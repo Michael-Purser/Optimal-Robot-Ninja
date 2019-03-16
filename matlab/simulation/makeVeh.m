@@ -7,6 +7,8 @@ function makeVeh()
 
 % Vehicle data (geometry, dynamics, ...):
 veh.wheelBase       = 0.2;
+veh.cogHeight       = 0.3;
+veh.mass            = 15;
 veh.actuatorfMin    = 3;
 
 % Sensor data:

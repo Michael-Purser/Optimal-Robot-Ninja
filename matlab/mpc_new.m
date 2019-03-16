@@ -15,7 +15,7 @@ addpath('./simulation/');
 addpath('./visualisation/');
 
 % situation:
-sitStr = '1_1_1';
+sitStr = '1_8_1';
 
 % load situation, environment and vehicle:
 eval(['load ./data/sit',sitStr,'.mat;']);
@@ -24,6 +24,7 @@ eval(['load ./data/env',num2str(sit.envNum),'.mat;']);
 
 % manual overrides:
 veh.actuatorfMin    = 3;
+veh.cogHeight       = 2;
 veh.Sensor.noiseamp = 0;
 veh.Sensor.freq     = 100;
 % veh.Optim.a_max     = 0.1;
@@ -100,7 +101,7 @@ while (sit.goalReached == 0 && count<=max_it)
         sit.globalVisited = [sit.globalVisited sit.goalState(1:2)];
         fprintf('Goal reached! Yipeeeeee :-) \n');
     else
-        % update loop counter
+        % update loop counter8
         count = count + 1;
     end
     

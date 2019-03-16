@@ -86,6 +86,14 @@ opti.set_value(measp, [meas;20*ones(max_meas-size(meas,1),2)]);
 x_begin = [0;0;0]; % always zero because problem solved in robot frame.
 x_final = sit.localGoals{end};
 T_init = norm(x_begin(1:2)-x_final(1:2))/u_max;
+
+% if size(sit.Sol.T,2)==0
+%     T_init  = sit.Init.T{end};
+% else
+%     %T_init  = sit.Sol.T{end};
+%     T_init  = sit.Init.T{end};
+% end
+
 % x_init  = [linspace(0,x_final(1),n+1);linspace(0,x_final(2),n+1); ...
 %     zeros(1,n+1)];
 % x_init  = [linspace(0,x_final(1),n+1);linspace(0,x_final(2),n+1); ...
@@ -102,12 +110,7 @@ x    = opti.variable(3,n+1);
 u    = opti.variable(2,n);
 T    = opti.variable(1,n);
 
-% if size(sit.Sol.T,2)==0
-%     T_init  = sit.Init.T{end};
-% else
-%     %T_init  = sit.Sol.T{end};
-%     T_init  = sit.Init.T{end};
-% end
+[dusqmax,samax] = getULimits(veh,0.8);
 
 % constraints:
 % TODO: add constraint for platform global acceleration
@@ -118,11 +121,12 @@ opti.subject_to(x(:,end)==x_final);
 opti.subject_to(uminp <= u(1,:) <= umaxp);
 opti.subject_to(uminp <= u(2,:) <= umaxp);
 opti.subject_to(u(1,:)+u(2,:) >= 0);
+opti.subject_to(abs(u(1,:).^2-u(2,:).^2) <= dusqmax);
 % opti.subject_to(a_min <= (n./T(2:end)).*diff(u(1,:)) <= a_max);
 % opti.subject_to(a_min <= (n./T(2:end)).*diff(u(2,:)) <= a_max);
 opti.subject_to(aminp <= np./T(2:end).*u(1,2:end)-np./T(1:end-1).*u(1,1:end-1) <= amaxp);
 opti.subject_to(aminp <= np./T(2:end).*u(2,2:end)-np./T(1:end-1).*u(2,1:end-1) <= amaxp);
-opti.subject_to(omminp <= (1/Lp)*(u(2,:)-u(1,:)) <= ommaxp);
+% opti.subject_to(omminp <= (1/Lp)*(u(2,:)-u(1,:)) <= ommaxp);
 opti.subject_to(T >= 0);
 opti.subject_to(T(2:end)==T(1:end-1));
 opti.subject_to(-minscalep<=diff(x(1,:))<=minscalep);
@@ -158,7 +162,8 @@ if solver=='ipopt'
         opti.set_initial(x,X0);
         opti.set_initial(u,U0);
     end
-    opti.solver('ipopt',struct('dump',true));
+    opti.solver('ipopt');
+%     opti.solver('ipopt',struct('dump',true));
     
 elseif solver=='qrqp'
     if count<10
@@ -203,8 +208,8 @@ end
 % solve:
 sol = opti.solve();
 
-SQP = opti.to_function('SQP',{x,u,T,measp,Lp,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep},{x,u,T});
-SQP.save('SQP.casadi');    
+% SQP = opti.to_function('SQP',{x,u,T,measp,Lp,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep},{x,u,T});
+% SQP.save('SQP.casadi');    
 
 % extract solution:
 T = sol.value(T);
