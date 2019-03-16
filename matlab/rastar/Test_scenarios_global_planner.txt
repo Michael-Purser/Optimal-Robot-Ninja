@@ -1,0 +1,14 @@
+1. Scenario 3
+	pos = [5;4.5]
+	ori = 3*pi/4
+
+2. Scenario 4
+	pos = [5;4.5]
+	ori = 3*pi/4
+
+3. Custom: Intensive situation
+	maze
+
+4. Custom: Infeasible case
+	completely surrounded goal
+	

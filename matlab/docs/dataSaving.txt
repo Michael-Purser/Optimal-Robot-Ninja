@@ -1,0 +1,19 @@
+*** SAVING DATA ***
+-------------------
+
+When applying the code and the MPC strategy, some data is necessary as parameters or input, other data is created during calculations in the programme and finally figures are generated for the user to check at a glance the output of the programme.
+To be able to examin the results or to discuss them with others in an efficient way, it is important to store the results of the programme such that they can be called upon later without needing to run time-consuming calculations again.
+Then again, storing all the data might be an inefficient idea, as this might result in unnecessarily large data structures, while a lot of this data (e.g. figures, ...) can be easily reproduced 'on the spot' by calling some simple and quick functions (this is certainly true for all vizualization functions).
+It is also important to have a clear and comprehensible separation of data, such that the global structure is easily navigatable.
+A balance is therefore required between what is stored and what is not. The choice has been made here to store all data resulting from the most intensive calculations, being:
+	- environment and sensor simulation
+	- optimal planning functions
+All data resulting from post-processing functions (e.g. creating the discretized local vehicle map, the map expanded with gaussians, etc...) is not saved.
+
+The code separates it's data in three main matlab 'structs':
+ - veh: contains all data about the vehicle irrespective of it's actual state. It contains all _invariant_ data of the vehicle --> the data that remains the same wherever you put it. This includes the parameters of the optimization problem.
+ - env: contains all the data about the environment.
+ - sit: contains all situational data. Stores simulated distance sensor measurements, subsequent vehicle states and orientations, subsequent initial guesse and solutions of optimization problem and only the last local map created (for instantaneous vizualisation purposes; technically this could be left out also).
+
+% ADD MORE DETAILED EXPLANATION OF DIFFERENT VARIABLES AND THEIR STRUCTURE
+% ADD TABLE? FIGURE?
