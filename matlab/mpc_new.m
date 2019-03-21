@@ -31,7 +31,7 @@ veh.Sensor.freq     = 100;
 % veh.Optim.a_min     = -0.1;
 sit.startState      = [0;0;0];
 sit.states          = {sit.startState};
-% sit.goalState       = [8;0;pi/2];
+sit.goalState       = [5;5;pi/2];
 
 % make global path to follow:
 % pathManual = [[5;9],[7;3],sit.goalState(1:2)];
@@ -88,7 +88,7 @@ while (sit.goalReached == 0 && count<=max_it)
 
     % solve optimization problem
     fprintf('Calculating optimal trajectory \n');
-    sit = optim_new(sit,veh,count,'ipopt');
+    sit = optim_new(sit,veh,count,'qrqp');
     
     % update vehicle position
     fprintf('Advancing robot to next state \n');

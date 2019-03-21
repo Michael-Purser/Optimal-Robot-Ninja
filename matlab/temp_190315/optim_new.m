@@ -114,7 +114,8 @@ T    = opti.variable(1,n);
 
 % constraints:
 % TODO: add constraint for platform global acceleration
-% ------> make actuator acceleration limits dependent on current velocity!
+% ------> make actuator acceleration limits dependent on current velocity
+% ------> add jerk contraints to avoid inf accelerations
 opti.subject_to(F(x(:,1:end-1),u,T/np)==x(:,2:end));
 opti.subject_to(x(:,1)==x_begin);
 opti.subject_to(x(:,end)==x_final);
@@ -126,7 +127,7 @@ opti.subject_to(abs(u(1,:).^2-u(2,:).^2) <= dusqmax);
 % opti.subject_to(a_min <= (n./T(2:end)).*diff(u(2,:)) <= a_max);
 opti.subject_to(aminp <= np./T(2:end).*u(1,2:end)-np./T(1:end-1).*u(1,1:end-1) <= amaxp);
 opti.subject_to(aminp <= np./T(2:end).*u(2,2:end)-np./T(1:end-1).*u(2,1:end-1) <= amaxp);
-% opti.subject_to(omminp <= (1/Lp)*(u(2,:)-u(1,:)) <= ommaxp);
+opti.subject_to(omminp <= (1/Lp)*(u(2,:)-u(1,:)) <= ommaxp);
 opti.subject_to(T >= 0);
 opti.subject_to(T(2:end)==T(1:end-1));
 opti.subject_to(-minscalep<=diff(x(1,:))<=minscalep);
@@ -145,12 +146,10 @@ opti.subject_to(costf(x(1:2,:))<=Ghatp);
 % objective:
 opti.minimize(sum(T)/np);
 
-
-
 % solver:
 % TODO: add a flag to get each time a waypoint has changed, reuse above
 % defined T_init?? (as T0 may vary too much).
-if solver=='ipopt'
+if strcmp(solver,'ipopt')==1
     if count==1
         opti.set_initial(T, T_init);
         opti.set_initial(x, x_init);
@@ -165,7 +164,7 @@ if solver=='ipopt'
     opti.solver('ipopt');
 %     opti.solver('ipopt',struct('dump',true));
     
-elseif solver=='qrqp'
+elseif strcmp(solver,'qrqp')==1
     if count<10
         opti.set_initial(T, T_init);
         opti.set_initial(x, x_init);
@@ -173,7 +172,8 @@ elseif solver=='qrqp'
         sol = opti.solve();
         T0 = sol.value(T);
         X0 = sol.value(x);
-        U0 = sol.value(u);
+        U0 = sol.value(u); 
+        lam0 = sol.value(opti.lam_g);
     else
         T0 = sit.Sol.T{end}(end);
         X0 = sit.Sol.X{end};
