@@ -8,3 +8,8 @@ The project is a collaboration between Intermodalics and the MECO research group
 The repository contains following folders:
  - __/matlab__: initial matlab code and simulation environment.
  - __/python__: python implementation of the matlab code, wit an architecture that fits the ROS environment used at Intermodalics, more specifically the move-base-flex package.
+
+Below is a figure of the code architecture:
+
+![alt text](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png "Code architecture")
+
