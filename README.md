@@ -24,5 +24,5 @@ Platform characteristics (full datasheet available [here](http://bit.ly/1L2FIzG)
  - localization availability frequency: 20 to 25 Hz
  - localization accuracy: a few cm
 
-![figure of turtlebot](https://drive.google.com/open?id=1KQHR8ZT0BD1pmZswUgDQV5zbe1CUhesj "Turtlebot 2 characteristics")
+![figure of turtlebot](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/turtlebot2_info.png "Turtlebot 2 characteristics")
 
