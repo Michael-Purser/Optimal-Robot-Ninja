@@ -12,7 +12,7 @@ The repository contains following folders:
 
 Below is a figure of the code architecture:
 
-![figure of code architecture](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png "Code architecture")
+![figure of code architecture](https://drive.google.com/open?id=1Ik6OIk-_bxGukOGU0d6ETbQlOADYXYE9 "Code architecture")
 
 ## Robot platform
 The mobile platform used to implement the code is a [Turtlebot 2](http://www.willowgarage.com/turtlebot), used together with a custom vision system developed at Intermodalics.  
