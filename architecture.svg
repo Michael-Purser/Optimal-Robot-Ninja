@@ -23,9 +23,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="15.839192"
-     inkscape:cx="-540.97336"
-     inkscape:cy="1.0582593"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="-67.584845"
+     inkscape:cy="168.83605"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -625,7 +625,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -639,7 +639,10 @@
        width="1357.8854"
        height="539.21155"
        x="-503.17615"
-       y="871.64978" />
+       y="871.64978"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <rect
        style="fill:#000000;fill-opacity:0.05741625;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect13675"
@@ -1432,14 +1435,20 @@
        width="210.39915"
        height="105.19958"
        x="165.95523"
-       y="1277.1318" />
+       y="1277.1318"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:22.5px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="268.76529"
        y="1323.8329"
        id="text4138-3"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          id="tspan4140-6"
          x="268.76529"
@@ -1454,14 +1463,20 @@
        width="210.39915"
        height="105.19958"
        x="166.66959"
-       y="1054.6616" />
+       y="1054.6616"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:22.5px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="270.79361"
        y="1090.1807"
        id="text4138-6-6"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          id="tspan4140-7-3"
          x="270.79361"
@@ -1480,14 +1495,20 @@
        width="210.39915"
        height="105.19958"
        x="-209.03535"
-       y="1279.1932" />
+       y="1279.1932"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:22.5px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-103.13399"
        y="1326.0787"
        id="text4190-1"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          id="tspan4192-5"
          x="-99.552444"
@@ -1502,14 +1523,20 @@
        width="210.39915"
        height="105.19958"
        x="-202.70894"
-       y="975.15259" />
+       y="975.15259"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:22.5px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-96.807571"
        y="1022.0382"
        id="text4190-9-7"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          x="-93.226036"
          y="1022.0382"
@@ -1524,14 +1551,20 @@
        width="210.39915"
        height="105.19958"
        x="164.91479"
-       y="890.57959" />
+       y="890.57959"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:22.5px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="270.81616"
        y="921.80786"
        id="text4190-9-6-9"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          x="274.39771"
          y="921.80786"
@@ -1548,37 +1581,58 @@
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Mend-8)"
        d="m 269.012,1156.1187 0,116.4285"
        id="path4312-5"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Mend-1-4)"
        d="m 376.512,1332.3065 251.5372,0"
        id="path4312-7-2"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker6550-1)"
        d="m 6.8480986,1028.0038 85.8630004,0 0,53.5381 71.670101,0"
        id="path6598-5"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccc" />
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker7084-1)"
        d="m 1.7973986,1332.0598 161.6244014,0"
        id="path6648-7"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker6856-3)"
        d="m -557.22521,914.58251 718.66771,0"
        id="path6652-4"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker7002-2)"
        d="m -336.60373,1332.1207 123.23861,0"
        id="path6656-3"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <g
        transform="matrix(0.34079067,0,0,0.34079067,286.0711,1189.752)"
-       id="g7540-8">
+       id="g7540-8"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
       <g
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="content-6"
@@ -1690,7 +1744,10 @@
            id="path7589-7" /></g>    </g>
     <g
        id="g7777-2"
-       transform="matrix(0.343,0,0,0.343,-451.92889,1190.4217)">
+       transform="matrix(0.343,0,0,0.343,-451.92889,1190.4217)"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
       <g
          word-spacing="normal"
          letter-spacing="normal"
@@ -1762,7 +1819,10 @@
            style="fill:#000000;stroke-width:0" /></g>    </g>
     <g
        transform="matrix(0.343,0,0,0.343,-82.727251,1192.1237)"
-       id="g8027-7">
+       id="g8027-7"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
       <g
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="g8029-7"
@@ -1834,7 +1894,10 @@
            id="path8057-9" /></g>    </g>
     <g
        transform="matrix(0.343,0,0,0.343,-79.178421,895.69382)"
-       id="g10247-4">
+       id="g10247-4"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
       <g
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="g10249-8"
@@ -1865,14 +1928,20 @@
        y="900.41071"
        x="-259.77222"
        style="font-style:normal;font-weight:normal;font-size:11.02499962px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       xml:space="preserve"><tspan
+       xml:space="preserve"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          y="900.41071"
          x="-259.77222"
          id="tspan10425-8"
          sodipodi:role="line">global path waypoints</tspan></text>
     <g
        id="g10595-8"
-       transform="matrix(0.343,0,0,0.343,-233.52155,777.38537)">
+       transform="matrix(0.343,0,0,0.343,-233.52155,777.38537)"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
       <g
          word-spacing="normal"
          letter-spacing="normal"
@@ -1900,14 +1969,20 @@
        width="210.39915"
        height="105.19958"
        x="-767.8924"
-       y="862.01331" />
+       y="862.01331"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:22.5px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-665.02148"
        y="909.90906"
        id="text4190-9-6-3-3"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          x="-665.02148"
          y="909.90906"
@@ -1921,14 +1996,20 @@
        d="m -920.41973,891.0084 149.00367,0"
        id="path6654-2-6"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:11.02499962px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-892.47113"
        y="906.15173"
        id="text11359-1"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          id="tspan11361-5"
          x="-892.47113"
@@ -1939,7 +2020,10 @@
        x="-924.2785"
        y="1059.3043"
        id="text11363-9"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          id="tspan11365-8"
          x="-924.2785"
@@ -1950,7 +2034,10 @@
        x="327.08282"
        y="1013.0057"
        id="text11571-4"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          x="328.83777"
          y="1013.0057"
@@ -1961,7 +2048,10 @@
          id="tspan14117">robot frame</tspan></text>
     <g
        transform="matrix(0.343,0,0,0.343,205.42011,917.87556)"
-       id="g11760-1">
+       id="g11760-1"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
       <g
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="g11762-0"
@@ -1997,7 +2087,10 @@
        x="733.48993"
        y="1326.285"
        id="text12480-76"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          id="tspan12482-31"
          x="733.48993"
@@ -2014,7 +2107,10 @@
        x="-1063.1108"
        y="1143.8312"
        id="text12480-7-5"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          id="tspan12482-3-9"
          x="-1063.1108"
@@ -2026,7 +2122,10 @@
        x="-1015.7537"
        y="1043.0867"
        id="text12480-7-6-6"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          id="tspan12482-3-1-2"
          x="-1015.7537"
@@ -2038,7 +2137,10 @@
        x="-454.05756"
        y="1114.2568"
        id="text12480-7-6-2-1"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          id="tspan12482-3-1-9-78"
          x="-454.05756"
@@ -2048,28 +2150,40 @@
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2, 8;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#marker7174-6)"
        d="m 493.7417,1337.1105 0,282.8427 -771.75659,0 0,-280.8224"
        id="path13681-5"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <ellipse
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.84274626;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4481-9"
        cx="92.75145"
        cy="1027.7411"
        rx="4.3308263"
-       ry="4.326467" />
+       ry="4.326467"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <ellipse
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.84274626;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4481-3-7"
        cx="493.71365"
        cy="1331.9092"
        rx="4.3308263"
-       ry="4.326467" />
+       ry="4.326467"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:15.75px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-419.39529"
        y="1336.9099"
        id="text12480-7-6-2-6-5"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          id="tspan12482-3-1-9-7-3"
          x="-419.39529"
@@ -2080,26 +2194,38 @@
        d="m -921.98714,1037.278 713.67278,0"
        id="path10127-8"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <ellipse
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.84274626;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4481-5-8"
        cx="-832.9762"
        cy="1037.0155"
        rx="4.3308263"
-       ry="4.326467" />
+       ry="4.326467"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker6926-3-6)"
        d="m -334.89983,999.3329 128.28938,0"
        id="path6654-6-3"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:15.75px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-433.91879"
        y="1004.0352"
        id="text12480-7-6-2-2-1"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          id="tspan12482-3-1-9-9-8"
          x="-433.91879"
@@ -2109,14 +2235,20 @@
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker11025-9)"
        d="m 375.838,945.05829 119.703,0"
        id="path10881-9"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <text
        sodipodi:linespacing="125%"
        id="text10423-1-6"
        y="920.07758"
        x="439.08832"
        style="font-style:normal;font-weight:normal;font-size:11.02499962px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       xml:space="preserve"><tspan
+       xml:space="preserve"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          y="920.07758"
          x="440.84326"
          id="tspan10425-2-4"
@@ -2130,30 +2262,45 @@
        d="m 163.58023,1110.1397 -502.4568,0"
        id="path11413-3"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;marker-end:url(#marker13885)"
        d="m 270.72088,996.29874 0,54.54826"
        id="path14125"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;marker-end:url(#marker14245)"
        d="m 92.857142,1027.7193 0,-58.92852 68.571428,0"
        id="path14237"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker15133)"
        d="m -832.79013,1039.2766 0,-99.47135 59.64996,0.14932"
        id="path15125"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccc" />
+       sodipodi:nodetypes="ccc"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:15.75px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-1014.5072"
        y="894.73566"
        id="text12480-7-6-6-3"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          id="tspan12482-3-1-2-3"
          x="-1014.5072"
@@ -2164,21 +2311,30 @@
        d="m -305.06607,1109.7824 0,-42.773 97.47972,0"
        id="path18431"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccc" />
+       sodipodi:nodetypes="ccc"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <ellipse
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.84274626;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4481-9-8"
        cx="-305.21664"
        cy="1110.0549"
        rx="4.3308263"
-       ry="4.326467" />
+       ry="4.326467"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:15.75px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="509.21173"
        y="949.75366"
        id="text12480-7-6-2-6-5-6"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
          id="tspan12482-3-1-9-7-3-0"
          x="509.21173"
@@ -2194,19 +2350,42 @@
        d="m -926.12381,1139.1127 1089.40913,0"
        id="path7360-7-9"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <ellipse
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.84274626;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4481-9-8-7"
        cx="-531.34021"
        cy="1139.2556"
        rx="4.3308263"
-       ry="4.326467" />
+       ry="4.326467"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker21806)"
        d="m -531.84531,1138.2252 -0.12627,-93.6285 c 0,0 -6.58441,-0.2658 -6.50285,-7.0711 0.0831,-6.9308 7.13419,-6.3766 7.13419,-6.3766 l 0,-88.89342 692.45957,0"
        id="path22738"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccsccc" />
+       sodipodi:nodetypes="ccsccc"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:22.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-502.11752"
+       y="838.51672"
+       id="text13677-3"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/michael/Dropbox/work/thesis/presentations/190321/architecture.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300"><tspan
+         sodipodi:role="line"
+         id="tspan13679-6"
+         x="-502.11752"
+         y="838.51672">MPC Iteration</tspan></text>
   </g>
 </svg>
