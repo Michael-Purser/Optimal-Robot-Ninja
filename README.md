@@ -15,13 +15,17 @@ Below is a figure of the code architecture:
 ![figure of code architecture](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png "Code architecture")
 
 ## Robot platform
-The mobile platform used to implement the code is a [Turtlebot 2](http://www.willowgarage.com/turtlebot), used together with a custom vision system developed at Intermodalics. 
-Platform characteristics:
+The mobile platform used to implement the code is a [Turtlebot 2](http://www.willowgarage.com/turtlebot), used together with a custom vision system developed at Intermodalics.  
+Platform characteristics ([full datasheet](http://bit.ly/1L2FIzG)):
  - diameter: 354 mm, height: 420 mm
- - weight: 6,3 kg (bottom-heavy, max payload of 5 kg)
+ - weight: 6,3 kg (bottom-heavy, max payload: 5 kg)
  - max speed: 0,65 m/s
+ - max rotational speed: 180°/s
+ - vision system: depth measurements with dual camera
+ - noise on measurements: few cm
  - costmap availability frequency: 5 Hz
- - positioning availability frequency: 20 to 25 Hz
+ - position estimate availability frequency: 20 to 25 Hz
+ - positioning accuracy: few cm
 
 ![figure of turtlebot](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/turtlebot2_info.png "Turtlebot 2 characteristics")
 
