@@ -8,7 +8,7 @@ The repository contains following folders:
  - __/python__: python implementation of matlab code, with an architecture that fits the ROS environment used at Intermodalics, more specifically the move-base-flex package.
  - __/c++__: C++ implementation of the code
 
-The current state of the code architecture can be found [here](https://drive.google.com/open?id=1vqejaQd0AvWK3YYID0Eymey2rQr1e2JI).
+The current state of the code architecture can be found [here](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png) (click on link, then right click on figure and open in new tab to see full figure).
 
 ## Robot platform
 The mobile platform used for implementation is a [Turtlebot 2](http://www.willowgarage.com/turtlebot), together with a custom vision system developed at Intermodalics.  
