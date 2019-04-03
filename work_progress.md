@@ -8,8 +8,10 @@ First, I had to get to grips with the ROS/gazebo/rviz interface and workflow; I 
  * Get the [turtlebot tutorial](http://wiki.ros.org/turtlebot/Tutorials/indigo/Turtlebot%20Installation) working in Gazebo on ROS kinetic, and steer the turtlebot around using keyboard teleop.
  * Visualise turtlebot info using rviz (following the [turtlebot rviz tutorial](http://wiki.ros.org/turtlebot/Tutorials/indigo/3D%20Visualisation)).
  * Reviewed (yet again) ROS concepts, and listened to some of the topics of the above gazebo turtlebot simulation with a simple 'rostopic echo' command.
- * 
+ * Created a ROS package 'my\_first\_package' which can launch three nodes: a talker, a listener for the 'joint\_states' topic and a listener for the depth camera image topic 'camera\_depth\_points', and print some info to the command line. The gazebo turtlebot simulation should be running for these listeners to work! ([here](http://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28c%2B%2B%29) is the tutorial I adapted to do this). In the process, learned that there are not only 'std\_msgs' in ROS but also other types of messages such as 'sensor\_msgs', which is what the turtlebot uses. I also checked that the created node inserts correctly in the node/topic graph (using 'rosrun rqt\_graph rqt\_graph' command)
+ * Followed the [localization and navigation](http://wiki.ros.org/turtlebot_navigation/Tutorials/Autonomously%20navigate%20in%20a%20known%20map) tutorials. Note: the teleop node is necessary to have correct localization, but must be shut down before the navigation is called! Otherwise the robot doesn't move as velocity commands from the teleop node seem to take precedence over the DWA node. Also, the DWA planner performs very poorly when going through tight spaces, 'dancing' around (spinning on it's axis before finally recovering).
 
 ## In progress
+ * Writing the local planner class, fitting it into structure provided by Nikolaos.
 
 ## To do
