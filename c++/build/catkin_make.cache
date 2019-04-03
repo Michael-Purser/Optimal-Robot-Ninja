@@ -1,0 +1,2 @@
+my_first_package
+-DCATKIN_DEVEL_PREFIX=/home/michael/Dropbox/work/thesis/code/c++/devel -DCMAKE_INSTALL_PREFIX=/home/michael/Dropbox/work/thesis/code/c++/install -G Unix Makefiles
