@@ -1,7 +1,12 @@
 # Optimal robot ninja
 
+<!---
 ***NOTE:  
 This repository is not being updated for the moment, as C++ implementation work is being done in a template defined in the GIP 2018 repository and will be added here later. A link to this repo can be found [here](https://github.com/intermodalics-gip/omg_ros).***
+-->
+
+***NOTE:  
+This repository is not the only one being updated, as C++ implementation work is being done in a branch of the GIP 2018 repository containing the code template. This repo is mostly for testing purposes, although at some point in the future the code will be added here too. A link to the GIP repo can be found [here](https://github.com/intermodalics-gip/omg_ros).***
 
 This repository contains the matlab and python code written for the master thesis 'Optimal robot ninja: making robots move in an optimal and responsive way'. The goal of this thesis is to make a mobile robot platform move optimally in an environment containing static (optionally also dynamic) obstacles. Optimality is defined her with respect to time. The project is a collaboration between Intermodalics and the MECO research group at KU Leuven.
 
