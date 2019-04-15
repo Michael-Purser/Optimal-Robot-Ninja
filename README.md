@@ -69,20 +69,22 @@ ROS/gazebo/rviz workflow:
     * *Note 1: teleop node necessary to perform localization, but must be shut down before navigation is called
     Otherwise robot will not move because velocity commands from teleop node take precedence over local\_planner node* 
     * *Suggestion: remove need for localization by hardcoding robot initial position*
-* Add local planner to navigation stack
+* Add a local planner to navigation stack
     * Add [TEB planner](https://github.com/rst-tu-dortmund/teb_local_planner) to simulation
     * Modify and recompile TEB planner
+    * Add own planner to navigation stack
+    * Add print and simple "go straight ahead" velocity command and compile
+    * Test in simulation
+
+*Workflow completed and working*
 
 
 #### In progress
- * Class provided by Intermodalics
-    * Complete class such that no errors when compiled
-    * Write a print to console showing planner has been called
-    * Send straight ahead velocity command to the robot
-
-#### To do
  * Implement matlab-code in C++
     * 'getNextLocalGoal', 'getConstraintValues' and 'getInitialGuesses' (see [code architecture ](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png))
+    * model on code from TEB planner for implementation good form practices
+
+#### To do
  * Thesis text
     * Chapter 1: review
     * Chapter 3: write
