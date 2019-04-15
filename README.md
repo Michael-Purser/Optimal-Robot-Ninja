@@ -8,14 +8,12 @@ This repository is not being updated for the moment, as C++ implementation work 
 ##### Table of contents 
 [About](#about)  
 [Contents](#contents)  
-[Robot platform](#platform)  
-[C++ Implementation log](#implementation_log)  
+[Robot platform](#robot-platform)  
+[C++ Implementation log](#implementation-log)  
 
-<a name="about"/>
 ## About
 This repository contains the matlab and C++ code written for the master thesis 'Optimal robot ninja: making robots move in an optimal and responsive way'. The goal of this thesis is to make a mobile robot platform move optimally in an environment containing static (optionally also dynamic) obstacles. Optimality is defined with respect to time. The project is a collaboration between [Intermodalics](https://www.intermodalics.eu/) and the [MECO research group](https://www.mech.kuleuven.be/en/pma/research/meco/) at KU Leuven.
 
-<a name="contents"/>
 ## Contents
 The repository contains following folders:
  - __/matlab__: matlab code and simulation environment.
@@ -24,7 +22,6 @@ The repository contains following folders:
 
 The current state of the code architecture can be found [here](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png) (click on link, then right click on figure and open in new tab to see full figure).
 
-<a name="platform"/>
 ## Robot platform
 The mobile platform used for implementation is a [Turtlebot 2](http://www.willowgarage.com/turtlebot), together with a custom vision system developed at Intermodalics.  
 Platform characteristics (full datasheet available for download [here](http://bit.ly/1L2FIzG)):
@@ -52,7 +49,6 @@ Current working points, in order of importance:
  - Examination of pointers and memory preallocation to make the C++ code run faster.
 -->
 
-<a name="implementation_log"/>
 ## Implementation log
 
 Log of **C++ implementation** work.  
