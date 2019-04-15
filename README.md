@@ -20,7 +20,8 @@ The repository contains following folders:
  - __/python__: python implementation of matlab code, with an architecture that fits the ROS environment used at Intermodalics (*abandoned, switched to C++*)
  - __/c++__: C++ implementation of the code
 
-The current state of the code architecture can be found [here](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png) (click on link, then right click on figure and open in new tab to see full figure).
+The current code architecture can be found [here](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png)  
+(for proper viewing, right click on figure and open in new tab).
 
 ## Robot platform
 The mobile platform used for implementation is a [Turtlebot 2](http://www.willowgarage.com/turtlebot), together with a custom vision system developed at Intermodalics.  
@@ -51,14 +52,12 @@ Current working points, in order of importance:
 
 ## Implementation log
 
-Log of **C++ implementation** work.  
+**(NOTE: C++ implementation work is currently being done in a branch of the GIP 2018 repository containing the code template. The current repo is mostly for testing purposes, although at some point in the future the code will be added here too. A link to the GIP repo can be found [here](https://github.com/intermodalics-gip/omg_ros))**
 
-**NOTE: C++ implementation work is currently being done in a branch of the GIP 2018 repository containing the code template. The current repo is mostly for testing purposes, although at some point in the future the code will be added here too. A link to the GIP repo can be found [here](https://github.com/intermodalics-gip/omg_ros).**
 
 #### Completed
 ROS/gazebo/rviz workflow:
  * Run turtlebot simulation on ROS kinetic (see [turtlebot tutorials](http://wiki.ros.org/turtlebot/Tutorials/indigo/Turtlebot%20Installation))
-    * read out some sensor topics using `rostopic echo`
  * Visualise turtlebot info using rviz (see [turtlebot rviz tutorial](http://wiki.ros.org/turtlebot/Tutorials/indigo/3D%20Visualisation)).
  * Create and build ROS package 'my\_first\_package'
     * implemented a talker, a listener for '\\joint\_states' topic and a listener for '\\camera\_depth\_points' topic
@@ -70,15 +69,21 @@ ROS/gazebo/rviz workflow:
     * *Note 1: teleop node necessary to perform localization, but must be shut down before navigation is called
     Otherwise robot will not move because velocity commands from teleop node take precedence over local\_planner node* 
     * *Suggestion: remove need for localization by hardcoding robot initial position*
+* Add local planner to navigation stack
+    * Add [TEB planner](https://github.com/rst-tu-dortmund/teb_local_planner) to simulation
+    * Modify and recompile TEB planner
 
 
 #### In progress
- * Write the local planner, fit it into class provided by Nikolaos.
-    * Writing a print that shows up in console when simulation is launched
-    * Sending a stright ahead velocity command to the robot
+ * Class provided by Intermodalics
+    * Complete class such that no errors when compiled
+    * Write a print to console showing planner has been called
+    * Send straight ahead velocity command to the robot
 
 #### To do
- * Implement code in C++:
-    * Blocks 'getNextLocalGoal', 'getConstraintValues' and 'getInitialGuesses' (see [code architecture ](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png))
- * Write chapter 3 of thesis text
+ * Implement matlab-code in C++
+    * 'getNextLocalGoal', 'getConstraintValues' and 'getInitialGuesses' (see [code architecture ](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png))
+ * Thesis text
+    * Chapter 1: review
+    * Chapter 3: write
 
