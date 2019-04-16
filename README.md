@@ -38,6 +38,11 @@ Platform characteristics (full datasheet available for download [here](http://bi
 ![figure of turtlebot](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/turtlebot2_info.png "Turtlebot 2 schematics")
 
 
+## Logging
+Write data to text file for further use and for python post-processing:
+
+![logging](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/logging.png "logging strategy")
+
 
 
 <!---
@@ -75,6 +80,8 @@ ROS/gazebo/rviz workflow:
     * Add own planner to navigation stack
     * Add print and simple "go straight ahead" velocity command and compile
     * Test in simulation
+* Implement test logger in code
+    * Write data to file (in this case, received global plan).
 
 *Workflow completed and working*
 
