@@ -9,6 +9,7 @@ This repository is not being updated for the moment, as C++ implementation work 
 [About](#about)  
 [Contents](#contents)  
 [Robot platform](#robot-platform)  
+[Logging](#logging)  
 [C++ Implementation log](#implementation-log)  
 
 ## About
