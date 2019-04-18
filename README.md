@@ -81,16 +81,17 @@ ROS/gazebo/rviz workflow:
     * Add own planner to navigation stack
     * Add print and simple "go straight ahead" velocity command and compile
     * Test in simulation
-* Implement test logger in code
-    * Write data to file (in this case, received global plan).
 
 *Workflow completed and working*
+
+* Implement code:
+    * Function exportSolution() that writes previous solution for next iteration
+    * Function getLocalGoal() that gets the next local goal from the global path
 
 
 #### In progress
  * Implement matlab-code in C++
-    * 'getNextLocalGoal', 'getConstraintValues' and 'getInitialGuesses' (see [code architecture ](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png))
-    * model on code from TEB planner for implementation good form practices
+    * 'getConstraintValues' and 'getInitialGuesses' (see [code architecture ](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png))
 
 #### To do
  * Thesis text
