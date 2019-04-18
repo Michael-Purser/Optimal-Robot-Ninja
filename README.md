@@ -18,7 +18,7 @@ This repository contains the matlab and C++ code written for the master thesis '
 ## Contents
 The repository contains following folders:
  - __/matlab__: matlab code and simulation environment.
- - __/python__: python implementation of matlab code, with an architecture that fits the ROS environment used at Intermodalics (*abandoned, switched to C++*)
+ - __/python__: python code for visualization of the results.
  - __/c++__: C++ implementation of the code
 
 The current code architecture can be found [here](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png)  
@@ -85,13 +85,14 @@ ROS/gazebo/rviz workflow:
 *Workflow completed and working*
 
 * Implement code:
-    * Function exportSolution() that writes previous solution for next iteration
-    * Function getLocalGoal() that gets the next local goal from the global path
+    * Function 'exportSolution' that writes previous solution for next iteration
+    * Function 'getLocalGoal' that gets the next local goal from the global path
+    * Function 'getInitialGuesses' that gets the initial values for the optimization solver
 
 
 #### In progress
  * Implement matlab-code in C++
-    * 'getConstraintValues' and 'getInitialGuesses' (see [code architecture ](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png))
+    * 'getConstraintValues'(see [code architecture ](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png))
 
 #### To do
  * Thesis text
