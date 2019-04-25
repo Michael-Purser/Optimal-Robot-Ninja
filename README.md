@@ -13,7 +13,7 @@ This repository is not being updated for the moment, as C++ implementation work 
 [C++ Implementation log](#implementation-log)  
 
 ## About
-This repository contains the matlab and C++ code written for the master thesis 'Optimal robot ninja: making robots move in an optimal and responsive way'. The goal of this thesis is to make a mobile robot platform move optimally in an environment containing static (optionally also dynamic) obstacles. Optimality is defined with respect to time. The project is a collaboration between [Intermodalics](https://www.intermodalics.eu/) and the [MECO research group](https://www.mech.kuleuven.be/en/pma/research/meco/) at KU Leuven.
+This repository contains the matlab, python and C++ code written for the master thesis 'Optimal robot ninja: making robots move in an optimal and responsive way'. The goal of this thesis is to make a mobile robot platform move optimally in an environment containing static (optionally also dynamic) obstacles. Optimality is defined with respect to time. The project is a collaboration between [Intermodalics](https://www.intermodalics.eu/) and the [MECO research group](https://www.mech.kuleuven.be/en/pma/research/meco/) at KU Leuven.
 
 ## Contents
 The repository contains following folders:
@@ -25,7 +25,7 @@ The current code architecture can be found [here](https://github.com/Michael-Pur
 (for proper viewing, right click on figure and open in new tab).
 
 ## Robot platform
-The mobile platform used for implementation is a [Turtlebot 2](http://www.willowgarage.com/turtlebot), together with a custom vision system developed at Intermodalics.  
+The mobile platform used for implementation is a [Turtlebot 2](http://www.willowgarage.com/turtlebot), together with a vision system developed at Intermodalics.  
 Platform characteristics (full datasheet available for download [here](http://bit.ly/1L2FIzG)):
  - diameter: 354 mm, height: 420 mm
  - weight: 6,3 kg (bottom-heavy), max payload: 5 kg
