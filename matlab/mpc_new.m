@@ -53,7 +53,6 @@ sit.viewFactor      = 0.3; % percentage of sensor horizon used for waypoint swit
 sit.goalReached = 0;
 sit.tol         = 0.01;
 
-
 %% MPC LOOP
 
 count               = 1;
@@ -88,7 +87,7 @@ while (sit.goalReached == 0 && count<=max_it)
 
     % solve optimization problem
     fprintf('Calculating optimal trajectory \n');
-    sit = optim_new(sit,veh,count,'qrqp');
+    sit = optim_new(sit,veh,count,'ipopt');
     
     % update vehicle position
     fprintf('Advancing robot to next state \n');

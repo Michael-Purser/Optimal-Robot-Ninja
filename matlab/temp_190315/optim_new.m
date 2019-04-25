@@ -66,6 +66,14 @@ sigyp = opti.parameter(1,1);
 Ghatp = opti.parameter(1,1);
 minscalep = opti.parameter(1,1);
 measp = opti.parameter(max_meas,2);
+xfinalp = opti.parameter(3,1);
+
+% initial and final positions + initial guess for time and states:
+% HAS TO HAPPEN OUTSIDE OF FUNCTION:
+x_begin = [0;0;0]; % always zero because problem solved in robot frame.
+x_final = sit.localGoals{end};
+T_init = norm(x_begin(1:2)-x_final(1:2))/u_max;
+
 
 opti.set_value(Lp, L);
 opti.set_value(np, n);
@@ -80,12 +88,7 @@ opti.set_value(sigyp, sigma_y);
 opti.set_value(Ghatp, G_hat);
 opti.set_value(minscalep, min_scale);
 opti.set_value(measp, [meas;20*ones(max_meas-size(meas,1),2)]);
-
-% initial and final positions + initial guess for time and states:
-% HAS TO HAPPEN OUTSIDE OF FUNCTION:
-x_begin = [0;0;0]; % always zero because problem solved in robot frame.
-x_final = sit.localGoals{end};
-T_init = norm(x_begin(1:2)-x_final(1:2))/u_max;
+opti.set_value(xfinalp,x_final);
 
 % if size(sit.Sol.T,2)==0
 %     T_init  = sit.Init.T{end};
@@ -118,11 +121,11 @@ T    = opti.variable(1,n);
 % ------> add jerk contraints to avoid inf accelerations
 opti.subject_to(F(x(:,1:end-1),u,T/np)==x(:,2:end));
 opti.subject_to(x(:,1)==x_begin);
-opti.subject_to(x(:,end)==x_final);
+opti.subject_to(x(:,end)==xfinalp);
 opti.subject_to(uminp <= u(1,:) <= umaxp);
 opti.subject_to(uminp <= u(2,:) <= umaxp);
 opti.subject_to(u(1,:)+u(2,:) >= 0);
-opti.subject_to(abs(u(1,:).^2-u(2,:).^2) <= dusqmax);
+% opti.subject_to(abs(u(1,:).^2-u(2,:).^2) <= dusqmax);
 % opti.subject_to(a_min <= (n./T(2:end)).*diff(u(1,:)) <= a_max);
 % opti.subject_to(a_min <= (n./T(2:end)).*diff(u(2,:)) <= a_max);
 opti.subject_to(aminp <= np./T(2:end).*u(1,2:end)-np./T(1:end-1).*u(1,1:end-1) <= amaxp);
@@ -161,7 +164,9 @@ if strcmp(solver,'ipopt')==1
         opti.set_initial(x,X0);
         opti.set_initial(u,U0);
     end
-    opti.solver('ipopt');
+    opts = struct;
+    opts.error_on_fail = true;
+    opti.solver('ipopt',opts);
 %     opti.solver('ipopt',struct('dump',true));
     
 elseif strcmp(solver,'qrqp')==1
@@ -189,6 +194,7 @@ elseif strcmp(solver,'qrqp')==1
     opts.qpsol_options.print_lincomb = 1;
     opts.dump_in = true;
     opts.dump = true;
+ 
 
     opti.solver('sqpmethod',opts);
 
@@ -208,8 +214,8 @@ end
 % solve:
 sol = opti.solve();
 
-% SQP = opti.to_function('SQP',{x,u,T,measp,Lp,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep},{x,u,T});
-% SQP.save('SQP.casadi');    
+MPC = opti.to_function('MPC',{x,u,T,measp,Lp,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xfinalp},{x,u,T});
+MPC.save('MPC.casadi');    
 
 % extract solution:
 T = sol.value(T);

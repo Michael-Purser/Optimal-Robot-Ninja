@@ -126,6 +126,7 @@ opti.subject_to(-minscalep<=diff(x(2,:))<=minscalep);
 
 pos = casadi.SX.sym('pos',2);
 
+
 Sum = 0;
 for k=1:size(meas,1)
     th  = meas(k,1);
@@ -146,22 +147,6 @@ opti.subject_to(costf(x(1:2,:))<=Ghatp);
 % objective:
 opti.minimize(sum(T)/np);
 
-% solver:
-
-Lp = opti.parameter(1,1);
-np = opti.parameter(1,1);
-uminp = opti.parameter(1,1);
-umaxp = opti.parameter(1,1);
-aminp = opti.parameter(1,1);
-amaxp = opti.parameter(1,1);
-omminp = opti.parameter(1,1);
-ommaxp = opti.parameter(1,1);
-sigxp = opti.parameter(1,1);
-sigyp = opti.parameter(1,1);
-Ghatp = opti.parameter(1,1);
-minscalep = opti.parameter(1,1);
-
-SQP = opti.to_function('SQP',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,sigxp,sigyp,Ghatp,minscalep},{x,u,T});
 
 if solver=='ipopt'
     if count==1
@@ -197,8 +182,8 @@ elseif solver=='qrqp'
     opts.qpsol = 'qrqp';
     % opts.qpsol = 'qpoases';
     opts.qpsol_options.print_lincomb = 1;
-    opts.dump_in = true;
-    opts.dump = true;
+    %opts.dump_in = true;
+    %opts.dump = true;
 
     opti.solver('sqpmethod',opts);
 
@@ -217,6 +202,10 @@ end
 
 % solve:
 sol = opti.solve();
+
+SQP = opti.to_function('SQP',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,sigxp,sigyp,Ghatp,minscalep},{x,u,T});
+SQP.save('solver.casadi')
+
 
 % extract solution:
 T = sol.value(T);
