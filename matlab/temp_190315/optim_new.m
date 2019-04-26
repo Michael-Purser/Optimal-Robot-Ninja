@@ -109,6 +109,8 @@ theta_init = n_vec*sin(phi)+theta_star*cos(phi);
 x_init  = [linspace(0,x_final(1),n+1);linspace(0,x_final(2),n+1); ...
     theta_init];
 
+u_init  = zeros(2,n);
+
 x    = opti.variable(3,n+1);
 u    = opti.variable(2,n);
 T    = opti.variable(1,n);
@@ -156,6 +158,7 @@ if strcmp(solver,'ipopt')==1
     if count==1
         opti.set_initial(T, T_init);
         opti.set_initial(x, x_init);
+        opti.set_initial(u, u_init);
     else
         T0 = sit.Sol.T{end}(end);
         X0 = sit.Sol.X{end};
