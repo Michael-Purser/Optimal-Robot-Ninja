@@ -88,6 +88,7 @@ while (sit.goalReached == 0 && count<=max_it)
     % solve optimization problem
     fprintf('Calculating optimal trajectory \n');
     sit = optim_new(sit,veh,count,'ipopt');
+    %sit = optim_new_noObstacles(sit,veh,count,'ipopt');
     
     % update vehicle position
     fprintf('Advancing robot to next state \n');

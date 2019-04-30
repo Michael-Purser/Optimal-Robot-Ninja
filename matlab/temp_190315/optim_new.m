@@ -66,6 +66,7 @@ sigyp = opti.parameter(1,1);
 Ghatp = opti.parameter(1,1);
 minscalep = opti.parameter(1,1);
 measp = opti.parameter(max_meas,2);
+xbeginp = opti.parameter(3,1);
 xfinalp = opti.parameter(3,1);
 
 % initial and final positions + initial guess for time and states:
@@ -88,6 +89,7 @@ opti.set_value(sigyp, sigma_y);
 opti.set_value(Ghatp, G_hat);
 opti.set_value(minscalep, min_scale);
 opti.set_value(measp, [meas;20*ones(max_meas-size(meas,1),2)]);
+opti.set_value(xbeginp,x_begin);
 opti.set_value(xfinalp,x_final);
 
 % if size(sit.Sol.T,2)==0
@@ -122,7 +124,7 @@ T    = opti.variable(1,n);
 % ------> make actuator acceleration limits dependent on current velocity
 % ------> add jerk contraints to avoid inf accelerations
 opti.subject_to(F(x(:,1:end-1),u,T/np)==x(:,2:end));
-opti.subject_to(x(:,1)==x_begin);
+opti.subject_to(x(:,1)==xbeginp);
 opti.subject_to(x(:,end)==xfinalp);
 opti.subject_to(uminp <= u(1,:) <= umaxp);
 opti.subject_to(uminp <= u(2,:) <= umaxp);
@@ -217,8 +219,8 @@ end
 % solve:
 sol = opti.solve();
 
-MPC = opti.to_function('MPC',{x,u,T,measp,Lp,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xfinalp},{x,u,T});
-MPC.save('MPC.casadi');    
+MPC = opti.to_function('MPC_withObst',{x,u,T,Lp,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,measp},{x,u,T});
+MPC.save('MPC_withObst.casadi');   
 
 % extract solution:
 T = sol.value(T);
