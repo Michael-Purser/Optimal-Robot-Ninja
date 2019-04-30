@@ -15,7 +15,7 @@ addpath('./simulation/');
 addpath('./visualisation/');
 
 % situation:
-sitStr = '1_8_1';
+sitStr = '1_1_1';
 
 % load situation, environment and vehicle:
 eval(['load ./data/sit',sitStr,'.mat;']);
@@ -31,7 +31,7 @@ veh.Sensor.freq     = 100;
 % veh.Optim.a_min     = -0.1;
 sit.startState      = [0;0;0];
 sit.states          = {sit.startState};
-sit.goalState       = [5;5;pi/2];
+sit.goalState       = [6;8;pi/2];
 
 % make global path to follow:
 % pathManual = [[5;9],[7;3],sit.goalState(1:2)];
@@ -43,7 +43,7 @@ for k=1:size(P,2)
 end
 
 % pathManual = [P(1:2,:) sit.goalState(1:2)];
-pathManual = [[7;0] sit.goalState(1:2)];
+pathManual = [sit.goalState(1:2)];
 
 % pathManual = [[2;9] [6;3] sit.goalState(1:2)];
 
@@ -87,7 +87,7 @@ while (sit.goalReached == 0 && count<=max_it)
 
     % solve optimization problem
     fprintf('Calculating optimal trajectory \n');
-    sit = optim_new(sit,veh,count,'ipopt');
+    sit = optim_new(sit,veh,count,'qrqp');
     %sit = optim_new_noObstacles(sit,veh,count,'ipopt');
     
     % update vehicle position
