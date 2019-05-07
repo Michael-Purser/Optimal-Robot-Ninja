@@ -9,5 +9,6 @@ npm-debug.log
 *.mtx
 *.h
 *.c
+*.in.txt
 
 *~
