@@ -41,7 +41,7 @@ end
 opti = casadi.Opti();
 
 % initial and final positions + initial guess for time and states:
-x_begin = [0;0;0]; % always zero because problem solved in robot frame.
+x_begin = [0;0;0];  % always zero because problem solved in robot frame.
 x_final = sit.localGoals{end};
 
 
@@ -94,77 +94,6 @@ sit.Sol.X{end+1} = opti.value(X);
 sit.Sol.U{end+1} = opti.value(U);
 sit.Sol.T{end+1} = opti.value(T);
 
-% % solver:
-% % TODO: add a flag to get each time a waypoint has changed, reuse above
-% % defined T_init?? (as T0 may vary too much).
-% if strcmp(solver,'ipopt')==1
-%     if count==1
-%         opti.set_initial(T, T_init);
-%         opti.set_initial(x, x_init);
-%         opti.set_initial(u, u_init);
-%     else
-%         T0 = sit.Sol.T{end}(end);
-%         X0 = sit.Sol.X{end};
-%         U0 = sit.Sol.U{end};
-%         opti.set_initial(T,T0);
-%         opti.set_initial(x,X0);
-%         opti.set_initial(u,U0);
-%     end
-%     opts = struct;
-%     opts.error_on_fail = true;
-%     opti.solver('ipopt',opts);
-% %     opti.solver('ipopt',struct('dump',true));
-%     
-% elseif strcmp(solver,'qrqp')==1
-%     if count<3
-%         opti.set_initial(T, T_init);
-%         opti.set_initial(x, x_init);
-%         opti.solver('ipopt');
-%         %sol = opti.solve();
-%         %T0 = sol.value(T);
-%         %X0 = sol.value(x);
-%         %U0 = sol.value(u); 
-%         T0 = T_init;
-%         X0 = x_init;
-%         U0 = u_init;
-% %         lam0 = sol.value(opti.lam_g);
-%     else
-%         T0 = sit.Sol.T{end}(end);
-%         X0 = sit.Sol.X{end};
-%         U0 = sit.Sol.U{end};
-% %         lam0 = sit.Sol.lamg{end};
-%     end
-
-% %     if count>1
-% %         opti.set_initial(opti.lam_g,lam0);
-% %     end
-% 
-%     % opts.qpsol = 'qpoases';
-%     % opts.qpsol_options.sparse = true;
-%     % opts.qpsol_options.schur = true;
-%     % opti.solver('sqpmethod',opts);
-% end
-% 
-% % solve:
-% % sol = opti.solve_limited();
-% 
-% % export the solver times if the boolean is true
-% if sit.log_bool == 1
-%     sit.log_vector(end+1) = sol.stats.t_wall_solver;
-% end
-% 
-% % export the solver if it's bthe first iteration and the boolean is true
-% if count==1 && sit.export_bool==1
-%     MPC = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,measp},{x,u,T});
-% %     MPC = opti.to_function('MPC',{x,u,T,L,n,u_min,u_max,a_min,a_max,om_min,om_max,G_hat,min_scale,x_begin,x_final,meas},{x,u,T});
-%     sit.solver = MPC;
-%     %MPC.save('MPC.casadi');
-% end
-% 
-% % extract solution:
-% T = sol.value(T);
-% X = sol.value(x);
-% U = sol.value(u);
 % lamg = sol.value(opti.lam_g);
 
 % append to struct:
