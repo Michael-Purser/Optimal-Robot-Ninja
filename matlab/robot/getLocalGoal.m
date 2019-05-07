@@ -1,4 +1,4 @@
-function sit = getLocalGoal_new(sit,veh)
+function sit = getLocalGoal(sit,veh)
 
 gv      = sit.globalVisited;
 gnv     = sit.globalNotVisited;

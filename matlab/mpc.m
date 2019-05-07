@@ -89,12 +89,12 @@ while (sit.goalReached == 0 && count<=max_it)
     end
 
     % express end goal in vehicle frame
-    sit = getLocalGoal_new(sit,veh);
+    sit = getLocalGoal(sit,veh);
 
     % solve optimization problem
     fprintf('Calculating optimal trajectory \n');
-    sit = optim_new(sit,veh,count,'qrqp');
-    %sit = optim_new_noObstacles(sit,veh,count,'ipopt');
+    sit = optim(sit,veh,count,'qrqp');
+    %sit = optim_noObstacles(sit,veh,count,'ipopt');
     
     % update vehicle position
     fprintf('Advancing robot to next state \n');

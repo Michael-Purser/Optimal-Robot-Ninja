@@ -1,4 +1,4 @@
-function sit = optim_new(sit,veh,count,solver)
+function sit = optim(sit,veh,count,solver)
 % Formulate and solve the minimum time optimization problem.
 % Vehicle model: diff-drive.
 
