@@ -1,3 +1,13 @@
 *.dropbox
 npm-debug.log
+*.o
+*.so
+*.mat
+*.casadi
+*.fig
+*.zip
+*.mtx
+*.h
+*.c
+
 *~

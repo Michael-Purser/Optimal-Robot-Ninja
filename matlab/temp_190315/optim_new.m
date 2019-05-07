@@ -36,20 +36,6 @@ if update_cycles>0
     end
 end
 
-% ode:
-ode = @(x,u)[0.5*(u(1)+u(2))*sin(x(3)); 0.5*(u(1)+u(2))*cos(x(3)); (1/L)*(u(2)-u(1))];
-
-% states integration:
-h  = casadi.SX.sym('h');
-x  = casadi.SX.sym('x',3);
-u  = casadi.SX.sym('u',2);
-k1 = ode(x,       u); 
-k2 = ode(x+h/2*k1,u);
-k3 = ode(x+h/2*k2,u);
-k4 = ode(x+h*k3,  u);
-xf = x+ h/6 * (k1 + 2*k2 + 2*k3 + k4);
-F  = casadi.Function('F',{x,u,h},{xf});
-
 % initialize variables:
 opti = casadi.Opti();
 
@@ -68,6 +54,20 @@ minscalep = opti.parameter(1,1);
 measp = opti.parameter(max_meas,2);
 xbeginp = opti.parameter(3,1);
 xfinalp = opti.parameter(3,1);
+
+% ode:
+ode = @(x,u)[0.5*(u(1)+u(2))*sin(x(3)); 0.5*(u(1)+u(2))*cos(x(3)); (1/L)*(u(2)-u(1))];
+
+% states integration:
+h  = casadi.SX.sym('h');
+x  = casadi.SX.sym('x',3);
+u  = casadi.SX.sym('u',2);
+k1 = ode(x,       u); 
+k2 = ode(x+h/2*k1,u);
+k3 = ode(x+h/2*k2,u);
+k4 = ode(x+h*k3,  u);
+xf = x+ h/6 * (k1 + 2*k2 + 2*k3 + k4);
+F  = casadi.Function('F',{x,u,h},{xf});
 
 % initial and final positions + initial guess for time and states:
 % HAS TO HAPPEN OUTSIDE OF FUNCTION:
@@ -197,24 +197,24 @@ elseif strcmp(solver,'qrqp')==1
     opts.jit = true;
     opts.compiler = 'shell';
     opts.jit_options.compiler = 'ccache gcc';
-opts.jit_options.flags = {'-O1'};
-opts.jit_temp_suffix = false;
-opts.qpsol = 'nlpsol';
-opts.max_iter = 1;
-opts.qpsol_options.nlpsol = 'ipopt';
-opts.qpsol_options.nlpsol_options.ipopt.tol = 1e-7;
-opts.qpsol_options.nlpsol_options.ipopt.tiny_step_tol = 1e-20;
-opts.qpsol_options.nlpsol_options.ipopt.fixed_variable_treatment = 'make_constraint';
-opts.qpsol_options.nlpsol_options.ipopt.hessian_constant = 'yes';
-opts.qpsol_options.nlpsol_options.ipopt.jac_c_constant = 'yes';
-opts.qpsol_options.nlpsol_options.ipopt.jac_d_constant = 'yes';
-opts.qpsol_options.nlpsol_options.ipopt.accept_every_trial_step = 'yes';
-opts.qpsol_options.nlpsol_options.ipopt.mu_init = 1e-3;
+    opts.jit_options.flags = {'-O1'};
+    opts.jit_temp_suffix = false;
+    opts.qpsol = 'nlpsol';
+    %opts.max_iter = 2; %%%
+    opts.qpsol_options.nlpsol = 'ipopt';
+    opts.qpsol_options.nlpsol_options.ipopt.tol = 1e-7;
+    opts.qpsol_options.nlpsol_options.ipopt.tiny_step_tol = 1e-20;
+    opts.qpsol_options.nlpsol_options.ipopt.fixed_variable_treatment = 'make_constraint';
+    opts.qpsol_options.nlpsol_options.ipopt.hessian_constant = 'yes';
+    opts.qpsol_options.nlpsol_options.ipopt.jac_c_constant = 'yes';
+    opts.qpsol_options.nlpsol_options.ipopt.jac_d_constant = 'yes';
+    opts.qpsol_options.nlpsol_options.ipopt.accept_every_trial_step = 'yes';
+    opts.qpsol_options.nlpsol_options.ipopt.mu_init = 1e-3;
 
-opts.qpsol_options.nlpsol_options.ipopt.print_level = 0;
-%opts.qpsol_options.nlpsol_options.print_time = false;
-opts.qpsol_options.nlpsol_options.ipopt.linear_solver = 'ma27';
-opts.qpsol_options.print_time = true;
+    opts.qpsol_options.nlpsol_options.ipopt.print_level = 0;
+    %opts.qpsol_options.nlpsol_options.print_time = false;
+    opts.qpsol_options.nlpsol_options.ipopt.linear_solver = 'ma27';
+    opts.qpsol_options.print_time = true;
  
 
     opti.solver('sqpmethod',opts);
@@ -234,10 +234,13 @@ end
 
 % solve:
 sol = opti.solve_limited();
-sol.stats
 
-MPC = opti.to_function('MPC_withObst',{x,u,T,Lp,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,measp},{x,u,T});
-MPC.save('MPC_withObst.casadi');   
+if sit.log_bool == 1
+    sit.log_vector(end+1) = sol.stats.t_wall_solver;
+end
+
+MPC = opti.to_function('MPC',{x,u,T,Lp,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,measp},{x,u,T});
+MPC.save('MPC.casadi');   
 
 % extract solution:
 T = sol.value(T);

@@ -8,6 +8,7 @@ clc;
 
 addpath('~/Downloads/casadi/install/matlab/');
 addpath('./data/');
+addpath('./temp_190315/');
 addpath('./rastar/');
 addpath('./robot/');
 addpath('./simulation/');
@@ -23,38 +24,55 @@ eval(['load ./data/env',num2str(sit.envNum),'.mat;']);
 
 % manual overrides:
 veh.actuatorfMin    = 3;
-% veh.Sensor.horizon  = 5;
+veh.cogHeight       = 2;
 veh.Sensor.noiseamp = 0;
-veh.Optim.a_max     = 0.1;
-veh.Optim.a_min     = -0.1;
-% sit.startState      = [7;1;pi;0];
-% sit.states          = {sit.startState};
-sit.goalState       = [10;10;0];
+veh.Sensor.freq     = 100;
+% veh.Optim.a_max     = 0.1;
+% veh.Optim.a_min     = -0.1;
+sit.startState      = [0;0;0];
+sit.states          = {sit.startState};
+sit.goalState       = [6;8;pi/2];
 
 % make global path to follow:
 % pathManual = [[5;9],[7;3],sit.goalState(1:2)];
+
+% Bool to select logging times:
+sit.log_bool = 1;
+sit.log_vector = [];
+
+P = [-1 -sqrt(3)/2 -0.5 0 0.5 sqrt(3)/2 1; 0 0.5 sqrt(3)/2 1 sqrt(3)/2 0.5 0; 1 1 1 1 1 1 1];
+P(1:2,:) = P(1:2,:)*5*sqrt(2);
+for k=1:size(P,2)
+    P(:,k) = homTrans(pi/4,[5 5])*P(:,k);
+end
+
+% pathManual = [P(1:2,:) sit.goalState(1:2)];
 pathManual = [sit.goalState(1:2)];
+% pathManual = [[2;9] [6;3] sit.goalState(1:2)];
 
 sit.globalVisited = [];
 sit.globalNotVisited = pathManual;
-
+sit.viewFactor      = 0.3; % percentage of sensor horizon used for waypoint switching;
+sit.goalReached = 0;
+sit.tol         = 0.01;
 
 %% MPC LOOP
 
 count               = 1;
-max_it              = 1000;
-goal_reached        = 0;
-tol                 = 0.01;
+max_it              = 20;
 tol_waypoints       = 0.5;
 
 % Initial goal check
-if norm([sit.states{end}(1:2);1]-[sit.goalState(1:2);1])<tol
+if norm([sit.states{end}(1:2);1]-[sit.goalState(1:2);1])<sit.tol
     fprintf(2,'Vehicle already within tolerance of final goal! \n');
     fprintf(2,'STOPPED \n');
-    goal_reached = 1;
+    sit.goalReached = 1;
 end
 
-while (goal_reached == 0 && count<=max_it)
+% Setup parametric optimization problem:
+% sit = optim_setup(veh);
+
+while (sit.goalReached == 0 && count<=max_it)
     
     fprintf('\n');
     fprintf('MPC STEP %i \n',count);
@@ -63,57 +81,40 @@ while (goal_reached == 0 && count<=max_it)
     fprintf('Simulating sensor \n');
     env = relevantObst(sit,veh,env);
     sit = sensor(sit,veh,env);
-
-    % make vehicle local map
-	% fprintf('Making local map \n');
-	% sit = makeMap(sit,veh);
-	% sit = addMeasurementsToMap(sit,veh,2,count);
-
-    % make G-landscape
-	% sit = addGaussianToMap(sit,veh);
+    
+    % adapt sensor measurements:
+    if count>1
+        alpha = 8;
+        sit = processMeas(sit,alpha);
+    end
 
     % express end goal in vehicle frame
-    sit = getLocalGoal(sit);
-    
-    % get geometric path to goal
-	% fprintf('Global planner: \n');
-	% sit = globalPlanner(sit,veh);
+    sit = getLocalGoal_new(sit,veh);
 
     % solve optimization problem
     fprintf('Calculating optimal trajectory \n');
-    sit = optim(sit,veh,count,'ipopt');
+    sit = optim_new(sit,veh,count,'qrqp');
+    %sit = optim_new_noObstacles(sit,veh,count,'ipopt');
     
     % update vehicle position
     fprintf('Advancing robot to next state \n');
     sit = mpcNextState(sit,veh,3);
     
-    % check if next waypoint has been reached
-    if norm(sit.states{end}(1:2)-sit.globalNotVisited(:,1))<tol_waypoints
-        fprintf('   Reached waypoint %i! \n',size(sit.globalVisited,2)+1);
-        % update waypoints
-        sit.globalVisited = [sit.globalVisited sit.globalNotVisited(:,1)];
-        sit.globalNotVisited = sit.globalNotVisited(:,2:end);
-    end
-    
-    % if in last iteration, update tolerance to real final tolerance:
-    if size(sit.globalNotVisited,2)==1
-        tol_waypoints = tol;
-    end
-    
     % check if goal is reached
     % TODO: for now it will stop too far from final goal!!
-    if size(sit.globalNotVisited,2)==0
+    if norm(sit.states{end}-sit.goalState)<=sit.tol
+        sit.goalReached = 1;
+        sit.globalVisited = [sit.globalVisited sit.goalState(1:2)];
         fprintf('Goal reached! Yipeeeeee :-) \n');
-        goal_reached = 1;
     else
-        % update loop counter
+        % update loop counter8
         count = count + 1;
     end
     
 end
 
 % check that goal indeed reached:
-if goal_reached == 0 || count > max_it
+if sit.goalReached == 0 || count > max_it
     error('Maximum number of MPC iterations exceeded!');
 end
 
@@ -121,19 +122,19 @@ end
 %% POST-PROCESSING:
     
 % check the obstacle constraint on solution
-sit.Sol.G = {};
-fprintf('Checking solution \n');
-for k=1:count
-    sit = checkSolution(sit,veh,k);
-end
+% sit.Sol.G = {};
+% fprintf('Checking solution \n');
+% for k=1:count
+%     sit = checkSolution(sit,veh,k);
+% end
 
 % make videos:
-% mpc_makeMov(sit,veh,env,sitStr,1);
+% mpc_makeMov(sit,veh,env,sitStr,count,1);
 % mpc_makeMov(sit,veh,env,sitStr,2);
 close all;
 
 % plots:
 fprintf('Plotting solution \n');
-mpc_plotSol(sit,veh,env,count,1,2);
+mpc_plotSol(sit,veh,env,count,2);
 
 
