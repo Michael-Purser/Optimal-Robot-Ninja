@@ -8,7 +8,6 @@ clc;
 
 addpath('~/Downloads/casadi/install/matlab/');
 addpath('./data/');
-addpath('./temp_190315/');
 addpath('./rastar/');
 addpath('./robot/');
 addpath('./simulation/');
@@ -37,8 +36,11 @@ sit.goalState       = [6;8;pi/2];
 % pathManual = [[5;9],[7;3],sit.goalState(1:2)];
 
 % Bool to select logging times:
-sit.log_bool = 1;
+sit.log_bool = 0;
 sit.log_vector = [];
+
+% Bool to select casadi export:
+sit.export_bool = 1;
 
 P = [-1 -sqrt(3)/2 -0.5 0 0.5 sqrt(3)/2 1; 0 0.5 sqrt(3)/2 1 sqrt(3)/2 0.5 0; 1 1 1 1 1 1 1];
 P(1:2,:) = P(1:2,:)*5*sqrt(2);
@@ -70,7 +72,7 @@ if norm([sit.states{end}(1:2);1]-[sit.goalState(1:2);1])<sit.tol
 end
 
 % Setup parametric optimization problem:
-% sit = optim_setup(veh);
+sit = optim_setup(veh,sit);
 
 while (sit.goalReached == 0 && count<=max_it)
     
@@ -93,7 +95,7 @@ while (sit.goalReached == 0 && count<=max_it)
 
     % solve optimization problem
     fprintf('Calculating optimal trajectory \n');
-    sit = optim(sit,veh,count,'qrqp');
+    sit = optim(sit,veh,count,'ipopt');
     %sit = optim_noObstacles(sit,veh,count,'ipopt');
     
     % update vehicle position
@@ -135,6 +137,6 @@ close all;
 
 % plots:
 fprintf('Plotting solution \n');
-mpc_plotSol(sit,veh,env,count,2);
+mpc_plotSol(sit,veh,env,count,2,2);
 
 

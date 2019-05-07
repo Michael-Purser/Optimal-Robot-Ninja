@@ -1,33 +1,30 @@
-function sit = optim_setup(veh)
+function sit = optim_setup(veh,sit)
 
 % initialize variables:
 opti = casadi.Opti();
 
 max_meas    = 1000;
 n           = veh.Optim.n;
+L           = veh.wheelBase;
 
-Lp = opti.parameter(1,1);
-np = opti.parameter(1,1);
-uminp = opti.parameter(1,1);
-umaxp = opti.parameter(1,1);
-aminp = opti.parameter(1,1);
-amaxp = opti.parameter(1,1);
-omminp = opti.parameter(1,1);
-ommaxp = opti.parameter(1,1);
-sigxp = opti.parameter(1,1);
-sigyp = opti.parameter(1,1);
-Ghatp = opti.parameter(1,1);
-minscalep = opti.parameter(1,1);
-measp = opti.parameter(max_meas,2);
-xbeginp = opti.parameter(3,1);
-xfinalp = opti.parameter(3,1);
+Lp          = opti.parameter(1,1);
+np          = opti.parameter(1,1);
+uminp       = opti.parameter(1,1);
+umaxp       = opti.parameter(1,1);
+aminp       = opti.parameter(1,1);
+amaxp       = opti.parameter(1,1);
+omminp      = opti.parameter(1,1);
+ommaxp      = opti.parameter(1,1);
+sigxp       = opti.parameter(1,1);
+sigyp       = opti.parameter(1,1);
+Ghatp       = opti.parameter(1,1);
+minscalep   = opti.parameter(1,1);
+measp       = opti.parameter(max_meas,2);
+xbeginp     = opti.parameter(3,1);
+xfinalp     = opti.parameter(3,1);
 
 % ode:
-ode  = @(x,u)[0.5*(u(1)+u(2))*sin(x(3)); 0.5*(u(1)+u(2))*cos(x(3)); opti.MTIMES((1/Lp),(u(2)-u(1)))];
-
-x    = opti.variable(3,n+1);
-u    = opti.variable(2,n);
-T    = opti.variable(1,n);
+ode  = @(x,u)[0.5*(u(1)+u(2))*sin(x(3)); 0.5*(u(1)+u(2))*cos(x(3)); (1/L)*(u(2)-u(1))];
 
 % states integration:
 h  = casadi.SX.sym('h');
@@ -40,12 +37,15 @@ k4 = ode(x+h*k3,  u);
 xf = x+ h/6 * (k1 + 2*k2 + 2*k3 + k4);
 F  = casadi.Function('F',{x,u,h},{xf});
 
+x    = opti.variable(3,n+1);
+u    = opti.variable(2,n);
+T    = opti.variable(1,n);
 
 % constraints:
 % TODO: add constraint for platform global acceleration
 % 	    make actuator acceleration limits dependent on current velocity
 % 	    add jerk contraints to avoid inf accelerations
-opti.subject_to(F(x(:,1:end-1),u,T/np)==x(:,2:end));
+opti.subject_to(F(x(:,1:end-1),u,T./np)==x(:,2:end));
 opti.subject_to(x(:,1)==xbeginp);
 opti.subject_to(x(:,end)==xfinalp);
 opti.subject_to(uminp <= u(1,:) <= umaxp);
@@ -101,17 +101,11 @@ opts.qpsol_options.nlpsol_options.ipopt.print_level = 0;
 opts.qpsol_options.nlpsol_options.ipopt.linear_solver = 'ma27';
 opts.qpsol_options.print_time = true;
 
-opti.solver('sqpmethod',opts);
+% opti.solver('sqpmethod',opts);
+opti.solver('ipopt');
 
-opti.set_initial(T,T0);
-opti.set_initial(x,X0);
-opti.set_initial(u,U0);
-if count>1
-    opti.set_initial(opti.lam_g,lam0);
-end
-
-MPC = opti.to_function('MPC',{x,u,T,Lp,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,measp},{x,u,T});
+MPC = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,measp,sigxp,sigyp},{x,u,T});
 sit.solver = MPC;
-MPC.save('MPC.casadi');
+% MPC.save('MPC.casadi');
     
 end
