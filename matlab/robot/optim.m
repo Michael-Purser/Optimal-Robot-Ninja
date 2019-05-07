@@ -1,4 +1,4 @@
-function sit = optim(sit,veh,count,solver)
+function sit = optim_new(sit,veh,count,solver)
 % Formulate and solve the minimum time optimization problem.
 % Vehicle model: diff-drive.
 
@@ -15,12 +15,13 @@ sigma_x = veh.Optim.sigma_x;
 sigma_y = veh.Optim.sigma_y;
 G_hat   = veh.Optim.G_hat;
 min_scale = 0.2;
+max_meas = 1000;
 
 % get measurements:
 meas    = sit.meas_tilde{end};
 
-% CHECK POSITION AND ADAPT G-HAT IF NEEDED !!!!! %
-G = checkPosition(meas,[0;0],sigma_x,sigma_y);
+% check position; adapt G_hat if needed:
+G = checkPosition(meas,[0 0],sigma_x,sigma_y);
 update_cycles = 0;
 while update_cycles<=10 && G>G_hat
     G_hat = 1.5*G_hat;
@@ -34,20 +35,6 @@ if update_cycles>0
         fprintf(2, 'Updating G_hat to %f \n',G_hat);
     end
 end
-
-% ode:
-ode = @(x,u)[0.5*(u(1)+u(2))*sin(x(3)); 0.5*(u(1)+u(2))*cos(x(3)); (1/L)*(u(2)-u(1))];
-
-% states integration:
-h  = casadi.SX.sym('h');
-x  = casadi.SX.sym('x',3);
-u  = casadi.SX.sym('u',2);
-k1 = ode(x,       u); 
-k2 = ode(x+h/2*k1,u);
-k3 = ode(x+h/2*k2,u);
-k4 = ode(x+h*k3,  u);
-xf = x+ h/6 * (k1 + 2*k2 + 2*k3 + k4);
-F  = casadi.Function('F',{x,u,h},{xf});
 
 % initialize variables:
 opti = casadi.Opti();
@@ -64,6 +51,30 @@ sigxp = opti.parameter(1,1);
 sigyp = opti.parameter(1,1);
 Ghatp = opti.parameter(1,1);
 minscalep = opti.parameter(1,1);
+measp = opti.parameter(max_meas,2);
+xbeginp = opti.parameter(3,1);
+xfinalp = opti.parameter(3,1);
+
+% ode:
+ode = @(x,u)[0.5*(u(1)+u(2))*sin(x(3)); 0.5*(u(1)+u(2))*cos(x(3)); (1/L)*(u(2)-u(1))];
+
+% states integration:
+h  = casadi.SX.sym('h');
+x  = casadi.SX.sym('x',3);
+u  = casadi.SX.sym('u',2);
+k1 = ode(x,       u); 
+k2 = ode(x+h/2*k1,u);
+k3 = ode(x+h/2*k2,u);
+k4 = ode(x+h*k3,  u);
+xf = x+ h/6 * (k1 + 2*k2 + 2*k3 + k4);
+F  = casadi.Function('F',{x,u,h},{xf});
+
+% initial and final positions + initial guess for time and states:
+% HAS TO HAPPEN OUTSIDE OF FUNCTION:
+x_begin = [0;0;0]; % always zero because problem solved in robot frame.
+x_final = sit.localGoals{end};
+T_init = norm(x_begin(1:2)-x_final(1:2))/u_max;
+
 
 opti.set_value(Lp, L);
 opti.set_value(np, n);
@@ -77,12 +88,17 @@ opti.set_value(sigxp, sigma_x);
 opti.set_value(sigyp, sigma_y);
 opti.set_value(Ghatp, G_hat);
 opti.set_value(minscalep, min_scale);
+opti.set_value(measp, [meas;20*ones(max_meas-size(meas,1),2)]);
+opti.set_value(xbeginp,x_begin);
+opti.set_value(xfinalp,x_final);
 
-% initial and final positions + initial guess for time and states:
-% HAS TO HAPPEN OUTSIDE OF FUNCTION:
-x_begin = [0;0;0]; % always zero because problem solved in robot frame.
-x_final = sit.localGoals{end};
-T_init = norm(x_begin(1:2)-x_final(1:2))/u_max;
+% if size(sit.Sol.T,2)==0
+%     T_init  = sit.Init.T{end};
+% else
+%     %T_init  = sit.Sol.T{end};
+%     T_init  = sit.Init.T{end};
+% end
+
 % x_init  = [linspace(0,x_final(1),n+1);linspace(0,x_final(2),n+1); ...
 %     zeros(1,n+1)];
 % x_init  = [linspace(0,x_final(1),n+1);linspace(0,x_final(2),n+1); ...
@@ -95,25 +111,25 @@ theta_init = n_vec*sin(phi)+theta_star*cos(phi);
 x_init  = [linspace(0,x_final(1),n+1);linspace(0,x_final(2),n+1); ...
     theta_init];
 
+u_init  = zeros(2,n);
+
 x    = opti.variable(3,n+1);
 u    = opti.variable(2,n);
 T    = opti.variable(1,n);
 
-% if size(sit.Sol.T,2)==0
-%     T_init  = sit.Init.T{end};
-% else
-%     %T_init  = sit.Sol.T{end};
-%     T_init  = sit.Init.T{end};
-% end
+[dusqmax,samax] = getULimits(veh,0.8);
 
 % constraints:
 % TODO: add constraint for platform global acceleration
+% ------> make actuator acceleration limits dependent on current velocity
+% ------> add jerk contraints to avoid inf accelerations
 opti.subject_to(F(x(:,1:end-1),u,T/np)==x(:,2:end));
-opti.subject_to(x(:,1)==x_begin);
-opti.subject_to(x(:,end)==x_final);
+opti.subject_to(x(:,1)==xbeginp);
+opti.subject_to(x(:,end)==xfinalp);
 opti.subject_to(uminp <= u(1,:) <= umaxp);
 opti.subject_to(uminp <= u(2,:) <= umaxp);
 opti.subject_to(u(1,:)+u(2,:) >= 0);
+% opti.subject_to(abs(u(1,:).^2-u(2,:).^2) <= dusqmax);
 % opti.subject_to(a_min <= (n./T(2:end)).*diff(u(1,:)) <= a_max);
 % opti.subject_to(a_min <= (n./T(2:end)).*diff(u(2,:)) <= a_max);
 opti.subject_to(aminp <= np./T(2:end).*u(1,2:end)-np./T(1:end-1).*u(1,1:end-1) <= amaxp);
@@ -124,34 +140,27 @@ opti.subject_to(T(2:end)==T(1:end-1));
 opti.subject_to(-minscalep<=diff(x(1,:))<=minscalep);
 opti.subject_to(-minscalep<=diff(x(2,:))<=minscalep);
 
-pos = casadi.SX.sym('pos',2);
+pos = casadi.MX.sym('pos',2);
 
-
-Sum = 0;
-for k=1:size(meas,1)
-    th  = meas(k,1);
-    r   = meas(k,2);
-    p   = [-r*sin(th);r*cos(th)];
-    g   = gaussianValue(pos,p,sigxp,sigyp);
-    Sum = Sum + g;
-end
-
-costf = casadi.Function('costf',{pos},{Sum});
+th  = measp(:,1);
+r   = measp(:,2);
+p   = [-r.*sin(th) r.*cos(th)];
+g   = gaussianValue(p,pos,sigxp,sigyp);
+costf = casadi.Function('costf',{pos},{sum(g)});
 
 opti.subject_to(costf(x(1:2,:))<=Ghatp);
-
-% initial guess:
-% opti.set_initial(T, T_init);
-% opti.set_initial(x, x_init);
 
 % objective:
 opti.minimize(sum(T)/np);
 
-
-if solver=='ipopt'
+% solver:
+% TODO: add a flag to get each time a waypoint has changed, reuse above
+% defined T_init?? (as T0 may vary too much).
+if strcmp(solver,'ipopt')==1
     if count==1
         opti.set_initial(T, T_init);
         opti.set_initial(x, x_init);
+        opti.set_initial(u, u_init);
     else
         T0 = sit.Sol.T{end}(end);
         X0 = sit.Sol.X{end};
@@ -160,15 +169,21 @@ if solver=='ipopt'
         opti.set_initial(x,X0);
         opti.set_initial(u,U0);
     end
-    opti.solver('ipopt');
+    opts = struct;
+    opts.error_on_fail = true;
+    opti.solver('ipopt',opts);
+%     opti.solver('ipopt',struct('dump',true));
     
-elseif solver=='qrqp'
-    if count==1
+elseif strcmp(solver,'qrqp')==1
+    if count<3
+        opti.set_initial(T, T_init);
+        opti.set_initial(x, x_init);
         opti.solver('ipopt');
         sol = opti.solve();
         T0 = sol.value(T);
         X0 = sol.value(x);
-        U0 = sol.value(u);
+        U0 = sol.value(u); 
+        lam0 = sol.value(opti.lam_g);
     else
         T0 = sit.Sol.T{end}(end);
         X0 = sit.Sol.X{end};
@@ -179,11 +194,28 @@ elseif solver=='qrqp'
     opts = struct;
     opts.convexify_strategy = 'eigen-reflect';
     opts.verbose = true;
-    opts.qpsol = 'qrqp';
-    % opts.qpsol = 'qpoases';
-    opts.qpsol_options.print_lincomb = 1;
-    %opts.dump_in = true;
-    %opts.dump = true;
+    opts.jit = true;
+    opts.compiler = 'shell';
+    opts.jit_options.compiler = 'ccache gcc';
+    opts.jit_options.flags = {'-O1'};
+    opts.jit_temp_suffix = false;
+    opts.qpsol = 'nlpsol';
+    %opts.max_iter = 2; %%%
+    opts.qpsol_options.nlpsol = 'ipopt';
+    opts.qpsol_options.nlpsol_options.ipopt.tol = 1e-7;
+    opts.qpsol_options.nlpsol_options.ipopt.tiny_step_tol = 1e-20;
+    opts.qpsol_options.nlpsol_options.ipopt.fixed_variable_treatment = 'make_constraint';
+    opts.qpsol_options.nlpsol_options.ipopt.hessian_constant = 'yes';
+    opts.qpsol_options.nlpsol_options.ipopt.jac_c_constant = 'yes';
+    opts.qpsol_options.nlpsol_options.ipopt.jac_d_constant = 'yes';
+    opts.qpsol_options.nlpsol_options.ipopt.accept_every_trial_step = 'yes';
+    opts.qpsol_options.nlpsol_options.ipopt.mu_init = 1e-3;
+
+    opts.qpsol_options.nlpsol_options.ipopt.print_level = 0;
+    %opts.qpsol_options.nlpsol_options.print_time = false;
+    opts.qpsol_options.nlpsol_options.ipopt.linear_solver = 'ma27';
+    opts.qpsol_options.print_time = true;
+ 
 
     opti.solver('sqpmethod',opts);
 
@@ -201,11 +233,14 @@ elseif solver=='qrqp'
 end
 
 % solve:
-sol = opti.solve();
+sol = opti.solve_limited();
 
-SQP = opti.to_function('SQP',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,sigxp,sigyp,Ghatp,minscalep},{x,u,T});
-SQP.save('solver.casadi')
+if sit.log_bool == 1
+    sit.log_vector(end+1) = sol.stats.t_wall_solver;
+end
 
+MPC = opti.to_function('MPC',{x,u,T,Lp,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,measp},{x,u,T});
+MPC.save('MPC.casadi');   
 
 % extract solution:
 T = sol.value(T);
