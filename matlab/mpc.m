@@ -61,7 +61,7 @@ sit.tol         = 0.01;
 %% MPC LOOP
 
 count               = 1;
-max_it              = 20;
+max_it              = 1000;
 tol_waypoints       = 0.5;
 
 % Initial goal check
@@ -72,7 +72,10 @@ if norm([sit.states{end}(1:2);1]-[sit.goalState(1:2);1])<sit.tol
 end
 
 % Setup parametric optimization problem:
-sit = optim_setup(veh,sit);
+MPCipopt            = optim_setup(veh,'ipopt');
+MPCsqp              = optim_setup(veh,'sqp');
+sit.ipoptSolver     = MPCipopt;
+sit.sqpSolver       = MPCsqp;
 
 while (sit.goalReached == 0 && count<=max_it)
     
@@ -95,7 +98,7 @@ while (sit.goalReached == 0 && count<=max_it)
 
     % solve optimization problem
     fprintf('Calculating optimal trajectory \n');
-    sit = optim(sit,veh,count,'ipopt');
+    sit = optim(sit,veh,count,'sqp');
     %sit = optim_noObstacles(sit,veh,count,'ipopt');
     
     % update vehicle position

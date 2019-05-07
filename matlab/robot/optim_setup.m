@@ -1,4 +1,4 @@
-function sit = optim_setup(veh,sit)
+function MPC = optim_setup(veh,solver_str)
 
 % initialize variables:
 opti = casadi.Opti();
@@ -40,6 +40,8 @@ F  = casadi.Function('F',{x,u,h},{xf});
 x    = opti.variable(3,n+1);
 u    = opti.variable(2,n);
 T    = opti.variable(1,n);
+
+% [dusqmax,samax] = getULimits(veh,0.8);
 
 % constraints:
 % TODO: add constraint for platform global acceleration
@@ -85,7 +87,7 @@ opts.jit_options.compiler = 'ccache gcc';
 opts.jit_options.flags = {'-O1'};
 opts.jit_temp_suffix = false;
 opts.qpsol = 'nlpsol';
-opts.max_iter = 1;
+% opts.max_iter = 1;
 opts.qpsol_options.nlpsol = 'ipopt';
 opts.qpsol_options.nlpsol_options.ipopt.tol = 1e-7;
 opts.qpsol_options.nlpsol_options.ipopt.tiny_step_tol = 1e-20;
@@ -102,10 +104,13 @@ opts.qpsol_options.nlpsol_options.ipopt.linear_solver = 'ma27';
 opts.qpsol_options.print_time = true;
 
 % opti.solver('sqpmethod',opts);
-opti.solver('ipopt');
+if strcmp(solver_str,'ipopt')==1
+    opti.solver('ipopt');
+else
+    opti.solver('sqpmethod',opts);
+end
 
 MPC = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,measp,sigxp,sigyp},{x,u,T});
-sit.solver = MPC;
 % MPC.save('MPC.casadi');
     
 end
