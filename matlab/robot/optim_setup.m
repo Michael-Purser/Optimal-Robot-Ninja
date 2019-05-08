@@ -24,7 +24,7 @@ xbeginp     = opti.parameter(3,1);
 xfinalp     = opti.parameter(3,1);
 
 % ode:
-ode  = @(x,u)[0.5*(u(1)+u(2))*sin(x(3)); 0.5*(u(1)+u(2))*cos(x(3)); (1/L)*(u(2)-u(1))];
+ode  = @(x,u)[0.5*(u(1)+u(2))*sin(x(3)); 0.5*(u(1)+u(2))*cos(x(3)); (2/L)*(u(2)-u(1))];
 
 % states integration:
 h  = casadi.SX.sym('h');
