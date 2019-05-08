@@ -112,5 +112,13 @@ end
 
 MPC = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,measp,sigxp,sigyp},{x,u,T});
 % MPC.save('MPC.casadi');
+
+if strcmp(solver_str,'ipopt')==1
+    ipoptSolver = MPC;
+    save 'MPCipopt.mat' 'ipoptSolver'
+else
+    sqpSolver = MPC;
+    save 'MPCsqp.mat' 'sqpSolver'
+end
     
 end

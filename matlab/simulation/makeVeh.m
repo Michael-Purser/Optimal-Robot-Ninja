@@ -10,6 +10,7 @@ veh.wheelBase       = 0.2;
 veh.cogHeight       = 0.3;
 veh.mass            = 15;
 veh.actuatorfMin    = 3;
+veh.actuationNoise  = 0.03;
 
 % Sensor data:
 % TODO: Substitute real laser capabilities (Hokuyo??).

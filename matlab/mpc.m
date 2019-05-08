@@ -32,12 +32,21 @@ sit.startState      = [0;0;0];
 sit.states          = {sit.startState};
 sit.goalState       = [6;8;pi/2];
 
+% Choose solving technique:
+solver = 'sqp';
+% solver = 'ipopt';
+
 % make global path to follow:
 % pathManual = [[5;9],[7;3],sit.goalState(1:2)];
 
 % Bool to select logging times:
 sit.log_bool = 0;
 sit.log_vector = [];
+
+% Bool to select if parametric problem has to be rebuilt:
+% (if 0, loaded from file)
+% IF THIS IS THE FIRST TIME RUNNING THE PROGRAM? SET TO 1
+sit.rebuild = 1;
 
 % Bool to select casadi export:
 sit.export_bool = 1;
@@ -72,10 +81,15 @@ if norm([sit.states{end}(1:2);1]-[sit.goalState(1:2);1])<sit.tol
 end
 
 % Setup parametric optimization problem:
-MPCipopt            = optim_setup(veh,'ipopt');
-MPCsqp              = optim_setup(veh,'sqp');
-sit.ipoptSolver     = MPCipopt;
-sit.sqpSolver       = MPCsqp;
+if sit.rebuild==1
+    ipoptSolver 	= optim_setup(veh,'ipopt');
+    sqpSolver       = optim_setup(veh,'sqp');
+else
+    load('MPCipopt.mat');
+    load('MPCsqp.mat');
+end
+sit.ipoptSolver     = ipoptSolver;
+sit.sqpSolver       = sqpSolver;
 
 while (sit.goalReached == 0 && count<=max_it)
     
@@ -98,12 +112,12 @@ while (sit.goalReached == 0 && count<=max_it)
 
     % solve optimization problem
     fprintf('Calculating optimal trajectory \n');
-    sit = optim(sit,veh,count,'sqp');
+    sit = optim(sit,veh,count,solver);
     %sit = optim_noObstacles(sit,veh,count,'ipopt');
     
     % update vehicle position
     fprintf('Advancing robot to next state \n');
-    sit = mpcNextState(sit,veh,3);
+    sit = mpcNextState(sit,veh,3,2);
     
     % check if goal is reached
     % TODO: for now it will stop too far from final goal!!

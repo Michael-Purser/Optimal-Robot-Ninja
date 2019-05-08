@@ -66,7 +66,7 @@ if strcmp(solver,'ipopt')==1
     MPC     = sit.ipoptSolver;
     
 else
-    if count<3
+    if count<5
         % initial guesses for first iteration
         phi         = atan2(x_final(3),n);
         alpha       = 0.5;
@@ -76,13 +76,13 @@ else
         x_init  = [linspace(0,x_final(1),n+1);linspace(0,x_final(2),n+1); ...
             theta_init];
         u_init  = zeros(2,n);
-        T_init = norm(x_begin(1:2)-x_final(1:2))/u_max;
+        T_init  = norm(x_begin(1:2)-x_final(1:2))/u_max;
         MPC     = sit.ipoptSolver;
     else
-        x_init = sit.Sol.X{end};
-        u_init = sit.Sol.U{end};
-        T_init = sit.Sol.T{end}(end);
-        MPC    = sit.sqpSolver;
+        x_init  = sit.Sol.X{end};
+        u_init  = sit.Sol.U{end};
+        T_init  = sit.Sol.T{end}(end);
+        MPC     = sit.sqpSolver;
     end
 end
 
