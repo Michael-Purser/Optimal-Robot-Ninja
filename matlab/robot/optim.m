@@ -1,39 +1,41 @@
-function sit = optim(sit,veh,count,solver)
+function MPC = optim(MPC,veh)
 % Formulate and solve the minimum time optimization problem.
 % Vehicle model: diff-drive.
 
 % parameters:
-L           = veh.wheelBase;
-n           = veh.Optim.n;
-u_min       = veh.Optim.u_min;
-u_max       = veh.Optim.u_max;
-a_min       = veh.Optim.a_min;
-a_max       = veh.Optim.a_max;
-om_min      = veh.Optim.om_min;
-om_max      = veh.Optim.om_max;
-sigma_x     = veh.Optim.sigma_x;
-sigma_y     = veh.Optim.sigma_y;
-G_hat       = veh.Optim.G_hat;
-min_scale   = 0.2;
+L           = veh.geometry.wheelBase;
+n           = MPC.nav.opt.horizon;
+u_min       = veh.dynamics.velLimits(1);
+u_max       = veh.dynamics.velLimits(2);
+a_min       = veh.dynamics.accLimits(1);
+a_max       = veh.dynamics.accLimits(2);
+om_min      = veh.dynamics.omLimits(1);
+om_max      = veh.dynamics.omLimits(2);
+sigma_x     = MPC.nav.opt.sigma;
+sigma_y     = MPC.nav.opt.sigma;
+Ghat        = MPC.nav.opt.Ghat;
+maxDist     = MPC.nav.opt.maxDist;
+solver      = MPC.nav.opt.solver;
 max_meas    = 1000;
 
 % get measurements:
-meas    = sit.meas_tilde{end};
+meas = MPC.nav.measurements;
+%meas    = sit.meas_tilde{end};
 meas = [meas;20*ones(max_meas-size(meas,1),2)];
 
 % check position; adapt G_hat if needed:
 G = checkPosition(meas,[0 0],sigma_x,sigma_y);
 update_cycles = 0;
-while update_cycles<=10 && G>G_hat
-    G_hat = 1.5*G_hat;
+while update_cycles<=10 && G>Ghat
+    Ghat = 1.5*Ghat;
     update_cycles = update_cycles + 1;
 end
 if update_cycles>0
-    if G>G_hat
+    if G>Ghat
         fprintf(2, 'Tried to update G_hat, but too many update cycles - probably error will occur \n');
     else
         fprintf(2, 'Too high starting G_hat!! \n');
-        fprintf(2, 'Updating G_hat to %f \n',G_hat);
+        fprintf(2, 'Updating G_hat to %f \n',Ghat);
     end
 end
 
@@ -42,12 +44,10 @@ opti = casadi.Opti();
 
 % initial and final positions + initial guess for time and states:
 x_begin = [0;0;0];  % always zero because problem solved in robot frame.
-x_final = sit.localGoals{end};
-
-
+x_final = MPC.nav.opt.goal;
 
 if strcmp(solver,'ipopt')==1
-    if count==1
+    if MPC.nav.k==1
         % initial guesses for first iteration
         phi         = atan2(x_final(3),n);
         alpha       = 0.5;
@@ -59,14 +59,14 @@ if strcmp(solver,'ipopt')==1
         u_init  = zeros(2,n);
         T_init = norm(x_begin(1:2)-x_final(1:2))/u_max;
     else
-        x_init = sit.Sol.X{end};
-        u_init = sit.Sol.U{end};
-        T_init = sit.Sol.T{end}(end);
+        x_init = MPC.nav.opt.sol.x;
+        u_init = MPC.nav.opt.sol.u;
+        T_init = MPC.nav.opt.sol.T;
     end
-    MPC     = sit.ipoptSolver;
+    problem    = MPC.nav.problemIpopt;
     
 else
-    if count<5
+    if MPC.nav.k<5
         % initial guesses for first iteration
         phi         = atan2(x_final(3),n);
         alpha       = 0.5;
@@ -77,22 +77,27 @@ else
             theta_init];
         u_init  = zeros(2,n);
         T_init  = norm(x_begin(1:2)-x_final(1:2))/u_max;
-        MPC     = sit.ipoptSolver;
+        problem = MPC.nav.problemIpopt;
     else
-        x_init  = sit.Sol.X{end};
-        u_init  = sit.Sol.U{end};
-        T_init  = sit.Sol.T{end}(end);
-        MPC     = sit.sqpSolver;
+        x_init  = MPC.nav.opt.sol.x;
+        u_init  = MPC.nav.opt.sol.u;
+        T_init  = MPC.nav.opt.sol.T;
+        problem = MPC.nav.problemSqp;
     end
 end
 
-[X,U,T] = MPC(x_init,u_init,T_init,L,n,u_min,u_max,a_min,a_max,om_min,...
-        om_max,G_hat,min_scale,x_begin,x_final,meas,sigma_x,sigma_y);
+% log the initial guesses
+MPC.nav.opt.init.x = x_init;
+MPC.nav.opt.init.u = u_init;
+MPC.nav.opt.init.T = T_init;
+
+[X,U,T] = problem(x_init,u_init,T_init,L,n,u_min,u_max,a_min,a_max,om_min,...
+        om_max,Ghat,maxDist,x_begin,x_final,meas,sigma_x,sigma_y);
 
 % append to struct:
-sit.Sol.X{end+1} = opti.value(X);
-sit.Sol.U{end+1} = opti.value(U);
-sit.Sol.T{end+1} = opti.value(T);
+MPC.nav.opt.sol.x = opti.value(X);
+MPC.nav.opt.sol.u = opti.value(U);
+MPC.nav.opt.sol.T = opti.value(T);
 
 % lamg = sol.value(opti.lam_g);
 

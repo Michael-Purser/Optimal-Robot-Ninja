@@ -1,19 +1,19 @@
-function sit = sensor(sit,veh,env)
+function MPC = sensor(MPC,veh,env)
 % Function that simulates execution of the rangefinder and that returns the
 % simulated measurements.
 % The ouput vector only contains nonzero measurements, as zero distance 
 % measurement is considered to be 'no obstacle detected'.
 
 % get vehicle info:
-pos         = [sit.states{end}(1:2);1];
-phi         = sit.states{end}(3);
+pos         = [MPC.nav.currentState(1:2);1];
+phi         = MPC.nav.currentState(3);
 
 % get sensor info:
-thetamax    = veh.Sensor.thetamax;
-h           = veh.Sensor.horizon;
-f           = veh.Sensor.freq;
-om          = veh.Sensor.omega;
-noiseamp    = veh.Sensor.noiseamp;
+thetamax    = veh.sensor.thetamax;
+h           = veh.sensor.horizon;
+f           = veh.sensor.freq;
+om          = veh.sensor.omega;
+noiseamp    = veh.sensor.noiseamp;
 
 % get relevant obstacle data:
 P           = env.ObstDetect.pos;
@@ -72,6 +72,6 @@ end
 meas = meas(all(meas,2),:);
 
 % append result to vehicle struct:
-sit.meas{end+1} = meas;
+MPC.nav.measurements = meas;
 
 end

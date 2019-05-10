@@ -1,4 +1,4 @@
-function env = relevantObst(sit,veh,env)
+function env = relevantObst(MPC,veh,env)
 % Function that gets the relevant obstacles around the vehicle given the
 % vehicle position and the environment data.
 % A relevant obstacle is an obstacle that is within range of the distance
@@ -7,8 +7,8 @@ function env = relevantObst(sit,veh,env)
 % happen more efficiently
 
 % extract data:
-p  = [sit.states{end}(1:2);1];
-h  = veh.Sensor.horizon;
+p  = [MPC.nav.currentState(1:2);1];
+h  = veh.sensor.horizon;
 
 % get nb of obstacles:
 nObst = size(env.Obst.pos,2);

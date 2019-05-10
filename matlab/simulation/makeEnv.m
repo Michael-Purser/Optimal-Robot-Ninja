@@ -16,7 +16,7 @@ env.Obst.data = [3, 3;
 
 save data/env1.mat env
 
-plotEnvironment(env);
+% plotEnvironment(env);
 savefig(gcf,'figs/envFigs/env1.fig');
 close(gcf);
 
@@ -32,7 +32,7 @@ env.Obst.data = [3, 3;
 
 save data/env2.mat env
 
-plotEnvironment(env);
+% plotEnvironment(env);
 savefig(gcf,'figs/envFigs/env2.fig');
 close(gcf);
 
@@ -48,7 +48,7 @@ env.Obst.data = [1,1,1,1,1,1,1,1,1,1;
 
 save data/env3.mat env
 
-plotEnvironment(env);
+% plotEnvironment(env);
 savefig(gcf,'figs/envFigs/env3.fig');
 close(gcf);
 
@@ -66,7 +66,7 @@ env.Obst.data = [1,  2,  1,  1,  1;
               
 save data/env4.mat env
 
-plotEnvironment(env);
+% plotEnvironment(env);
 savefig(gcf,'figs/envFigs/env4.fig');
 close(gcf);
 
@@ -82,7 +82,7 @@ env.Obst.data = [1, 1;
 
 save data/env5.mat env
 
-plotEnvironment(env);
+% plotEnvironment(env);
 savefig(gcf,'figs/envFigs/env5.fig');
 close(gcf);
 
@@ -98,7 +98,7 @@ env.Obst.data = [1, 1, 0.7;
 
 save data/env6.mat env
 
-plotEnvironment(env);
+% plotEnvironment(env);
 savefig(gcf,'figs/envFigs/env6.fig');
 close(gcf);
 
@@ -114,7 +114,7 @@ env.Obst.data = [1, 1, 0.7;
 
 save data/env7.mat env
 
-plotEnvironment(env);
+% plotEnvironment(env);
 savefig(gcf,'figs/envFigs/env7.fig');
 close(gcf);
 
@@ -126,7 +126,7 @@ env.Obst.data = [];
 
 save data/env8.mat env
 
-plotEnvironment(env);
+% plotEnvironment(env);
 savefig(gcf,'figs/envFigs/env8.fig');
 close(gcf);
 

@@ -17,123 +17,100 @@ addpath('./visualisation/');
 sitStr = '1_1_1';
 
 % load situation, environment and vehicle:
-eval(['load ./data/sit',sitStr,'.mat;']);
-eval(['load ./data/veh',num2str(sit.vehNum),'.mat;']);
-eval(['load ./data/env',num2str(sit.envNum),'.mat;']);
+eval(['load ./data/MPC',sitStr,'.mat;']);
+eval(['load ./data/veh',num2str(MPC.nav.veh),'.mat;']);
+eval(['load ./data/env',num2str(MPC.nav.env),'.mat;']);
 
-% manual overrides:
-veh.actuatorfMin    = 3;
-veh.cogHeight       = 2;
-veh.Sensor.noiseamp = 0;
-veh.Sensor.freq     = 100;
-% veh.Optim.a_max     = 0.1;
-% veh.Optim.a_min     = -0.1;
-sit.startState      = [0;0;0];
-sit.states          = {sit.startState};
-sit.goalState       = [6;8;pi/2];
+% initialization:
+veh.dynamics.COG        = [0;0;2];
+veh.sensor.noiseamp     = 0;
+veh.sensor.freq         = 100;
+veh.motors.fmax         = 3;
+MPC.nav.globalStart     = [0;0;0];
+MPC.nav.currentState    = MPC.nav.globalStart;
+MPC.nav.globalGoal      = [6;8;pi/2];
+MPC.nav.tolerance       = 0.01;
+MPC.nav.opt.solver      = 'sqp';
+MPC.nav.kmax            = 1000;
+MPC.nav.rebuild         = true;
+MPC.log.logBool         = true;
+MPC.log.exportBool      = false;
 
-% Choose solving technique:
-solver = 'sqp';
-% solver = 'ipopt';
-
-% make global path to follow:
-% pathManual = [[5;9],[7;3],sit.goalState(1:2)];
-
-% Bool to select logging times:
-sit.log_bool = 0;
-sit.log_vector = [];
-
-% Bool to select if parametric problem has to be rebuilt:
-% (if 0, loaded from file)
-% IF THIS IS THE FIRST TIME RUNNING THE PROGRAM? SET TO 1
-sit.rebuild = 1;
-
-% Bool to select casadi export:
-sit.export_bool = 1;
-
-P = [-1 -sqrt(3)/2 -0.5 0 0.5 sqrt(3)/2 1; 0 0.5 sqrt(3)/2 1 sqrt(3)/2 0.5 0; 1 1 1 1 1 1 1];
-P(1:2,:) = P(1:2,:)*5*sqrt(2);
-for k=1:size(P,2)
-    P(:,k) = homTrans(pi/4,[5 5])*P(:,k);
-end
-
-% pathManual = [P(1:2,:) sit.goalState(1:2)];
-pathManual = [sit.goalState(1:2)];
-% pathManual = [[2;9] [6;3] sit.goalState(1:2)];
-
-sit.globalVisited = [];
-sit.globalNotVisited = pathManual;
-sit.viewFactor      = 0.3; % percentage of sensor horizon used for waypoint switching;
-sit.goalReached = 0;
-sit.tol         = 0.01;
 
 %% MPC LOOP
 
-count               = 1;
-max_it              = 1000;
-tol_waypoints       = 0.5;
-
-% Initial goal check
-if norm([sit.states{end}(1:2);1]-[sit.goalState(1:2);1])<sit.tol
-    fprintf(2,'Vehicle already within tolerance of final goal! \n');
-    fprintf(2,'STOPPED \n');
-    sit.goalReached = 1;
+% setup parametric optimization problem:
+if MPC.nav.goalReached == false
+    if MPC.nav.rebuild==true
+        problemIpopt 	= optim_setup(MPC,veh,'ipopt');
+        problemSqp      = optim_setup(MPC,veh,'sqp');
+    else
+        load('problemIpopt.mat');
+        load('problemSqp.mat');
+    end
+    MPC.nav.problemIpopt = problemIpopt;
+    MPC.nav.problemSqp   = problemSqp;
 end
 
-% Setup parametric optimization problem:
-if sit.rebuild==1
-    ipoptSolver 	= optim_setup(veh,'ipopt');
-    sqpSolver       = optim_setup(veh,'sqp');
-else
-    load('MPCipopt.mat');
-    load('MPCsqp.mat');
-end
-sit.ipoptSolver     = ipoptSolver;
-sit.sqpSolver       = sqpSolver;
-
-while (sit.goalReached == 0 && count<=max_it)
+while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     
     fprintf('\n');
-    fprintf('MPC STEP %i \n',count);
-
-    % sensor simulation
-    fprintf('Simulating sensor \n');
-    env = relevantObst(sit,veh,env);
-    sit = sensor(sit,veh,env);
+    fprintf('MPC STEP %i \n',MPC.nav.k);
     
-    % adapt sensor measurements:
-    if count>1
-        alpha = 8;
-        sit = processMeas(sit,alpha);
+    % here the robot should localize
+    % however we assume that location is perfectly known, so no
+    % localization routine is implemented here
+    
+    % this part checks whether the robot is already within tolerance of the
+    % final navigation goal
+    % if this is the case, the loop breaks and the robot is considered
+    % in the right final state, ie navigation is finished
+    if norm([MPC.nav.currentState(1:2);1]-[MPC.nav.globalGoal(1:2);1])<MPC.nav.tolerance
+        fprintf(2,'Vehicle within tolerance of final goal! \n');
+        fprintf(2,'STOPPED \n');
+        MPC.nav.goalReached = true;
+        break;
     end
+    
+    % this part simulates the environment info gathering of the robot
+    % you can either work from purely preloaded info, purely measured
+    % real-time, or both
+    fprintf('Measuring environment \n');
+    env = relevantObst(MPC,veh,env);
+    MPC = sensor(MPC,veh,env);
+%     if MPC.nav.k>1
+%         alpha = 8;
+%         sit = processMeas(sit,alpha); % adapt sensor measurements:
+%     end
+    
+    % check if computation of a global plan is necessary
+    % if so, a new global plan is computed
 
-    % express end goal in vehicle frame
-    sit = getLocalGoal(sit,veh);
+    % now get the local goal on the global plan, and transform it to the
+    % local coordinate frame to be used in the optimization problem
+    MPC = getLocalGoal(MPC);
 
     % solve optimization problem
     fprintf('Calculating optimal trajectory \n');
-    sit = optim(sit,veh,count,solver);
-    %sit = optim_noObstacles(sit,veh,count,'ipopt');
+    MPC = optim(MPC,veh);
     
-    % update vehicle position
+    % update vehicle position using the actuator frequency and
+    % back-simulation with added noise to simulate real-world effects
     fprintf('Advancing robot to next state \n');
-    sit = mpcNextState(sit,veh,3,2);
+    MPC = mpcNextState(MPC,veh,3,2);
     
-    % check if goal is reached
-    % TODO: for now it will stop too far from final goal!!
-    if norm(sit.states{end}-sit.goalState)<=sit.tol
-        sit.goalReached = 1;
-        sit.globalVisited = [sit.globalVisited sit.goalState(1:2)];
-        fprintf('Goal reached! Yipeeeeee :-) \n');
-    else
-        % update loop counter8
-        count = count + 1;
+    % update loop counter
+    MPC.nav.k = MPC.nav.k + 1;
+    
+    % if required, log the MPC iteration
+    if MPC.log.logBool == true
+        MPC = logMPC(MPC);
     end
     
 end
 
 % check that goal indeed reached:
-if sit.goalReached == 0 || count > max_it
+if MPC.nav.goalReached == false || MPC.nav.k > MPC.nav.kmax
     error('Maximum number of MPC iterations exceeded!');
 end
 

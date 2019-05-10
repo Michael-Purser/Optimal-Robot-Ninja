@@ -1,4 +1,4 @@
-function sit = mpcNextState(sit,veh,nSelector,stateUpdateSelector)
+function MPC = mpcNextState(MPC,veh,nSelector,stateUpdateSelector)
 % Function that calculates how many states to move the vehicle between
 % successive MPC iterations.
 % Different strategies are implemented for comparison.
@@ -7,10 +7,10 @@ switch nSelector
     
     % Strategy 1: Based on distance to target (old)
     case 1
-        n_original = veh.Optim.n;
+        n_original = MPC.nav.opt.horizon;
         n_min      = ceil(veh.Optim.n/10);
         n_max      = ceil(veh.Optim.n/10);
-        n_new = ceil(n_original*(1-norm([sit.states{end}(1:2);1]-[sit.goalState(1:2);1])/norm([sit.startState(1:2);1]-[sit.goalState(1:2);1])));
+        n_new = ceil(n_original*(1-norm([MPC.nav.currentState(1:2);1]-[MPC.nav.globalGoal(1:2);1])/norm([MPC.nav.globalStart(1:2);1]-[MPC.nav.globalGoal(1:2);1])));
         if n_new<n_min
             n_new = n_min;
         elseif n_new>n_max
@@ -19,13 +19,13 @@ switch nSelector
     
     % Strategy 2: based on actuation frequency
     case 2
-        f_min   = veh.actuatorfMin; % Hz
-        if isempty(sit.Sol.T)
-            T_n = sit.Init.T{end};
+        f_min   = veh.motors.fmax; % Hz
+        if MPC.nav.opt.sol.T == 0
+            T_n = MPC.nav.opt.init.T;
         else
-            T_n = sit.Sol.T{end};
+            T_n = MPC.nav.opt.sol.T(end);
         end
-        n = veh.Optim.n;
+        n = MPC.nav.opt.horizon;
         n_new = ceil(n/(T_n*f_min));
         if n_new>n
             n_new = n;
@@ -33,13 +33,13 @@ switch nSelector
         
     % Strategy 3: same as 2, but with exact change (instead of ceil)
     case 3
-        f_min   = veh.actuatorfMin; % Hz
-        if isempty(sit.Sol.T)
-            T_n = sit.Init.T{end};
+        f_min   = veh.motors.fmax; % Hz
+        if MPC.nav.opt.sol.T == 0
+            T_n = MPC.nav.opt.init.T;
         else
-            T_n = sit.Sol.T{end}(end);
+            T_n = MPC.nav.opt.sol.T(end);
         end
-        n = veh.Optim.n;
+        n = MPC.nav.opt.horizon;
         n_new = 1+n/(T_n*f_min); % +1 because of matlab indexing!!
         if n_new>n
             n_new = n;
@@ -47,12 +47,14 @@ switch nSelector
 end
 
 % update position, orientation and control signals:
-curPos  = sit.states{end};
-solX    = sit.Sol.X{end};
-solU    = sit.Sol.U{end};
-T_n     = sit.Sol.T{end}(end);
-n       = veh.Optim.n;
-noiseA  = veh.actuationNoise;
+curPos  = MPC.nav.currentState;
+solX    = MPC.nav.opt.sol.x;
+solU    = MPC.nav.opt.sol.u;
+T_n     = MPC.nav.opt.sol.T(end);
+n       = MPC.nav.opt.horizon;
+noiseA  = veh.motors.noiseamp;
+L       = veh.geometry.wheelBase;
+Umax    = veh.dynamics.velLimits(2);
 
 switch stateUpdateSelector
     
@@ -79,10 +81,6 @@ switch stateUpdateSelector
     case 2
         % this strategy updates the state by integrating the solution,
         % after adding white noise to simulate real-world effects
-        
-        % get parameters
-        L = veh.wheelBase;
-        Umax = veh.Optim.u_max;
         
         % add white noise to velocity signals
         Unoisy = zeros(size(solU));
@@ -193,8 +191,8 @@ end
         
 
 % add to situation struct:
-sit.nNew{end+1} = n_new;
-sit.states{end+1} = [newPos(1:2);newOri];
-sit.controls{end+1} = newU;
+% sit.nNew{end+1} = n_new;
+MPC.nav.currentState = [newPos(1:2);newOri];
+MPC.nav.currentVelocity  = newU;
 
 end

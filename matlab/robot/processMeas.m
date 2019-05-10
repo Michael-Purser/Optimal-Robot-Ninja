@@ -1,4 +1,4 @@
-function sit = processMeas(sit,a)
+function MPC = processMeas(MPC,a)
 
 xp = sit.states{end-1}(1:2);    % previous state
 xc = sit.states{end}(1:2);        % current state

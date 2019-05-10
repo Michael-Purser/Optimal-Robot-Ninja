@@ -1,11 +1,11 @@
-function MPC = optim_setup(veh,solver_str)
+function problem = optim_setup(MPC,veh,solver_str)
 
 % initialize variables:
 opti = casadi.Opti();
 
 max_meas    = 1000;
-n           = veh.Optim.n;
-L           = veh.wheelBase;
+n           = MPC.nav.opt.horizon;
+L           = veh.geometry.wheelBase;
 
 Lp          = opti.parameter(1,1);
 np          = opti.parameter(1,1);
@@ -110,15 +110,23 @@ else
     opti.solver('sqpmethod',opts);
 end
 
-MPC = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,measp,sigxp,sigyp},{x,u,T});
-% MPC.save('MPC.casadi');
+problem = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,measp,sigxp,sigyp},{x,u,T});
+problem.save('problem.casadi');
 
 if strcmp(solver_str,'ipopt')==1
-    ipoptSolver = MPC;
-    save 'MPCipopt.mat' 'ipoptSolver'
+    problemIpopt = problem;
+    save 'problemIpopt.mat' 'problemIpopt'
 else
-    sqpSolver = MPC;
-    save 'MPCsqp.mat' 'sqpSolver'
+    problemSqp = problem;
+    save 'problemSqp.mat' 'problemSqp'
+end
+
+if MPC.log.exportBool == true
+    if strcmp(solver_str,'ipopt')==1
+        problem.save('problemIpopt.casadi');
+    else
+        problem.save('problemSqp.casadi');
+    end
 end
     
 end

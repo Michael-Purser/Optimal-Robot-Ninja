@@ -1,4 +1,4 @@
-function plotEnv(env,sit)
+function plotEnv(env,MPC)
 % Function that plots the environment with robot and obstacles, in world
 % reference frame.
 
@@ -27,12 +27,12 @@ end
 
 if nargin == 2
     % plot robot with its orientation:
-    p   = sit.states{end};
+    p   = MPC.nav.currentState;
     plot(p(1),p(2),'ro');
     quiver(p(1),p(2),-sin(p(3)),cos(p(3)),'r-');
 
     % plot desired final robot position:
-    g   = sit.goalState;
+    g   = MPC.nav.globalGoal;
     plot(g(1),g(2),'rx');
 end
 
