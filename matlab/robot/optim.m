@@ -11,8 +11,7 @@ a_min       = veh.dynamics.accLimits(1);
 a_max       = veh.dynamics.accLimits(2);
 om_min      = veh.dynamics.omLimits(1);
 om_max      = veh.dynamics.omLimits(2);
-sigma_x     = MPC.nav.opt.sigma;
-sigma_y     = MPC.nav.opt.sigma;
+sigma       = MPC.nav.opt.sigma;
 Ghat        = MPC.nav.opt.Ghat;
 maxDist     = MPC.nav.opt.maxDist;
 solver      = MPC.nav.opt.solver;
@@ -24,7 +23,7 @@ meas = MPC.nav.measurements;
 meas = [meas;20*ones(max_meas-size(meas,1),2)];
 
 % check position; adapt G_hat if needed:
-G = checkPosition(meas,[0 0],sigma_x,sigma_y);
+G = checkPosition(meas,[0 0],sigma,sigma);
 update_cycles = 0;
 while update_cycles<=10 && G>Ghat
     Ghat = 1.5*Ghat;
@@ -45,6 +44,7 @@ opti = casadi.Opti();
 % initial and final positions + initial guess for time and states:
 x_begin = [0;0;0];  % always zero because problem solved in robot frame.
 x_final = MPC.nav.opt.goal;
+u_begin = MPC.nav.currentVelocity;
 
 if strcmp(solver,'ipopt')==1
     if MPC.nav.k==1
@@ -92,7 +92,7 @@ MPC.nav.opt.init.u = u_init;
 MPC.nav.opt.init.T = T_init;
 
 [X,U,T] = problem(x_init,u_init,T_init,L,n,u_min,u_max,a_min,a_max,om_min,...
-        om_max,Ghat,maxDist,x_begin,x_final,meas,sigma_x,sigma_y);
+        om_max,Ghat,maxDist,x_begin,x_final,u_begin,meas,sigma);
 
 % append to struct:
 MPC.nav.opt.sol.x = opti.value(X);

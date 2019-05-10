@@ -15,13 +15,13 @@ aminp       = opti.parameter(1,1);
 amaxp       = opti.parameter(1,1);
 omminp      = opti.parameter(1,1);
 ommaxp      = opti.parameter(1,1);
-sigxp       = opti.parameter(1,1);
-sigyp       = opti.parameter(1,1);
+sigmap      = opti.parameter(1,1);
 Ghatp       = opti.parameter(1,1);
 minscalep   = opti.parameter(1,1);
 measp       = opti.parameter(max_meas,2);
 xbeginp     = opti.parameter(3,1);
 xfinalp     = opti.parameter(3,1);
+ubeginp     = opti.parameter(2,1);
 
 % ode:
 ode  = @(x,u)[0.5*(u(1)+u(2))*sin(x(3)); 0.5*(u(1)+u(2))*cos(x(3)); (2/L)*(u(2)-u(1))];
@@ -52,6 +52,7 @@ opti.subject_to(x(:,1)==xbeginp);
 opti.subject_to(x(:,end)==xfinalp);
 opti.subject_to(uminp <= u(1,:) <= umaxp);
 opti.subject_to(uminp <= u(2,:) <= umaxp);
+opti.subject_to(u(:,1) == ubeginp);
 opti.subject_to(u(1,:)+u(2,:) >= 0);
 % opti.subject_to(abs(u(1,:).^2-u(2,:).^2) <= dusqmax);
 % opti.subject_to(a_min <= (n./T(2:end)).*diff(u(1,:)) <= a_max);
@@ -69,7 +70,7 @@ pos = casadi.MX.sym('pos',2);
 th  = measp(:,1);
 r   = measp(:,2);
 p   = [-r.*sin(th) r.*cos(th)];
-g   = gaussianValue(p,pos,sigxp,sigyp);
+g   = gaussianValue(p,pos,sigmap,sigmap);
 costf = casadi.Function('costf',{pos},{sum(g)});
 
 opti.subject_to(costf(x(1:2,:))<=Ghatp);
@@ -110,7 +111,7 @@ else
     opti.solver('sqpmethod',opts);
 end
 
-problem = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,measp,sigxp,sigyp},{x,u,T});
+problem = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,ubeginp,measp,sigmap},{x,u,T});
 problem.save('problem.casadi');
 
 if strcmp(solver_str,'ipopt')==1

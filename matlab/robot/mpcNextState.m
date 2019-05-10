@@ -191,7 +191,7 @@ end
         
 
 % add to situation struct:
-% sit.nNew{end+1} = n_new;
+MPC.nav.m            = n_new;
 MPC.nav.currentState = [newPos(1:2);newOri];
 MPC.nav.currentVelocity  = newU;
 
