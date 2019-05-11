@@ -4,46 +4,64 @@ function makeEnv()
 % The environments are made out of geometric shapes.
 % They are stored in .dat files for later access.
 
-env.obst.known.circles      = {};
-env.obst.known.rectangles   = {};
-env.obst.unknown.circles    = {};
-env.obst.unknown.rectangles = {};
-
 
 %% Environment 1: Two circles
 
-env.obst.known.circles.C1.name      = 'circle1';
-env.obst.known.circles.C1.center    = [-4;4;1];
-env.obst.known.circles.C1.radius    = 3;
+% reset env.obst cell array:
+env.obst      = {};
 
-env.obst.known.circles.C2.name      = 'circle2';
-env.obst.known.circles.C2.center    = [4;4;1];
-env.obst.known.circles.C2.radius    = 3;
+C1.name      = 'C1';
+C1.type      = 'circle';
+C1.mode      = 'known';
+C1.center    = [-4;4;1];
+C1.radius    = 3;
+env.obst{end+1} = C1;
+
+C2.name      = 'C2';
+C2.type      = 'circle';
+C2.mode      = 'known';
+C2.center    = [4;4;1];
+C2.radius    = 3;
+env.obst{end+1} = C2;
 
 save data/env1.mat env
 
 
-% plotEnvironment(env);
-% savefig(gcf,'figs/envFigs/env1.fig');
-% close(gcf);
+plotEnv(env);
+savefig(gcf,'figs/envFigs/env1.fig');
+close(gcf);
 
 
-% %% Environment 2: Gap between two long narrow rectangles
-% env.Obst.pos  = [-4, 4;
-%                    3, 3;
-%                    1, 1];
-% env.Obst.type = [2, 2];
-% env.Obst.data = [3, 3;
-%                   0.8, 0.8;
-%                   -pi/8, pi/8];
-% 
-% save data/env2.mat env
-% 
-% % plotEnvironment(env);
-% savefig(gcf,'figs/envFigs/env2.fig');
-% close(gcf);
-% 
-% 
+%% Environment 2: Gap between two long narrow rectangles
+
+% reset env.obst cell array:
+env.obst      = {};
+
+R1.name         = 'R1';
+R1.type         = 'rectangle';
+R1.mode         = 'known';
+R1.center       = [-4;3;1];
+R1.width        = 3;
+R1.height       = 0.8;
+R1.orientation  = -pi/8;
+env.obst{end+1} = R1;
+
+R2.name         = 'R2';
+R2.type         = 'rectangle';
+R2.mode         = 'known';
+R2.center       = [4;3;1];
+R2.width        = 3;
+R2.height       = 0.8;
+R2.orientation  = pi/8;
+env.obst{end+1} = R2;
+
+save data/env2.mat env
+
+plotEnv(env);
+savefig(gcf,'figs/envFigs/env2.fig');
+close(gcf);
+
+
 % %% Environment 3: two vertical rows of circles
 % env.Obst.pos  = [-2, -2, -2, -2, -2, 2, 2, 2, 2, 2;
 %                    0,  2,  4,  6,  8, 0, 2, 4, 6, 8;

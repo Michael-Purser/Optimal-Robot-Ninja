@@ -1,30 +1,43 @@
-function plotEnv(env,MPC)
+function plotEnv(env,varargin)
 % Function that plots the environment with robot and obstacles, in world
 % reference frame.
+% Known obstacles are plotted in blue, unknown obstacles in cyan.
 
-nObst   = size(env.Obst.pos,2);
 arc     = 0:0.01:2*pi;
 
 figure;
 hold all;
 
 % plot obstacles:
-for i=1:nObst
-    type = env.Obst.type(i);
-    data = env.Obst.data(:,i);
-    pos  = env.Obst.pos(:,i);
+for i=1:size(env.obst,2)
+    type = env.obst{i}.type;
+    mode = env.obst{i}.mode;
+    if strcmp(mode,'known')==1
+        plotColor = 'b';
+    elseif strcmp(mode,'unknown')==1
+        plotColor = 'c';
+    end
+    
     % circular obstacle:
-    if type==1
-        plot(pos(1)+data(1)*cos(arc), pos(2)+data(1)*sin(arc),'b',...
+    if strcmp(type,'circle')==1
+        pos = env.obst{i}.center;
+        R = env.obst{i}.radius;
+        plot(pos(1)+R*cos(arc), pos(2)+R*sin(arc), plotColor,...
             'LineWidth',1.5);
+        
     % rectangular obstacle:
-    else
-        C = rectangleCorners(pos,data(1),data(2),data(3));
+    elseif strcmp(type,'rectangle')==1
+        pos = env.obst{i}.center;
+        W = env.obst{i}.width;
+        H = env.obst{i}.height;
+        ori = env.obst{i}.orientation;
+        C = rectangleCorners(pos,W,H,ori);
         C(:,end+1) = C(:,1);
-        plot(C(1,:),C(2,:),'b','LineWidth',1.5);
+        plot(C(1,:),C(2,:),plotColor,'LineWidth',1.5);
     end
 end
 
+% plot MPC info on fig (optional)
 if nargin == 2
     % plot robot with its orientation:
     p   = MPC.nav.currentState;
@@ -36,10 +49,10 @@ if nargin == 2
     plot(g(1),g(2),'rx');
 end
 
-% Set axis constraints:
+% axis constraints:
 axis equal;
 
-% Title:
+% title:
 title('Environment in world frame');
 
 end

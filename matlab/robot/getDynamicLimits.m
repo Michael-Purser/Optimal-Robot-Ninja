@@ -1,4 +1,6 @@
 function MPC = getDynamicLimits(MPC,veh)
+    % Function that gets the dynamic limits used in the optimization
+    % problem from the vehicle info
 
     MPC.nav.opt.dynamicLimits.vel(1) = min(veh.dynamics.velLimits(1),veh.motors.velLimits(1));
     MPC.nav.opt.dynamicLimits.vel(2) = min(veh.dynamics.velLimits(2),veh.motors.velLimits(2));
