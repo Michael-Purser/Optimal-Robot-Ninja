@@ -40,10 +40,13 @@ MPC.log.exportBool      = false;
 
 %% MPC LOOP
 
-% Check that sit, veh, ... have been initialized correctly
+% check that sit, veh, ... have been initialized correctly
 
-% Sort obstacles
+% sort obstacles
 env = sortObstacles(MPC,env);
+
+% sample preloaded obstacles
+% MPC = samplePreloadedObstacles(MPC,env);
 
 % select most restrictive vehicle dynamic constraints:
 MPC = getDynamicLimits(MPC,veh);
@@ -91,7 +94,7 @@ while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
 %         alpha = 8;
 %         sit = processMeas(sit,alpha); % adapt sensor measurements:
 %     end
-    MPC = measToCartesian(MPC);
+    MPC = prepareObstacleData(MPC);
     
     % check if computation of a global plan is necessary
     % if so, a new global plan is computed
@@ -142,6 +145,6 @@ close all;
 % plots:
 k = MPC.nav.k-1;
 fprintf('Plotting solution \n');
-mpc_plotSol(MPC,veh,env,5,false,1);
+mpc_plotSol(MPC,veh,env,k,false,1);
 
 

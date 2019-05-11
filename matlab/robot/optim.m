@@ -18,7 +18,7 @@ solver      = MPC.nav.opt.solver;
 max_meas    = 1000;
 
 % get measurements (in cartesian coordinates):
-meas        = MPC.nav.obstacleData.meas.trans;
+meas        = MPC.nav.opt.obst;
 %meas    = sit.meas_tilde{end};
 meas        = [meas;20*ones(max_meas-size(meas,1),2)];
 
