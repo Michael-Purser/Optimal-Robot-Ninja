@@ -1,19 +1,16 @@
-function plotG(sit,veh,it)
+function plotG(MPC,veh,it)
 % Function that makes a 3D plot of the "gaussian landscape" around
 % measurements, and adds a line representing the G_hat level.
 
-N_original = veh.Map.N;
-veh.Map.N = 100;
-H         = veh.Sensor.horizon;
-G_hat     = veh.Optim.G_hat;
-N         = veh.Map.N;
+N         = 100;
+H         = veh.sensor.horizon;
+Ghat      = MPC.nav.opt.Ghat;
 
 % reconstruct gaussian local map from 'sit' data:
-sit     = makeMap(sit,veh);
-sit     = addMeasurementsToMap(sit,veh,2,it);
-sit     = addGaussianToMap(sit,veh);
-dx      = sit.Temp.dx;
-gmap    = sit.Temp.gmap;
+map     = zeros(2*N+1,2*N+1);
+dx      = 2*H/(2*N+1);
+map     = addMeasurementsToMap(map,dx,MPC,N,2,it);
+gmap    = addGaussianToMap(map,MPC,veh,N);
 
 % make plot limits:
 x_vec = linspace(-(H-dx/2),H-dx/2,2*N+1);
@@ -23,9 +20,6 @@ y_vec = linspace(-(H-dx/2),H-dx/2,2*N+1);
 figure;
 hold all;
 mesh(x_vec,y_vec,gmap'); axis off;
-contour3(x_vec,y_vec,gmap',[veh.Optim.G_hat,veh.Optim.G_hat],'r','Linewidth',4);
-
-% restablish original N:
-veh.Map.N = N_original;
+contour3(x_vec,y_vec,gmap',[Ghat,Ghat],'r','Linewidth',4);
 
 end

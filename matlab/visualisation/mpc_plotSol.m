@@ -1,32 +1,24 @@
-function mpc_plotSol(sit,veh,env,it,varargin)
+function mpc_plotSol(MPC,veh,env,it,varargin)
 
-N_original = veh.Map.N;
-veh.Map.N = 200;
-gv      = sit.globalVisited;
-gnv     = sit.globalNotVisited;
-states  = {sit.states{1:it}};
-p       = [states{it}(1:2);1];
-phi     = sit.states{it}(3);
-X       = sit.Sol.X{it};
-U       = sit.Sol.U{it};
-T       = sit.Sol.T{it};
-x_final = [sit.goalState(1:2);1];
-H       = veh.Sensor.horizon;
-G_hat   = veh.Optim.G_hat;
-n       = veh.Optim.n;
-N       = veh.Map.N;
-nObst   = size(env.Obst.pos,2);
+states  = {MPC.log.states{1:it}};
+p       = [states{it-1}(1:2);1];
+phi     = states{it-1}(3);
+X       = MPC.log.opts{it}.sol.x;
+U       = MPC.log.opts{it}.sol.u;
+T       = MPC.log.opts{it}.sol.T;
+x_final = [MPC.nav.globalGoal(1:2);1];
+H       = veh.sensor.horizon;
+G_hat   = MPC.nav.opt.Ghat;
+n       = MPC.nav.opt.horizon;
+N       = 200;
 arc     = 0:0.01:2*pi;
 
-% reconstruct gaussian local map from 'sit' data:
-sit     = makeMap(sit,veh);
-sit     = addMeasurementsToMap(sit,veh,2,it);
-sit     = addGaussianToMap(sit,veh);
-dx      = sit.Temp.dx;
-gmap    = sit.Temp.gmap;
+% reconstruct gaussian local map from MPC data:
+map     = zeros(2*N+1,2*N+1);
+dx      = 2*H/(2*N+1);
+map     = addMeasurementsToMap(map,dx,MPC,N,2,it);
+gmap    = addGaussianToMap(map,MPC,veh,N);
 
-% x_loc_coords = linspace(-(H-dx/2),H-dx/2,2*N+1);
-% y_loc_coords = linspace(-(H-dx/2),H-dx/2,2*N+1);
 x_loc_coords = linspace(-(H-dx),H-dx,2*N+1);
 y_loc_coords = linspace(-(H-dx),H-dx,2*N+1);
 x_loc_coords = [x_loc_coords;zeros(1,size(x_loc_coords,2));ones(1,size(x_loc_coords,2))];
@@ -36,25 +28,33 @@ figure;
 hold all;
 
 % plot obstacles:
-for i=1:nObst
-    type = env.Obst.type(i);
-    data = env.Obst.data(:,i);
-    pos  = env.Obst.pos(:,i);
+for i=1:size(env.obst,2)
+    type = env.obst{i}.type;
+    mode = env.obst{i}.mode;
+    if strcmp(mode,'known')==1
+        plotColor = 'b';
+    elseif strcmp(mode,'unknown')==1
+        plotColor = 'c';
+    end
+    
     % circular obstacle:
-    if type==1
-        plot(pos(1)+data(1)*cos(arc), pos(2)+data(1)*sin(arc),'b',...
+    if strcmp(type,'circle')==1
+        pos = env.obst{i}.center;
+        R = env.obst{i}.radius;
+        plot(pos(1)+R*cos(arc), pos(2)+R*sin(arc), plotColor,...
             'LineWidth',1.5);
+        
     % rectangular obstacle:
-    else
-        C = rectangleCorners(pos,data(1),data(2),data(3));
+    elseif strcmp(type,'rectangle')==1
+        pos = env.obst{i}.center;
+        W = env.obst{i}.width;
+        H = env.obst{i}.height;
+        ori = env.obst{i}.orientation;
+        C = rectangleCorners(pos,W/2,H/2,ori);
         C(:,end+1) = C(:,1);
-        plot(C(1,:),C(2,:),'b','LineWidth',1.5);
+        plot(C(1,:),C(2,:),plotColor,'LineWidth',1.5);
     end
 end
-
-% plot global path:
-gpath = [states{1}(1:2) gv gnv];
-plot(gpath(1,:),gpath(2,:),'ko--');
 
 % plot gaussians from local map: transform to global coordinates before 
 % plotting:
@@ -107,29 +107,29 @@ if nargin == 6
     subplot(1,2,2);
     plot(t_vec(1:end-1),U(2,:)); xlabel('time [s]'); ylabel('v_{left}(t) [m/s]'); title('v_{left}(t)');
     
-    % plot n_new and max(G) in all iterations:
-    figure;
-    hold all;
-    for k = 1:size(sit.Sol.G,2)
-        plot(k,max(sit.Sol.G{k}),'b.-'); 
-        xlabel('iteration [-]'); ylabel('max(G) [-]');
-        titlestr = {'max(G) over successive MPC iterations','(original measurements)'};
-        title(titlestr);
-    end
+%     % plot n_new and max(G) in all iterations:
+%     figure;
+%     hold all;
+%     for k = 1:size(MPC.log.opts,2)
+%         plot(k,max(sit.Sol.G{k}),'b.-'); 
+%         xlabel('iteration [-]'); ylabel('max(G) [-]');
+%         titlestr = {'max(G) over successive MPC iterations','(original measurements)'};
+%         title(titlestr);
+%     end
     
-    % plot euclidian distance between successive MPC states:
+    % plot n_new and euclidian distance between successive MPC states:
     figure;
     subplot(1,2,1); hold all;
-    for k = 1:size(sit.nNew,2)
-        plot(k,sit.nNew{k},'b.-'); 
+    for k = 1:size(MPC.log.opts,2)
+        plot(k,MPC.log.m{k},'b.-'); 
         xlabel('iteration [-]'); ylabel('n_{new} [-]');
         titlestr = {'n_{new} over successive','MPC iterations'};
         title(titlestr);
     end
     subplot(1,2,2); hold all;
-    for k = 1:size(sit.states,2)-1
-        s1 = sit.states{k}(1:2);
-        s2 = sit.states{k+1}(1:2);
+    for k = 1:size(MPC.log.states,2)-1
+        s1 = MPC.log.states{k}(1:2);
+        s2 = MPC.log.states{k+1}(1:2);
         d = norm(s1-s2);
         plot(k,d,'b.-'); 
         xlabel('iteration [-]'); ylabel('d [m]');
@@ -139,7 +139,5 @@ if nargin == 6
 
 end
 
-% restablish original N:
-veh.Map.N = N_original;
 
 end

@@ -32,7 +32,7 @@ MPC.nav.currentState    = MPC.nav.globalStart;  % Robot starts at global start
 MPC.nav.currentVelocity = [0;0];                % Robot starts from standstil
 MPC.nav.tolerance       = 0.01;
 MPC.nav.opt.solver      = 'sqp';
-MPC.nav.kmax            = 1000;
+MPC.nav.kmax            = 4;
 MPC.nav.rebuild         = true;
 MPC.nav.mapObstacles    = false;
 MPC.log.logBool         = true;
@@ -42,6 +42,12 @@ MPC.log.exportBool      = false;
 %% MPC LOOP
 
 % Check that sit, veh, ... have been initialized correctly
+
+% Sort obstacles
+env = sortObstacles(MPC,env);
+
+% select most restrictive vehicle dynamic constraints:
+MPC = getDynamicLimits(MPC,veh);
 
 % setup parametric optimization problem:
 if MPC.nav.goalReached == false
@@ -55,9 +61,6 @@ if MPC.nav.goalReached == false
     MPC.nav.problemIpopt = problemIpopt;
     MPC.nav.problemSqp   = problemSqp;
 end
-
-% select most restrictive dynamic constraints:
-MPC = getDynamicLimits(MPC,veh);
 
 while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     
@@ -84,7 +87,6 @@ while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     % real-time, or both
     fprintf('Measuring environment \n');
 %     env = relevantObst(MPC,veh,env);
-    env = sortObstacles(MPC,env);
     MPC = sensor(MPC,veh,env);
 %     if MPC.nav.k>1
 %         alpha = 8;
@@ -139,6 +141,7 @@ close all;
 
 % plots:
 fprintf('Plotting solution \n');
-mpc_plotSol(sit,veh,env,count,2,2);
+plotG(MPC,veh,MPC.nav.k-1);
+mpc_plotSol(MPC,veh,env,MPC.nav.k-1,1,1);
 
 
