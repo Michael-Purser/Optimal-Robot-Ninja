@@ -82,8 +82,8 @@ while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     end
     
     % this part simulates the environment info gathering of the robot
-    % you can either work from purely preloaded info, purely measured
-    % real-time, or both
+    % you can either work from purely measured data in real-time, or a
+    % combination of measured and preloaded data
     fprintf('Measuring environment \n');
 %     env = relevantObst(MPC,veh,env);
     MPC = sensor(MPC,veh,env);
@@ -91,6 +91,7 @@ while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
 %         alpha = 8;
 %         sit = processMeas(sit,alpha); % adapt sensor measurements:
 %     end
+    MPC = measToCartesian(MPC);
     
     % check if computation of a global plan is necessary
     % if so, a new global plan is computed
@@ -141,6 +142,6 @@ close all;
 % plots:
 k = MPC.nav.k-1;
 fprintf('Plotting solution \n');
-mpc_plotSol(MPC,veh,env,k,false,1);
+mpc_plotSol(MPC,veh,env,5,false,1);
 
 

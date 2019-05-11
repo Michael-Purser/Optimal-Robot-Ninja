@@ -2,12 +2,12 @@ function mpc_plotSol(MPC,veh,env,it,fail,varargin)
 
 if fail
     it      = MPC.nav.k - 1;
-    meas    = MPC.nav.measurements;
+    meas    = MPC.nav.obstacleData.meas.orig;
     states  = {MPC.log.states{1:it}};
     p       = [states{it}(1:2);1];
     phi     = states{it}(3);
 else
-    meas    = MPC.log.meas{it};
+    meas    = MPC.log.meas{it}.orig;
     states  = {MPC.log.states{1:it}};
     p       = [states{it-1}(1:2);1];
     phi     = states{it-1}(3);

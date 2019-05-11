@@ -73,10 +73,8 @@ opti.subject_to(T(2:end)==T(1:end-1));
 
 pos = casadi.MX.sym('pos',2);
 
-th  = measp(:,1);
-r   = measp(:,2);
-p   = [-r.*sin(th) r.*cos(th)];
-g   = gaussianValue(p,pos,sigmap,sigmap);
+% p   = [measp(:,1) measp(:,2)];
+g   = gaussianValue(measp,pos,sigmap,sigmap);
 costf = casadi.Function('costf',{pos},{sum(g)});
 
 opti.subject_to(costf(x(1:2,:))<=Ghatp);

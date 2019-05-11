@@ -17,10 +17,10 @@ maxDist     = MPC.nav.opt.maxDist;
 solver      = MPC.nav.opt.solver;
 max_meas    = 1000;
 
-% get measurements:
-meas = MPC.nav.measurements;
+% get measurements (in cartesian coordinates):
+meas        = MPC.nav.obstacleData.meas.trans;
 %meas    = sit.meas_tilde{end};
-meas = [meas;20*ones(max_meas-size(meas,1),2)];
+meas        = [meas;20*ones(max_meas-size(meas,1),2)];
 
 % check position; adapt G_hat if needed:
 G = checkPosition(meas,[0 0],sigma,sigma);

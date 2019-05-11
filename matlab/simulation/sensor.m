@@ -67,6 +67,6 @@ end
 meas = meas(all(meas,2),:);
 
 % append result to vehicle struct:
-MPC.nav.measurements = meas;
+MPC.nav.obstacleData.meas.orig = meas;
 
 end

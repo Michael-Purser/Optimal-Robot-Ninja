@@ -37,11 +37,29 @@ plot(meas(:,1),meas(:,2),'ko');
 axis equal;
 title('Circle sampling in local coordinate axis');
 
+% transform to world frame
+T = homTrans(0.0,center);
+for i=1:N
+   A = T*[meas(i,:)';1];
+   meas(i,:) = A(1:2);
+end
 
-% sample rectangularar obstacle
+arc = 0:0.01:2*pi;
+figure;
+plot(center(1)+R*cos(arc), center(2)+R*sin(arc), 'b', 'LineWidth',1.5);
+hold on;
+plot(meas(:,1),meas(:,2),'ko');
+axis equal;
+title('Circle sampling in global coordinate axis');
+
+
+
+
+% sample rectangular obstacle
 center  = env.obst{2}.center;
 W       = env.obst{2}.width;
 H       = env.obst{2}.height;
+ori     = env.obst{2}.orientation;
 
 NW      = ceil(W/deltaL);
 NH      = ceil(H/deltaL);
@@ -67,3 +85,19 @@ hold on;
 plot(meas(:,1),meas(:,2),'ko');
 axis equal;
 title('Rectangle sampling in local coordinate axis');
+
+% transform to world frame
+T = homTrans(ori,center);
+for i=1:size(meas,1)
+   A = T*[meas(i,:)';1];
+   meas(i,:) = A(1:2);
+end
+
+figure;
+C = rectangleCorners(center,W/2,H/2,ori);
+C(:,end+1) = C(:,1);
+plot(C(1,:),C(2,:),'b','LineWidth',1.5);
+hold on;
+plot(meas(:,1),meas(:,2),'ko');
+axis equal;
+title('Rectangle sampling in global coordinate axis');
