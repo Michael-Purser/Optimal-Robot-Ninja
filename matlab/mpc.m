@@ -33,7 +33,7 @@ MPC.nav.tolerance       = 0.01;
 MPC.nav.opt.solver      = 'ipopt';
 MPC.nav.kmax            = 20;
 MPC.nav.rebuild         = true;
-MPC.nav.mapObstacles    = false;
+MPC.nav.preload         = false;
 MPC.log.logBool         = true;
 MPC.log.exportBool      = false;
 
@@ -46,7 +46,7 @@ MPC.log.exportBool      = false;
 env = sortObstacles(MPC,env);
 
 % sample preloaded obstacles
-% MPC = samplePreloadedObstacles(MPC,env);
+% MPC = samplePreloaded(MPC,env);
 
 % select most restrictive vehicle dynamic constraints:
 MPC = getDynamicLimits(MPC,veh);
