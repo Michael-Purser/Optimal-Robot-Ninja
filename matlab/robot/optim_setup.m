@@ -17,7 +17,7 @@ omminp      = opti.parameter(1,1);
 ommaxp      = opti.parameter(1,1);
 sigmap      = opti.parameter(1,1);
 Ghatp       = opti.parameter(1,1);
-minscalep   = opti.parameter(1,1);
+maxDistp    = opti.parameter(1,1);
 measp       = opti.parameter(max_meas,2);
 xbeginp     = opti.parameter(3,1);
 xfinalp     = opti.parameter(3,1);
@@ -48,22 +48,28 @@ T    = opti.variable(1,n);
 % 	    make actuator acceleration limits dependent on current velocity
 % 	    add jerk contraints to avoid inf accelerations
 opti.subject_to(F(x(:,1:end-1),u,T./np)==x(:,2:end));
+
 opti.subject_to(x(:,1)==xbeginp);
 opti.subject_to(x(:,end)==xfinalp);
+opti.subject_to(-maxDistp<=diff(x(1,:))<=maxDistp);
+opti.subject_to(-maxDistp<=diff(x(2,:))<=maxDistp);
+
 opti.subject_to(uminp <= u(1,:) <= umaxp);
 opti.subject_to(uminp <= u(2,:) <= umaxp);
 opti.subject_to(u(:,1) == ubeginp);
+opti.subject_to(u(:,end) == [0;0]);  
 opti.subject_to(u(1,:)+u(2,:) >= 0);
 % opti.subject_to(abs(u(1,:).^2-u(2,:).^2) <= dusqmax);
+
 % opti.subject_to(a_min <= (n./T(2:end)).*diff(u(1,:)) <= a_max);
 % opti.subject_to(a_min <= (n./T(2:end)).*diff(u(2,:)) <= a_max);
 opti.subject_to(aminp <= np./T(2:end).*u(1,2:end)-np./T(1:end-1).*u(1,1:end-1) <= amaxp);
 opti.subject_to(aminp <= np./T(2:end).*u(2,2:end)-np./T(1:end-1).*u(2,1:end-1) <= amaxp);
+
 opti.subject_to(omminp <= (1/Lp)*(u(2,:)-u(1,:)) <= ommaxp);
+
 opti.subject_to(T >= 0);
 opti.subject_to(T(2:end)==T(1:end-1));
-opti.subject_to(-minscalep<=diff(x(1,:))<=minscalep);
-opti.subject_to(-minscalep<=diff(x(2,:))<=minscalep);
 
 pos = casadi.MX.sym('pos',2);
 
@@ -111,7 +117,7 @@ else
     opti.solver('sqpmethod',opts);
 end
 
-problem = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,minscalep,xbeginp,xfinalp,ubeginp,measp,sigmap},{x,u,T});
+problem = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,maxDistp,xbeginp,xfinalp,ubeginp,measp,sigmap},{x,u,T});
 problem.save('problem.casadi');
 
 if strcmp(solver_str,'ipopt')==1

@@ -27,8 +27,9 @@ veh.sensor.noiseamp     = 0;
 veh.sensor.freq         = 100;
 veh.motors.fmax         = 3;
 MPC.nav.globalStart     = [0;0;0];
-MPC.nav.currentState    = MPC.nav.globalStart;
 MPC.nav.globalGoal      = [6;8;pi/2];
+MPC.nav.currentState    = MPC.nav.globalStart;  % Robot starts at global start
+MPC.nav.currentVelocity = [0;0];                % Robot starts from standstil
 MPC.nav.tolerance       = 0.01;
 MPC.nav.opt.solver      = 'sqp';
 MPC.nav.kmax            = 1000;
@@ -51,6 +52,9 @@ if MPC.nav.goalReached == false
     MPC.nav.problemIpopt = problemIpopt;
     MPC.nav.problemSqp   = problemSqp;
 end
+
+% select most restrictive dynamic constraints:
+MPC = getDynamicLimits(MPC,veh);
 
 while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     

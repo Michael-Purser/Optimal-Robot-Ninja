@@ -26,14 +26,16 @@ MPC.nav.rebuild         = true;     % Indicate wether to rebuild (true) or load 
 MPC.nav.problemIpopt    = 0;        % put here as compromise; limit memory when logging opt
 MPC.nav.problemSqp      = 0;
 
-MPC.nav.opt.start       = [];
-MPC.nav.opt.goal        = [];
-MPC.nav.opt.horizon     = 200;
-MPC.nav.opt.obst        = [];
-MPC.nav.opt.dynLimits   = [];
-MPC.nav.opt.sigma       = 0.1;
-MPC.nav.opt.Ghat        = 2.0;
-MPC.nav.opt.maxDist     = 0.1;
+MPC.nav.opt.start         = [];
+MPC.nav.opt.goal          = [];
+MPC.nav.opt.horizon       = 200;
+MPC.nav.opt.obst          = [];
+MPC.nav.opt.dynLimits.vel = [];
+MPC.nav.opt.dynLimits.acc = [];
+MPC.nav.opt.dynLimits.om  = [];
+MPC.nav.opt.sigma         = 0.1;
+MPC.nav.opt.Ghat          = 2.0;
+MPC.nav.opt.maxDist       = 0.1;
 
 MPC.nav.opt.init.x      = [];
 MPC.nav.opt.init.u      = [];

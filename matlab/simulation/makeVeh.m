@@ -18,8 +18,8 @@ veh.dynamics.accLimits  = [-0.2;0.2];
 % Actuators
 veh.motors.fmax       	= 3;
 veh.motors.noiseamp    	= 0.03;
-veh.motors.velLimits    = [];
-veh.motors.accLimits    = [];
+veh.motors.velLimits    = [-0.2,0.2];
+veh.motors.accLimits    = [-0.2,0.2];
 
 % Sensor:
 veh.sensor.thetamax     = pi;
