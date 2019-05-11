@@ -1,4 +1,4 @@
-function plotEnv(env,varargin)
+function plotEnv(env,MPC)
 % Function that plots the environment with robot and obstacles, in world
 % reference frame.
 % Known obstacles are plotted in blue, unknown obstacles in cyan.
@@ -31,7 +31,7 @@ for i=1:size(env.obst,2)
         W = env.obst{i}.width;
         H = env.obst{i}.height;
         ori = env.obst{i}.orientation;
-        C = rectangleCorners(pos,W,H,ori);
+        C = rectangleCorners(pos,W/2,H/2,ori);
         C(:,end+1) = C(:,1);
         plot(C(1,:),C(2,:),plotColor,'LineWidth',1.5);
     end

@@ -23,6 +23,7 @@ MPC.nav.k               = 1;        % Loop counter
 MPC.nav.kmax            = 1000;     % Loop counter maximum
 MPC.nav.m               = 0;        % Number of states advanced in this MPC step
 MPC.nav.rebuild         = true;     % Indicate wether to rebuild (true) or load (false) the problem
+MPC.nav.mapObstacles    = true;     % Indicate wether to sort the obstacles between mapped & measured
 MPC.nav.problemIpopt    = 0;        % put here as compromise; limit memory when logging opt
 MPC.nav.problemSqp      = 0;
 

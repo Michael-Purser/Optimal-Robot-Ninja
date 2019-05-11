@@ -34,6 +34,7 @@ MPC.nav.tolerance       = 0.01;
 MPC.nav.opt.solver      = 'sqp';
 MPC.nav.kmax            = 1000;
 MPC.nav.rebuild         = true;
+MPC.nav.mapObstacles    = true;
 MPC.log.logBool         = true;
 MPC.log.exportBool      = false;
 
@@ -82,7 +83,8 @@ while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     % you can either work from purely preloaded info, purely measured
     % real-time, or both
     fprintf('Measuring environment \n');
-    env = relevantObst(MPC,veh,env);
+%     env = relevantObst(MPC,veh,env);
+    env = sortObstacles(MPC,env);
     MPC = sensor(MPC,veh,env);
 %     if MPC.nav.k>1
 %         alpha = 8;

@@ -4,6 +4,9 @@ function makeEnv()
 % The environments are made out of geometric shapes.
 % They are stored in .dat files for later access.
 
+env.obst      = {};
+env.measured  = {};
+env.mapped    = {};
 
 %% Environment 1: Two circles
 
@@ -40,7 +43,7 @@ env.obst      = {};
 R1.name         = 'R1';
 R1.type         = 'rectangle';
 R1.mode         = 'known';
-R1.center       = [-4;3;1];
+R1.center       = [-2;3;1];
 R1.width        = 3;
 R1.height       = 0.8;
 R1.orientation  = -pi/8;
@@ -49,7 +52,7 @@ env.obst{end+1} = R1;
 R2.name         = 'R2';
 R2.type         = 'rectangle';
 R2.mode         = 'known';
-R2.center       = [4;3;1];
+R2.center       = [2;3;1];
 R2.width        = 3;
 R2.height       = 0.8;
 R2.orientation  = pi/8;
