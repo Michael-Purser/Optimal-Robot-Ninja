@@ -10,7 +10,7 @@ veh.geometry.wheelBase  = 0.2;
 veh.geometry.height     = 0.3;
 
 veh.dynamics.mass       = 15;
-veh.dynamics.COG        = [];
+veh.dynamics.COG        = [0;0;0.2]; % in vehicle xyz
 veh.dynamics.omLimits   = [-pi;pi];
 veh.dynamics.velLimits  = [-0.2;0.2];
 veh.dynamics.accLimits  = [-0.2;0.2];
