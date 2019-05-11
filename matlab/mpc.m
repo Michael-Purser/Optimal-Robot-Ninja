@@ -34,7 +34,7 @@ MPC.nav.tolerance       = 0.01;
 MPC.nav.opt.solver      = 'sqp';
 MPC.nav.kmax            = 1000;
 MPC.nav.rebuild         = true;
-MPC.nav.mapObstacles    = true;
+MPC.nav.mapObstacles    = false;
 MPC.log.logBool         = true;
 MPC.log.exportBool      = false;
 

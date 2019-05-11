@@ -15,11 +15,6 @@ f           = veh.sensor.freq;
 om          = veh.sensor.omega;
 noiseamp    = veh.sensor.noiseamp;
 
-% get relevant obstacle data:
-P           = env.ObstDetect.pos;
-Type        = env.ObstDetect.type;
-Data        = env.ObstDetect.data;
-
 % angular increment for rangefinder, and number of measurements:
 dtheta      = om/f;
 N           = floor(2*thetamax/dtheta);
@@ -30,19 +25,19 @@ for k = 1:N
     theta       = -thetamax + k*dtheta;
     meas(k,1)   = theta;
     v2          = [-h*sin(theta+phi); h*cos(theta+phi); 0];
-    dist        = h*ones(1,size(Data,2));
-    for i = 1:size(Data,2)
-        type    = Type(i);
-        if type == 1
-            p       = P(:,i);
+    dist        = h*ones(1,size(env.measured,2));
+    for i = 1:size(env.measured,2)
+        type    = env.measured{i}.type;
+        if strcmp(type,'circle')
+            p       = env.measured{i}.center;
             v1      = p-pos;
-            r       = Data(1,i);
+            r       = env.measured{i}.radius;
             [I,d]   = distanceToCircleEdge(v1,v2,r);
-        else
-            p       = P(:,i);
-            dx      = Data(1,i);
-            dy      = Data(2,i);
-            rho     = Data(3,i);
+        elseif strcmp(type,'rectangle')
+            p       = env.measured{i}.center;
+            dx      = 0.5*env.measured{i}.width;
+            dy      = 0.5*env.measured{i}.height;
+            rho     = env.measured{i}.orientation;
             C       = rectangleCorners(p,dx,dy,rho);
             [I,d]   = distanceToRectangleEdge(pos,v2,C);
         end
