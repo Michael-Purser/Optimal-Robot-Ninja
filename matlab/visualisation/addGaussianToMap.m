@@ -1,9 +1,6 @@
-function gmap = addGaussianToMap(map,MPC,veh,N)
+function gmap = addGaussianToMap(map,sig,h,N)
 % Function that takes the local robot map and returns a new map containing
 % the values of the G-landscape
-
-h   = veh.sensor.horizon;
-sig = MPC.nav.opt.sigma;
 
 % make the gaussian
 % on a grid extending 3 standard deviations in each direction

@@ -1,12 +1,9 @@
-function map = addMeasurementsToMap(map,dx,MPC,n,selector,it)
+function map = addMeasurementsToMap(map,dx,meas,phi,n,selector)
 % Function that adds the measurements to the local map.
 % The polar rangefinder measurements are converted to cartesian
 % coordinates, then are placed on a grid map cell following:
 %   case 1: a flooring strategy --> gives errors with limit measurements
 %   case 2: a 4-quadrant strategy --> more robust
-
-meas    = MPC.log.meas{it};
-phi     = MPC.log.states{it-1}(3);
 
 switch selector
     

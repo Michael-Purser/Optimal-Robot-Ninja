@@ -22,7 +22,6 @@ eval(['load ./data/veh',num2str(MPC.nav.veh),'.mat;']);
 eval(['load ./data/env',num2str(MPC.nav.env),'.mat;']);
 
 % initialization:
-veh.dynamics.COG        = [0;0;2];
 veh.sensor.noiseamp     = 0;
 veh.sensor.freq         = 100;
 veh.motors.fmax         = 3;
@@ -31,8 +30,8 @@ MPC.nav.globalGoal      = [6;8;pi/2];
 MPC.nav.currentState    = MPC.nav.globalStart;  % Robot starts at global start
 MPC.nav.currentVelocity = [0;0];                % Robot starts from standstil
 MPC.nav.tolerance       = 0.01;
-MPC.nav.opt.solver      = 'sqp';
-MPC.nav.kmax            = 3;
+MPC.nav.opt.solver      = 'ipopt';
+MPC.nav.kmax            = 20;
 MPC.nav.rebuild         = true;
 MPC.nav.mapObstacles    = false;
 MPC.log.logBool         = true;
@@ -141,9 +140,7 @@ close all;
 
 % plots:
 k = MPC.nav.k-1;
-k = 2;
 fprintf('Plotting solution \n');
-plotG(MPC,veh,k);
-mpc_plotSol(MPC,veh,env,k,1,1);
+mpc_plotSol(MPC,veh,env,k,false,1);
 
 

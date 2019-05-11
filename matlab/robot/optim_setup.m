@@ -57,7 +57,7 @@ opti.subject_to(-maxDistp<=diff(x(2,:))<=maxDistp);
 opti.subject_to(uminp <= u(1,:) <= umaxp);
 opti.subject_to(uminp <= u(2,:) <= umaxp);
 opti.subject_to(u(:,1) == ubeginp);
-opti.subject_to(u(:,end) == [0;0]);  
+%opti.subject_to(u(:,end) == [0;0]);  
 opti.subject_to(u(1,:)+u(2,:) >= 0);
 % opti.subject_to(abs(u(1,:).^2-u(2,:).^2) <= dusqmax);
 

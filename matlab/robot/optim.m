@@ -66,7 +66,7 @@ if strcmp(solver,'ipopt')==1
     problem    = MPC.nav.problemIpopt;
     
 else
-    if MPC.nav.k<5
+    if MPC.nav.k<3
         % initial guesses for first iteration
         phi         = atan2(x_final(3),n);
         alpha       = 0.5;
