@@ -53,7 +53,7 @@ for k = 1:N
         % measured, so set to zero:
         meas(k,2) = 0;
     else
-        % if 'Data' is empty, 'dist' is empty, so perform a check to avoid
+        % if obstacle list is empty, 'dist' is empty, so perform a check to avoid
         % errors:
         if (~isempty(dist))
             % smallest measured distance along beam is 'real' measurement

@@ -1,8 +1,8 @@
-function plotMeas(sit,veh,it)
+function plotMeas(MPC,veh,it)
 % Function that plots sensor measurements in local vehicle frame
 
-meas = sit.meas{it};
-H    = veh.Sensor.horizon;
+meas = MPC.log.meas{it};
+H    = veh.sensor.horizon;
 arc  = 0:0.1:2*pi;
 
 figure;
