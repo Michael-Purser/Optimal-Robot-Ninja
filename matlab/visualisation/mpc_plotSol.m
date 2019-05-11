@@ -96,16 +96,6 @@ end
 
 plot(x_final(1),x_final(2),'xr','LineWidth',1.4);
 
-% plot path from global planner: transform from local to global coordinates
-% before plotting:
-% if ext==1
-%     x_g = zeros(3,size(path,1));
-%     for k = 1:size(X,2)
-%         x_g(:,k) = Tr*[path(k,1);path(k,2);1];
-%     end
-%     plot(x_g(1,:),x_g(2,:),'g.');
-% end
-
 % axis constraints:
 axis equal;
 axis([-2 12 -1 12]);
