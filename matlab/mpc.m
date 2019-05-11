@@ -40,6 +40,8 @@ MPC.log.exportBool      = false;
 
 %% MPC LOOP
 
+% Check that sit, veh, ... have been initialized correctly
+
 % setup parametric optimization problem:
 if MPC.nav.goalReached == false
     if MPC.nav.rebuild==true
