@@ -32,7 +32,7 @@ MPC.nav.currentState    = MPC.nav.globalStart;  % Robot starts at global start
 MPC.nav.currentVelocity = [0;0];                % Robot starts from standstil
 MPC.nav.tolerance       = 0.01;
 MPC.nav.opt.solver      = 'sqp';
-MPC.nav.kmax            = 4;
+MPC.nav.kmax            = 3;
 MPC.nav.rebuild         = true;
 MPC.nav.mapObstacles    = false;
 MPC.log.logBool         = true;
@@ -140,8 +140,10 @@ end
 close all;
 
 % plots:
+k = MPC.nav.k-1;
+k = 2;
 fprintf('Plotting solution \n');
-plotG(MPC,veh,MPC.nav.k-1);
-mpc_plotSol(MPC,veh,env,MPC.nav.k-1,1,1);
+plotG(MPC,veh,k);
+mpc_plotSol(MPC,veh,env,k,1,1);
 
 

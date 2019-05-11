@@ -10,4 +10,8 @@ MPC.log.opts{end+1}         = MPC.nav.opt;
 MPC.log.m{end+1}            = MPC.nav.m;
 % CPU times --> TO DO
 
+% calculate and log G-values of solution:
+MPC.log.opts{end}.sol.Gvalues    = ...
+    checkSolution(MPC.nav.measurements,MPC.nav.opt.sol.x,MPC.nav.opt.sigma);
+
 end

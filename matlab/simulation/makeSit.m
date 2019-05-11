@@ -59,6 +59,7 @@ MPC.log.velocities      = {};
 MPC.log.meas            = {};
 MPC.log.globalPlans     = {};
 MPC.log.opts            = {};
+MPC.log.opts.sol.Gvalues = [];
 MPC.log.m               = {};
 MPC.log.CPUtimes        = {};
 

@@ -107,15 +107,15 @@ if nargin == 6
     subplot(1,2,2);
     plot(t_vec(1:end-1),U(2,:)); xlabel('time [s]'); ylabel('v_{left}(t) [m/s]'); title('v_{left}(t)');
     
-%     % plot n_new and max(G) in all iterations:
-%     figure;
-%     hold all;
-%     for k = 1:size(MPC.log.opts,2)
-%         plot(k,max(sit.Sol.G{k}),'b.-'); 
-%         xlabel('iteration [-]'); ylabel('max(G) [-]');
-%         titlestr = {'max(G) over successive MPC iterations','(original measurements)'};
-%         title(titlestr);
-%     end
+    % plot max(G) in all iterations:
+    figure;
+    hold all;
+    for k = 1:size(MPC.log.opts,2)
+        plot(k,max(MPC.log.opts{k}.sol.Gvalues),'b.-'); 
+        xlabel('iteration [-]'); ylabel('max(G) [-]');
+        titlestr = {'max(G) over successive MPC iterations','(original measurements)'};
+        title(titlestr);
+    end
     
     % plot n_new and euclidian distance between successive MPC states:
     figure;
