@@ -46,11 +46,11 @@ switch selector
 
         end
         
-        figure
-        plot(indices(:,1)); hold on;
-        plot(indices(:,2)); hold off;
-        legend('nx','ny');
-    
+%         figure
+%         plot(indices(:,1)); hold on;
+%         plot(indices(:,2)); hold off;
+%         legend('nx','ny');
+%     
 %     % case 1: flooring strategy (gives errors sometimes)
 %     case 1
 %         for k=1:size(meas,1)

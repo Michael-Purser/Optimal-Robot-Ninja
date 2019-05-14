@@ -33,8 +33,8 @@ MPC.nav.currentVelocity     = [0;0];                % Robot starts from standsti
 MPC.nav.tolerance           = 0.01;
 MPC.nav.opt.solver      	= 'ipopt';
 MPC.nav.opt.maxDist         = 0.1;
-MPC.nav.opt.globalPlanR     = 2;
-MPC.nav.kmax                = 1000;
+MPC.nav.opt.globalPlanR     = 3;
+MPC.nav.kmax                = 1;
 MPC.nav.rebuild             = false;
 MPC.nav.preload             = true;
 MPC.log.logBool             = true;
@@ -129,6 +129,6 @@ close all;
 % plots:
 k = MPC.nav.k-1;
 fprintf('Plotting solution \n');
-mpc_plotSol(MPC,veh,env,k,false,1);
+mpc_plotSol(MPC,veh,env,1,false);
 
 

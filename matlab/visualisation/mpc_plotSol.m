@@ -4,17 +4,13 @@ if fail
     %it      = MPC.nav.k - 1;
     %meas    = MPC.nav.obstacleData.meas.orig;
     meas    = MPC.nav.opt.obst;
-    states  = {MPC.log.states{1:it}};
-    p       = [states{it}(1:2);1];
-    phi     = states{it}(3);
 else
     meas    = MPC.log.opts{it}.obst;
-    states  = {MPC.log.states{1:it}};
-    p       = [states{it}(1:2);1];
-    phi     = states{it}(3);
 end
 
-
+states  = {MPC.log.states{1:it}};
+p       = [states{it}(1:2);1];
+phi     = states{it}(3);
 x_final = [MPC.nav.globalGoal(1:2);1];
 H       = veh.sensor.horizon;
 Ghat    = MPC.nav.opt.Ghat;
@@ -44,8 +40,6 @@ gmap    = addGaussianToMap(map,sigma,H,N);
 
 x_vec        = linspace(-(H-dx),H-dx,2*N+1);
 y_vec        = linspace(-(H-dx),H-dx,2*N+1);
-% x_loc_coords = [x_loc_coords;zeros(1,size(x_loc_coords,2));ones(1,size(x_loc_coords,2))];
-% y_loc_coords = [zeros(1,size(y_loc_coords,2));y_loc_coords;ones(1,size(y_loc_coords,2))];
 
 figure;
 hold all;
@@ -86,7 +80,7 @@ contour(x_vec,y_vec,gmap',10);
 % plot global path:
 plot(globalPlan(:,1),globalPlan(:,2),'r','LineWidth',1.4);
 
-% plot vehicle global path following radius
+% plot vehicle global path view radius
 plot(p(1)+Rv*cos(arc), p(2)+Rv*sin(arc), 'g--','LineWidth',1.5);
 
 % plot vehicle and its path: transform from local to global coordinates
@@ -109,7 +103,10 @@ end
 
 % Plot local and global goal:
 goal = Tr*[localGoal(1:2);1];
+goal = [goal(1:2);localGoal(3)-phi];
 plot(goal(1),goal(2),'ok','LineWidth',1.4);
+quiver(goal(1),goal(2),sin(goal(3)),cos(goal(3)),'k','LineWidth',1.4);
+
 plot(x_final(1),x_final(2),'xr','LineWidth',1.4);
 
 % axis constraints:
