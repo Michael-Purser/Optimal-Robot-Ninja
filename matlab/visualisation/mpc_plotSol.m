@@ -1,16 +1,17 @@
 function mpc_plotSol(MPC,veh,env,it,fail,varargin)
 
 if fail
-    it      = MPC.nav.k - 1;
-    meas    = MPC.nav.obstacleData.meas.orig;
+    %it      = MPC.nav.k - 1;
+    %meas    = MPC.nav.obstacleData.meas.orig;
+    meas    = MPC.nav.opt.obst;
     states  = {MPC.log.states{1:it}};
     p       = [states{it}(1:2);1];
     phi     = states{it}(3);
 else
-    meas    = MPC.log.meas{it}.orig;
+    meas    = MPC.log.opts{it}.obst;
     states  = {MPC.log.states{1:it}};
-    p       = [states{it-1}(1:2);1];
-    phi     = states{it-1}(3);
+    p       = [states{it}(1:2);1];
+    phi     = states{it}(3);
 end
 
 
@@ -19,21 +20,32 @@ H       = veh.sensor.horizon;
 Ghat    = MPC.nav.opt.Ghat;
 sigma   = MPC.nav.opt.sigma;
 n       = MPC.nav.opt.horizon;
-N       = 200;
+N       = 500;
 arc     = 0:0.01:2*pi;
+W       = MPC.nav.map.width;
+H       = W/2;
+globalPlan = MPC.nav.globalPlan.worldCoordinates;
+localGoal  = MPC.nav.opt.goal;
+Rv      = MPC.nav.opt.globalPlanR;
+
+% transform obstacle data to global frame:
+T           = homTrans(phi,[p(1);p(2)]);
+measGlobal  = zeros(size(meas));
+for i=1:size(meas,1)
+   A = T*[meas(i,:)';1];
+   measGlobal(i,:) = A(1:2);
+end
 
 % reconstruct gaussian local map from MPC data:
 map     = zeros(2*N+1,2*N+1);
 dx      = 2*H/(2*N+1);
-map     = addMeasurementsToMap(map,dx,meas,phi,n,2);
+map     = addMeasurementsToMap(map,dx,measGlobal,phi,N,2);
 gmap    = addGaussianToMap(map,sigma,H,N);
 
-x_loc_coords = linspace(-(H-dx),H-dx,2*N+1);
-y_loc_coords = linspace(-(H-dx),H-dx,2*N+1);
-x_vec        = x_loc_coords;
-y_vec        = y_loc_coords;
-x_loc_coords = [x_loc_coords;zeros(1,size(x_loc_coords,2));ones(1,size(x_loc_coords,2))];
-y_loc_coords = [zeros(1,size(y_loc_coords,2));y_loc_coords;ones(1,size(y_loc_coords,2))];
+x_vec        = linspace(-(H-dx),H-dx,2*N+1);
+y_vec        = linspace(-(H-dx),H-dx,2*N+1);
+% x_loc_coords = [x_loc_coords;zeros(1,size(x_loc_coords,2));ones(1,size(x_loc_coords,2))];
+% y_loc_coords = [zeros(1,size(y_loc_coords,2));y_loc_coords;ones(1,size(y_loc_coords,2))];
 
 figure;
 hold all;
@@ -67,14 +79,15 @@ for i=1:size(env.obst,2)
     end
 end
 
-% plot gaussians from local map: transform to global coordinates before 
-% plotting:
-x_glob_coords = homTrans(0,p)*x_loc_coords;
-y_glob_coords = homTrans(0,p)*y_loc_coords;
-x_glob_coords = x_glob_coords(1,:);
-y_glob_coords = y_glob_coords(2,:);
-contour(x_glob_coords,y_glob_coords,gmap',[Ghat Ghat],'LineWidth',2,'LineColor','r');
-contour(x_glob_coords,y_glob_coords,gmap',10);
+% plot gaussians from map:
+contour(x_vec,y_vec,gmap',[Ghat Ghat],'LineWidth',2,'LineColor','r');
+contour(x_vec,y_vec,gmap',10);
+
+% plot global path:
+plot(globalPlan(:,1),globalPlan(:,2),'r','LineWidth',1.4);
+
+% plot vehicle global path following radius
+plot(p(1)+Rv*cos(arc), p(2)+Rv*sin(arc), 'g--','LineWidth',1.5);
 
 % plot vehicle and its path: transform from local to global coordinates
 % before plotting:
@@ -94,6 +107,9 @@ for k=1:size(states,2)
     plot(states{k}(1),states{k}(2),'ro-','MarkerSize',6,'LineWidth',1.4);
 end
 
+% Plot local and global goal:
+goal = Tr*[localGoal(1:2);1];
+plot(goal(1),goal(2),'ok','LineWidth',1.4);
 plot(x_final(1),x_final(2),'xr','LineWidth',1.4);
 
 % axis constraints:

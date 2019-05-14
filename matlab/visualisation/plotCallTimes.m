@@ -1,4 +1,4 @@
-function logCallTimes()
+function plotCallTimes()
 % Function that plots the recorded execution times of the MPC loop for
 % different solver configurations
 % Input:    filename        file containing the execution times for a 

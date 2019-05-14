@@ -6,6 +6,7 @@ clear;
 close all;
 clc;
 
+% add relevant folders to path:
 addpath('~/Downloads/casadi/install/matlab/');
 addpath('./data/');
 addpath('./rastar/');
@@ -21,57 +22,41 @@ eval(['load ./data/MPC',sitStr,'.mat;']);
 eval(['load ./data/veh',num2str(MPC.nav.veh),'.mat;']);
 eval(['load ./data/env',num2str(MPC.nav.env),'.mat;']);
 
-% initialization:
-veh.sensor.noiseamp     = 0;
-veh.sensor.freq         = 100;
-veh.motors.fmax         = 3;
-MPC.nav.globalStart     = [0;0;0];
-MPC.nav.globalGoal      = [6;8;pi/2];
-MPC.nav.currentState    = MPC.nav.globalStart;  % Robot starts at global start
-MPC.nav.currentVelocity = [0;0];                % Robot starts from standstil
-MPC.nav.tolerance       = 0.01;
-MPC.nav.opt.solver      = 'ipopt';
-MPC.nav.kmax            = 20;
-MPC.nav.rebuild         = true;
-MPC.nav.preload         = false;
-MPC.log.logBool         = true;
-MPC.log.exportBool      = false;
+% parameter initialization:
+veh.sensor.noiseamp         = 0;
+veh.sensor.freq             = 100;
+veh.motors.fmax             = 3;
+MPC.nav.globalStart         = [0;0;pi/3];
+MPC.nav.globalGoal          = [6;8;pi/2];
+MPC.nav.currentState        = MPC.nav.globalStart;  % Robot starts at global start
+MPC.nav.currentVelocity     = [0;0];                % Robot starts from standstill
+MPC.nav.tolerance           = 0.01;
+MPC.nav.opt.solver      	= 'ipopt';
+MPC.nav.opt.maxDist         = 0.1;
+MPC.nav.opt.globalPlanR     = 2;
+MPC.nav.kmax                = 1000;
+MPC.nav.rebuild             = false;
+MPC.nav.preload             = true;
+MPC.log.logBool             = true;
+MPC.log.exportBool          = false;
+MPC.log.states{end+1}       = MPC.nav.currentState;
+MPC.log.velocities{end+1}   = [0;0];
 
 
 %% MPC LOOP
 
-% check that sit, veh, ... have been initialized correctly
+% Initialize the MPC loop
+MPC = initialize(MPC,env,veh);
 
-% sort obstacles
-env = sortObstacles(MPC,env);
-
-% sample preloaded obstacles
-% MPC = samplePreloaded(MPC,env);
-
-% select most restrictive vehicle dynamic constraints:
-MPC = getDynamicLimits(MPC,veh);
-
-% setup parametric optimization problem:
-if MPC.nav.goalReached == false
-    if MPC.nav.rebuild==true
-        problemIpopt 	= optim_setup(MPC,veh,'ipopt');
-        problemSqp      = optim_setup(MPC,veh,'sqp');
-    else
-        load('problemIpopt.mat');
-        load('problemSqp.mat');
-    end
-    MPC.nav.problemIpopt = problemIpopt;
-    MPC.nav.problemSqp   = problemSqp;
-end
-
+% Actual loop:
 while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     
     fprintf('\n');
     fprintf('MPC STEP %i \n',MPC.nav.k);
     
-    % here the robot should localize
+    % (here the robot should localize
     % however we assume that location is perfectly known, so no
-    % localization routine is implemented here
+    % localization routine is implemented here)
     
     % this part checks whether the robot is already within tolerance of the
     % final navigation goal
@@ -88,20 +73,18 @@ while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     % you can either work from purely measured data in real-time, or a
     % combination of measured and preloaded data
     fprintf('Measuring environment \n');
-%     env = relevantObst(MPC,veh,env);
     MPC = sensor(MPC,veh,env);
-%     if MPC.nav.k>1
-%         alpha = 8;
-%         sit = processMeas(sit,alpha); % adapt sensor measurements:
-%     end
+    % optional: process the sensor meas (left out for now)
+    % transform obstacle data to local frame and move to MPC data
+    % structure:
     MPC = prepareObstacleData(MPC);
     
-    % check if computation of a global plan is necessary
+    % check if recomputation of a global plan is necessary
     % if so, a new global plan is computed
 
-    % now get the local goal on the global plan, and transform it to the
+    % get the local goal on the global plan, and transform it to the
     % local coordinate frame to be used in the optimization problem
-    MPC = getLocalGoal(MPC);
+    MPC = getLocalStartAndGoal(MPC);
 
     % solve optimization problem
     fprintf('Calculating optimal trajectory \n');
@@ -115,7 +98,8 @@ while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     % update loop counter
     MPC.nav.k = MPC.nav.k + 1;
     
-    % if required, log the MPC iteration
+    % if required, log the MPC iteration (this is useful for analysis and
+    % visualizations later)
     if MPC.log.logBool == true
         MPC = logMPC(MPC);
     end

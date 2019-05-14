@@ -8,22 +8,30 @@ function MPC = prepareObstacleData(MPC)
     preloaded   = MPC.nav.obstacleData.preloaded;
 
     % Transform local polar measurements to local cartesian measurements
-    trans = zeros(size(orig));
+    transLocal = zeros(size(orig));
     for i=1:size(orig,1)
         theta   = orig(i,1);
         R       = orig(i,2);
-        trans(i,:) = [-R*sin(theta) R*cos(theta)];
+        transLocal(i,:) = [-R*sin(theta) R*cos(theta)];
     end
-    MPC.nav.obstacleData.meas.trans = trans;
+    MPC.nav.obstacleData.meas.transLocal = transLocal;
+    
+    % Transform measurements to global cartesian measurements
+    T = homTrans(state(3),[state(1);state(2)]);
+    transGlobal = zeros(size(orig));
+    for i=1:size(orig,1)
+       A = T*[transLocal(i,:)';1];
+       transGlobal(i,:) = A(1:2);
+    end
+    MPC.nav.obstacleData.meas.transGlobal = transGlobal;
     
     % Transform preloaded data to local cartesian measurements
     preloadedLocal = zeros(size(preloaded));
-    T = homTrans(state(3),[state(1);state(2)]);
     for i=1:size(preloaded,1)
-       A = T*[preloaded(i,:)';1];
+       A = T\[preloaded(i,:)';1];
        preloadedLocal(i,:) = A(1:2);
     end
     
     % Fill info in variable used by optimization routine
-    MPC.nav.opt.obst = [trans;preloadedLocal];
+    MPC.nav.opt.obst = [transLocal;preloadedLocal];
 end

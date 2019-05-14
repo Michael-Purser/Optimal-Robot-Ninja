@@ -12,13 +12,27 @@ MPC.nav.veh             = 1;
 MPC.nav.env             = 1;
 MPC.nav.globalStart     = [];
 MPC.nav.globalGoal      = [];
-MPC.nav.globalPlan      = [];
 MPC.nav.currentState    = [];       % Current robot state
 MPC.nav.currentVelocity = [];       % Current velocity signal
-MPC.nav.map             = [];       % Map with pre-loaded environment info
+
+MPC.nav.globalPlan.gridCoordinates  = [];  % Global plan in gridmap coordinates
+MPC.nav.globalPlan.worldCoordinates = [];  % Global plan in world coordinates
+
+MPC.nav.map.width       = 0;        % Map width
+MPC.nav.map.height      = 0;        % Map height
+MPC.nav.map.dx          = 0;        % Map discretization along x
+MPC.nav.map.dy          = 0;        % Map discretization along y
+MPC.nav.map.Nw          = 0;        % Map width discretization steps
+MPC.nav.map.Nh          = 0;        % Map height discretization steps
+MPC.nav.map.values      = [];       % Map matrix
+MPC.nav.map.inflated    = [];       % Map inflated with G-values
+MPC.nav.map.center      = [];       % Map center in world frame
+
 MPC.nav.obstacleData.meas.orig    = [];      % Measurements from simulated sensor (polar)
-MPC.nav.obstacleData.meas.trans   = [];      % Measurements in cartesian coordinates
+MPC.nav.obstacleData.meas.transLocal   = [];      % Measurements in cartesian coordinates
+MPC.nav.obstacleData.meas.transGlobal   = [];      % Measurements in cartesian coordinates
 MPC.nav.obstacleData.preloaded    = [];      % Preloaded sampled environment data
+
 MPC.nav.tolerance       = 1e-2;     % Tolerance on final goal
 MPC.nav.goalReached     = false;    % Indicate wether goal is reached
 MPC.nav.k               = 1;        % Loop counter
@@ -28,6 +42,7 @@ MPC.nav.rebuild         = true;     % Indicate wether to rebuild (true) or load 
 MPC.nav.preload         = true;     % Indicate wether to sort the obstacles between mapped & measured
 MPC.nav.problemIpopt    = 0;        % put here as compromise; limit memory when logging opt
 MPC.nav.problemSqp      = 0;
+MPC.nav.lastIndex       = 1;        % last index along the global plan (should be moved!!)
 
 MPC.nav.opt.start         = [];
 MPC.nav.opt.goal          = [];
@@ -39,6 +54,7 @@ MPC.nav.opt.dynLimits.om  = [];
 MPC.nav.opt.sigma         = 0.1;
 MPC.nav.opt.Ghat          = 2.0;
 MPC.nav.opt.maxDist       = 0.1;
+MPC.nav.opt.globalPlanR   = 2;
 
 MPC.nav.opt.init.x      = [];
 MPC.nav.opt.init.u      = [];
@@ -63,29 +79,6 @@ MPC.log.globalPlans     = {};
 MPC.log.opts            = {};
 MPC.log.m               = {};
 MPC.log.CPUtimes        = {};
-
-
-% sit.vehNum          = 1;
-% sit.envNum          = 1;
-% sit.startState      = [];
-% sit.startControls   = [];
-% sit.goalState	    = [];
-% sit.states          = {sit.startState};
-% sit.controls        = {sit.startControls};
-% sit.localGoals      = {};
-% sit.globalVisited    = [];
-% sit.globalNotVisited = [];
-% sit.meas            = {};
-% sit.meas_tilde      = {[]};
-% sit.R               = {}; % logger for R-values to process measurements
-% sit.Init.T          = {5};
-% sit.Init.path       = {};
-% sit.Sol.X           = {};
-% sit.Sol.U           = {};
-% sit.Sol.T           = {};
-% sit.Sol.lamg        = {};
-% sit.Sol.G           = {}; % solution G-value logger
-% sit.nNew            = {}; % MPC states logger
 
 
 %% situation 1_1_1:

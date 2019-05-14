@@ -3,7 +3,7 @@ function problem = optim_setup(MPC,veh,solver_str)
 % initialize variables:
 opti = casadi.Opti();
 
-max_meas    = 1000;
+max_meas    = 10000;
 n           = MPC.nav.opt.horizon;
 L           = veh.geometry.wheelBase;
 

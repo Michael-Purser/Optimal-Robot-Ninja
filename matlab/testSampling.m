@@ -17,7 +17,7 @@ R1.orientation  = -pi/8;
 env.obst{end+1} = R1;
 
 % hardcode delta L
-deltaL = 0.1;
+deltaL = 0.01;
 
 % sample circular obstacle
 center  = env.obst{1}.center;

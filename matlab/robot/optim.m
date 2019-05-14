@@ -15,11 +15,10 @@ sigma       = MPC.nav.opt.sigma;
 Ghat        = MPC.nav.opt.Ghat;
 maxDist     = MPC.nav.opt.maxDist;
 solver      = MPC.nav.opt.solver;
-max_meas    = 1000;
+max_meas    = 10000;
 
 % get measurements (in cartesian coordinates):
 meas        = MPC.nav.opt.obst;
-%meas    = sit.meas_tilde{end};
 meas        = [meas;20*ones(max_meas-size(meas,1),2)];
 
 % check position; adapt G_hat if needed:
@@ -42,7 +41,7 @@ end
 opti = casadi.Opti();
 
 % initial and final positions + initial guess for time and states:
-x_begin = [0;0;0];  % always zero because problem solved in robot frame.
+x_begin = MPC.nav.opt.start;
 x_final = MPC.nav.opt.goal;
 u_begin = MPC.nav.currentVelocity;
 
