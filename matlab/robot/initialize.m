@@ -24,16 +24,20 @@ function [MPC,env] = initialize(MPC,env,veh)
     MPC = getDynamicLimits(MPC,veh);
 
     % setup parametric optimization problem:
-    if MPC.nav.goalReached == false
-        if MPC.nav.rebuild==true
-            problemIpopt 	= optim_setup(MPC,veh,'ipopt');
-            problemSqp      = optim_setup(MPC,veh,'sqp');
-        else
-            load('problemIpopt.mat');
-            load('problemSqp.mat');
-        end
-        MPC.nav.problemIpopt = problemIpopt;
-        MPC.nav.problemSqp   = problemSqp;
+    if MPC.nav.rebuild==true
+        problemIpoptA 	= optim_setup(MPC,veh,'ipopt',false);
+        problemIpoptB 	= optim_setup(MPC,veh,'ipopt',true);
+        problemSqpA     = optim_setup(MPC,veh,'sqp',false);
+        problemSqpB     = optim_setup(MPC,veh,'sqp',true);
+    else
+        load('problemIpoptA.mat');
+        load('problemIpoptB.mat');
+        load('problemSqpA.mat');
+        load('problemSqpB.mat');
     end
+    MPC.nav.problemIpoptA = problemIpoptA;
+    MPC.nav.problemIpoptB = problemIpoptB;
+    MPC.nav.problemSqpA   = problemSqpA;
+    MPC.nav.problemSqpB   = problemSqpB;
 
 end

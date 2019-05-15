@@ -8,8 +8,8 @@ function makeSit()
 % 5.
 
 %% GENERAL CASE:
-MPC.nav.veh             = 1;
-MPC.nav.env             = 1;
+MPC.nav.vehicle         = 1;
+MPC.nav.environment     = 1;
 MPC.nav.globalStart     = [];
 MPC.nav.globalGoal      = [];
 MPC.nav.currentState    = [];       % Current robot state
@@ -17,6 +17,7 @@ MPC.nav.currentVelocity = [];       % Current velocity signal
 
 MPC.nav.globalPlan.gridCoordinates  = [];  % Global plan in gridmap coordinates
 MPC.nav.globalPlan.worldCoordinates = [];  % Global plan in world coordinates
+MPC.nav.globalPlan.lastIndex        = 1;   % Last local goal index along the global plan
 
 MPC.nav.map.width       = 0;        % Map width
 MPC.nav.map.height      = 0;        % Map height
@@ -33,16 +34,18 @@ MPC.nav.obstacleData.meas.transLocal   = [];      % Measurements in cartesian co
 MPC.nav.obstacleData.meas.transGlobal   = [];      % Measurements in cartesian coordinates
 MPC.nav.obstacleData.preloaded    = [];      % Preloaded sampled environment data
 
-MPC.nav.tolerance       = 1e-2;     % Tolerance on final goal
-MPC.nav.goalReached     = false;    % Indicate wether goal is reached
-MPC.nav.k               = 1;        % Loop counter
-MPC.nav.kmax            = 1000;     % Loop counter maximum
-MPC.nav.m               = 0;        % Number of states advanced in this MPC step
+MPC.nav.goalTolerance   = 1e-2;     % Tolerance on final goal
+MPC.nav.goalReached     = false;    % Indicate if final goal is reached
+MPC.nav.goalInView      = false;    % Indicate if final goal is within view or not
+MPC.nav.k               = 1;        % MPC loop counter
+MPC.nav.kmax            = 1000;     % MPC loop counter maximum
+MPC.nav.m               = 0;        % Number of states advanced in current MPC step
 MPC.nav.rebuild         = true;     % Indicate wether to rebuild (true) or load (false) the problem
 MPC.nav.preload         = true;     % Indicate wether to sort the obstacles between mapped & measured
-MPC.nav.problemIpopt    = 0;        % put here as compromise; limit memory when logging opt
-MPC.nav.problemSqp      = 0;
-MPC.nav.lastIndex       = 1;        % last index along the global plan (should be moved!!)
+MPC.nav.problemIpoptA   = 0;        % put here as compromise; limit memory when logging opt
+MPC.nav.problemIpoptB   = 0;
+MPC.nav.problemSqpA     = 0;
+MPC.nav.problemSqpB     = 0;
 
 MPC.nav.opt.start         = [];
 MPC.nav.opt.goal          = [];
@@ -82,15 +85,15 @@ MPC.log.CPUtimes        = {};
 
 
 %% situation 1_1_1:
-MPC.nav.veh             = 1;
-MPC.nav.env             = 1;
+MPC.nav.vehicle         = 1;
+MPC.nav.environment     = 1;
 MPC.nav.globalStart     = [0;0;0];
 MPC.nav.globalGoal	    = [0;10;0];
 MPC.nav.currentState    = MPC.nav.globalStart;
 
 save data/MPC1_1_1.mat MPC
 
-eval(['load ./data/env',num2str(MPC.nav.env),'.mat;']);
+eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
 
 plotEnv(env,MPC);
 savefig(gcf,'figs/sitFigs/MPC1_1_1.fig');

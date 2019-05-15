@@ -5,6 +5,7 @@ plan        = MPC.nav.globalPlan.worldCoordinates;
 R           = MPC.nav.opt.globalPlanR;
 globalStart = MPC.nav.globalStart;
 globalGoal  = MPC.nav.globalGoal;
+last_index  = MPC.nav.globalPlan.lastIndex;
 
 % Iterate over global plan and get last point on plan
 % if no point of plan is further than global plan horizon, get last one in
@@ -15,9 +16,9 @@ globalGoal  = MPC.nav.globalGoal;
 % THIS METHOD ONLY WORKS AS LONG AS THE GLOBAL PATH STAYS WITHIN THE
 % VEHICLE VIEW RADIUS!!
 
-last_index = MPC.nav.lastIndex;
 current_index = last_index;
 found = 0;
+goalInView = false;
 i = last_index;
 while found==0
     if i==size(plan,1)
@@ -25,6 +26,7 @@ while found==0
         % within view and set the last plan element as local goal
         found = 1;
         current_index = size(plan,1);
+        goalInView = true;
     end
     % find the first point beyond range
     if norm(x(1:2)-plan(i,:)')>R
@@ -34,7 +36,6 @@ while found==0
     i = i+1;
 end
 
-MPC.nav.lastIndex = current_index;
 g = plan(current_index,:);
 
 % get the local goal orientation
@@ -61,9 +62,10 @@ ori = ori + x(3); % transform to local coordinate system
 % coordinates
 T = homTrans(x(3),[x(1:2);1]);
 G = T\[g';1];
-MPC.nav.opt.goal = [G(1:2);ori];
 
-% For now, robot always at center of local frame so start is always zero:
-MPC.nav.opt.start = [0;0;0];
+MPC.nav.globalPlan.lastIndex = current_index;
+MPC.nav.opt.goal = [G(1:2);ori];
+MPC.nav.opt.start = [0;0;0]; % For now, robot always at center of local frame so start is always zero:
+MPC.nav.goalInView = goalInView;
 
 end

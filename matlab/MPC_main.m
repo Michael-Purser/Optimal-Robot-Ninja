@@ -19,21 +19,21 @@ sitStr = '1_1_1';
 
 % load situation, environment and vehicle:
 eval(['load ./data/MPC',sitStr,'.mat;']);
-eval(['load ./data/veh',num2str(MPC.nav.veh),'.mat;']);
-eval(['load ./data/env',num2str(MPC.nav.env),'.mat;']);
+eval(['load ./data/veh',num2str(MPC.nav.vehicle),'.mat;']);
+eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
 
 % parameter initialization:
 veh.sensor.noiseamp         = 0;
 veh.sensor.freq             = 100;
 veh.motors.fmax             = 3;
-MPC.nav.globalStart         = [4;8;pi/3];
+MPC.nav.globalStart         = [3.9;8;0];
 MPC.nav.globalGoal          = [6;8;pi/2];
 MPC.nav.currentState        = MPC.nav.globalStart;  % Robot starts at global start
 MPC.nav.currentVelocity     = [0;0];                % Robot starts from standstill
-MPC.nav.tolerance           = 0.01;
+MPC.nav.goalTolerance       = 0.01;
 MPC.nav.opt.solver      	= 'ipopt';
 MPC.nav.opt.maxDist         = 0.1;
-MPC.nav.opt.globalPlanR     = 1;
+MPC.nav.opt.globalPlanR     = 2;
 MPC.nav.kmax                = 1000;
 MPC.nav.rebuild             = true;
 MPC.nav.preload             = true;
@@ -62,7 +62,7 @@ while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     % final navigation goal
     % if this is the case, the loop breaks and the robot is considered
     % in the right final state, ie navigation is finished
-    if norm([MPC.nav.currentState(1:2);1]-[MPC.nav.globalGoal(1:2);1])<MPC.nav.tolerance
+    if norm([MPC.nav.currentState(1:2);1]-[MPC.nav.globalGoal(1:2);1])<MPC.nav.goalTolerance
         fprintf(2,'Vehicle localized to be within tolerance of final goal! \n');
         fprintf(2,'STOPPED \n');
         MPC.nav.goalReached = true;

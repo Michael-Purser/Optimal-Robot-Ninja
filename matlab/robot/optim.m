@@ -37,7 +37,7 @@ if update_cycles>0
     end
 end
 
-% initialize variables:
+% initialize opti:
 opti = casadi.Opti();
 
 % initial and final positions + initial guess for time and states:
@@ -46,8 +46,10 @@ x_final = MPC.nav.opt.goal;
 u_begin = MPC.nav.currentVelocity;
 
 if strcmp(solver,'ipopt')==1
+    fprintf('Using IPOPT solver \n');
+    % if first iteration, make initial guesses; else 'warm-start' the
+    % solver with previous solution:
     if MPC.nav.k==1
-        % initial guesses for first iteration
         phi         = atan2(x_final(3),n);
         alpha       = 0.5;
         n_vec       = linspace(0,n,n+1);
@@ -62,9 +64,18 @@ if strcmp(solver,'ipopt')==1
         u_init = MPC.nav.opt.sol.u;
         T_init = MPC.nav.opt.sol.T;
     end
-    problem    = MPC.nav.problemIpopt;
+    % select problem to solve depending on wether endgoal is in view or
+    % not:
+    if MPC.nav.goalInView
+        fprintf('\t Goal in view \n');
+        problem    = MPC.nav.problemIpoptB;
+    else
+        fprintf('\t Goal not in view \n');
+        problem    = MPC.nav.problemIpoptA;
+    end
     
 else
+    fprintf('Using SQP solver - first iterations are IPOPT \n');
     if MPC.nav.k<3
         % initial guesses for first iteration
         phi         = atan2(x_final(3),n);
@@ -76,12 +87,20 @@ else
             theta_init];
         u_init  = zeros(2,n);
         T_init  = norm(x_begin(1:2)-x_final(1:2))/u_max;
-        problem = MPC.nav.problemIpopt;
+        problem = MPC.nav.problemIpoptA;
     else
         x_init  = MPC.nav.opt.sol.x;
         u_init  = MPC.nav.opt.sol.u;
         T_init  = MPC.nav.opt.sol.T;
-        problem = MPC.nav.problemSqp;
+        % select problem to solve depending on wether endgoal is in view or
+        % not:
+        if MPC.nav.goalInView
+            fprintf('\t Goal in view \n');
+            problem    = MPC.nav.problemSqpB;
+        else
+            fprintf('\t Goal not in view \n');
+            problem    = MPC.nav.problemSqpA;
+        end
     end
 end
 

@@ -1,4 +1,4 @@
-function problem = optim_setup(MPC,veh,solver_str)
+function problem = optim_setup(MPC,veh,solver_str,with_end)
 
 % initialize variables:
 opti = casadi.Opti();
@@ -57,8 +57,15 @@ opti.subject_to(-maxDistp<=diff(x(2,:))<=maxDistp);
 opti.subject_to(uminp <= u(1,:) <= umaxp);
 opti.subject_to(uminp <= u(2,:) <= umaxp);
 opti.subject_to(u(:,1) == ubeginp);
-%opti.subject_to(u(:,end) == [0;0]);  
+
+% end velocity constraint; depends on wether the end goal is in view or
+% not:
+if with_end
+	opti.subject_to(u(:,end) == [0;0]);
+end
 opti.subject_to(u(1,:)+u(2,:) >= 0);
+
+% add platform dynamics constraint:
 % opti.subject_to(abs(u(1,:).^2-u(2,:).^2) <= dusqmax);
 
 % opti.subject_to(a_min <= (n./T(2:end)).*diff(u(1,:)) <= a_max);
@@ -115,15 +122,27 @@ else
     opti.solver('sqpmethod',opts);
 end
 
-problem = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,omminp,ommaxp,Ghatp,maxDistp,xbeginp,xfinalp,ubeginp,measp,sigmap},{x,u,T});
+problem = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,...
+    omminp,ommaxp,Ghatp,maxDistp,xbeginp,xfinalp,ubeginp,measp,...
+    sigmap},{x,u,T});
 problem.save('problem.casadi');
 
 if strcmp(solver_str,'ipopt')==1
-    problemIpopt = problem;
-    save 'problemIpopt.mat' 'problemIpopt'
+    if with_end
+        problemIpoptB = problem;
+        save 'problemIpoptB.mat' 'problemIpoptB'
+    else
+        problemIpoptA = problem;
+        save 'problemIpoptA.mat' 'problemIpoptA'
+    end
 else
-    problemSqp = problem;
-    save 'problemSqp.mat' 'problemSqp'
+    if with_end
+        problemSqpB = problem;
+        save 'problemSqpB.mat' 'problemSqpB'
+    else
+        problemSqpA = problem;
+        save 'problemSqpA.mat' 'problemSqpA'
+    end
 end
 
 if MPC.log.exportBool == true
