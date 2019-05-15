@@ -7,6 +7,7 @@ function env = sortObstacles(MPC,env)
             mode = env.obst{i}.mode;
             if strcmp(mode,'known')
                 env.mapped{end+1} = env.obst{i};
+                env.measured{end+1} = env.obst{i};
             else
                 env.measured{end+1} = env.obst{i};
             end

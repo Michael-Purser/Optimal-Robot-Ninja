@@ -33,5 +33,6 @@ function MPC = prepareObstacleData(MPC)
     end
     
     % Fill info in variable used by optimization routine
-    MPC.nav.opt.obst = [transLocal;preloadedLocal];
+    % MPC.nav.opt.obst = [transLocal;preloadedLocal];
+    MPC.nav.opt.obst = [transLocal];
 end

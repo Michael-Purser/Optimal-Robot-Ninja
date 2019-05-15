@@ -26,16 +26,16 @@ eval(['load ./data/env',num2str(MPC.nav.env),'.mat;']);
 veh.sensor.noiseamp         = 0;
 veh.sensor.freq             = 100;
 veh.motors.fmax             = 3;
-MPC.nav.globalStart         = [0;0;pi/3];
+MPC.nav.globalStart         = [4;8;pi/3];
 MPC.nav.globalGoal          = [6;8;pi/2];
 MPC.nav.currentState        = MPC.nav.globalStart;  % Robot starts at global start
 MPC.nav.currentVelocity     = [0;0];                % Robot starts from standstill
 MPC.nav.tolerance           = 0.01;
 MPC.nav.opt.solver      	= 'ipopt';
 MPC.nav.opt.maxDist         = 0.1;
-MPC.nav.opt.globalPlanR     = 3;
-MPC.nav.kmax                = 1;
-MPC.nav.rebuild             = false;
+MPC.nav.opt.globalPlanR     = 1;
+MPC.nav.kmax                = 1000;
+MPC.nav.rebuild             = true;
 MPC.nav.preload             = true;
 MPC.log.logBool             = true;
 MPC.log.exportBool          = false;
@@ -46,7 +46,7 @@ MPC.log.velocities{end+1}   = [0;0];
 %% MPC LOOP
 
 % Initialize the MPC loop
-MPC = initialize(MPC,env,veh);
+[MPC,env] = initialize(MPC,env,veh);
 
 % Actual loop:
 while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
@@ -63,7 +63,7 @@ while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     % if this is the case, the loop breaks and the robot is considered
     % in the right final state, ie navigation is finished
     if norm([MPC.nav.currentState(1:2);1]-[MPC.nav.globalGoal(1:2);1])<MPC.nav.tolerance
-        fprintf(2,'Vehicle within tolerance of final goal! \n');
+        fprintf(2,'Vehicle localized to be within tolerance of final goal! \n');
         fprintf(2,'STOPPED \n');
         MPC.nav.goalReached = true;
         break;
@@ -105,7 +105,7 @@ while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     end
     
 end
-
+ 
 % check that goal indeed reached:
 if MPC.nav.goalReached == false || MPC.nav.k > MPC.nav.kmax
     error('Maximum number of MPC iterations exceeded!');
@@ -129,6 +129,6 @@ close all;
 % plots:
 k = MPC.nav.k-1;
 fprintf('Plotting solution \n');
-mpc_plotSol(MPC,veh,env,1,false);
+mpc_plotSol(MPC,veh,env,k,false);
 
 

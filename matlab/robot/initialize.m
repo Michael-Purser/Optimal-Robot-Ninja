@@ -1,4 +1,4 @@
-function MPC = initialize(MPC,env,veh)
+function [MPC,env] = initialize(MPC,env,veh)
 % initialization function for the MPC loop
     
     % process the knowledge in the environment structure:

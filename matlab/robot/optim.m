@@ -15,7 +15,7 @@ sigma       = MPC.nav.opt.sigma;
 Ghat        = MPC.nav.opt.Ghat;
 maxDist     = MPC.nav.opt.maxDist;
 solver      = MPC.nav.opt.solver;
-max_meas    = 10000;
+max_meas    = 1000;
 
 % get measurements (in cartesian coordinates):
 meas        = MPC.nav.opt.obst;

@@ -20,18 +20,18 @@ current_index = last_index;
 found = 0;
 i = last_index;
 while found==0
-    % find the first point beyond range
-    if norm(x(1:2)-plan(i,:)')>R
-        found = 1;
-        current_index = i;
-    end
-    i = i+1;
     if i==size(plan,1)
         % if no goal found in the entire plan, assume the global goal is
         % within view and set the last plan element as local goal
         found = 1;
         current_index = size(plan,1);
     end
+    % find the first point beyond range
+    if norm(x(1:2)-plan(i,:)')>R
+        found = 1;
+        current_index = i;
+    end
+    i = i+1;
 end
 
 MPC.nav.lastIndex = current_index;

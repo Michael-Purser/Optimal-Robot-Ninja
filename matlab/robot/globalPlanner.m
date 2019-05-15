@@ -18,7 +18,7 @@ if abs(goalAbs(1))<H && abs(goalAbs(2))<H
     goalsAbs = goalAbs;
     
     % MAKE MAP:
-    [values,N]    = addBorder(values,N,1);
+    [values,N] = addBorder(values,N,1);
     goals      = getIndices(values,N,dx,goalsAbs,Ghat);
     start      = getIndices(values,N,dx,startAbs,Ghat);
 
@@ -75,7 +75,7 @@ end
 % ADD EXCEPTION:
 % If because of 'unique' command above the path_abs only contains 1 entry,
 % add the exact starting position:
-planAbs = [0 0;planAbs];
+planAbs = [startAbs(1:2);planAbs];
 
 % EXPAND PATH UNTIL IT HAS RIGHT LENGTH:
 % B = interpolateUntil(path_abs(:,1),n);

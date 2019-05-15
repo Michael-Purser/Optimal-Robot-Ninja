@@ -109,13 +109,11 @@ class CasadiCodegenWrapper:
   def call_efficient(self,arg,res):
     assert len(arg)==self.n_in
     assert len(res)==self.n_out
-    mem = self.checkout()
     for i in range(self.n_in):
       self.arg[i] = arg[i].ctypes.data_as(POINTER(c_double))
     for i in range(self.n_out):
       self.res[i] = res[i].ctypes.data_as(POINTER(c_double))
-    self.f(self.arg,self.res,self.iw,self.w,mem)
-    self.release(mem)
+    self.f(self.arg,self.res,self.iw,self.w)
 
 
 

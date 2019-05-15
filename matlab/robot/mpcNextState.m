@@ -99,19 +99,19 @@ switch stateUpdateSelector
         % NOTE: the - in the loop is because of the 'awkward' definition of
         % the robot's orientation phi, which is positive in the opposite
         % direction than omega
-        theta = zeros(1,size(solU,2));
+        theta = zeros(1,size(solX,2));
         for i=2:n
             theta(i) = theta(i-1)-(T_n/n)*omega(i-1);
         end
         
         % get vx, vy and omega values using the dynamic equations
-        vx = (Unoisy(1,:)+Unoisy(2,:))/2 .* sin(theta);
-        vy = (Unoisy(1,:)+Unoisy(2,:))/2 .* cos(theta);
+        vx = (Unoisy(1,:)+Unoisy(2,:))/2 .* sin(theta(1:end-1)); % because states 1 longer than velocities
+        vy = (Unoisy(1,:)+Unoisy(2,:))/2 .* cos(theta(1:end-1));
         
         % get x, y values of state (in local frame) by integrating velocity 
         % signals (simple Euler)
-        x = zeros(1,size(solU,2));
-        y = zeros(1,size(solU,2));
+        x = zeros(1,size(solX,2));
+        y = zeros(1,size(solX,2));
         for i=2:n
             x(i) = x(i-1)+(T_n/n)*vx(i-1);
             y(i) = y(i-1)+(T_n/n)*vy(i-1);
