@@ -95,15 +95,14 @@ while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     fprintf('Advancing robot to next state \n');
     MPC = mpcNextState(MPC,veh,3,2);
     
-    % update loop counter
-    MPC.nav.k = MPC.nav.k + 1;
-    
     % if required, log the MPC iteration (this is useful for analysis and
     % visualizations later)
     if MPC.log.logBool == true
         MPC = logMPC(MPC);
     end
     
+    % update loop counter
+    MPC.nav.k = MPC.nav.k + 1;
 end
  
 % check that goal indeed reached:

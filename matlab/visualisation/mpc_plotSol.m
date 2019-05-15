@@ -8,21 +8,21 @@ else
     meas    = MPC.log.opts{it}.obst;
 end
 
-states  = {MPC.log.states{1:it}};
-p       = [states{it}(1:2);1];
-phi     = states{it}(3);
-x_final = [MPC.nav.globalGoal(1:2);1];
-H       = veh.sensor.horizon;
-Ghat    = MPC.nav.opt.Ghat;
-sigma   = MPC.nav.opt.sigma;
-n       = MPC.nav.opt.horizon;
-N       = 500;
-arc     = 0:0.01:2*pi;
-W       = MPC.nav.map.width;
-H       = W/2;
-globalPlan = MPC.nav.globalPlan.worldCoordinates;
-localGoal  = MPC.nav.opt.goal;
-Rv      = MPC.nav.opt.globalPlanR;
+states      = {MPC.log.states{1:it}};
+p           = [states{it}(1:2);1];
+phi         = states{it}(3);
+x_final     = [MPC.nav.globalGoal(1:2);1];
+H           = veh.sensor.horizon;
+Ghat        = MPC.nav.opt.Ghat;
+sigma       = MPC.nav.opt.sigma;
+n           = MPC.nav.opt.horizon;
+N           = 500;
+arc         = 0:0.01:2*pi;
+W           = MPC.nav.map.width;
+H           = W/2;
+globalPlan  = MPC.nav.globalPlan.worldCoordinates;
+localGoal   = MPC.nav.opt.goal;
+Rv          = MPC.nav.opt.globalPlanR;
 
 % transform obstacle data to global frame:
 T           = homTrans(phi,[p(1);p(2)]);
