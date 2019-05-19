@@ -102,74 +102,50 @@ plotEnv(env,MPC);
 savefig(gcf,'figs/sitFigs/MPC1_1_1.fig');
 close(gcf);
 
-% %% situation 1_1_2:
-% sit.vehNum          = 1;
-% sit.envNum          = 1;
-% sit.startState      = [0;0;0];
-% sit.startControls   = [0;0];
-% sit.goalState	    = [10;10;0];
-% sit.states          = {sit.startState};
-% sit.controls        = {sit.startControls};
-% sit.Init.T          = {5};
-% 
-% save data/sit1_1_2.mat sit
-% 
-% eval(['load ./data/env',num2str(sit.envNum),'.mat;']);
-% 
-% plotEnv(env,sit);
-% savefig(gcf,'figs/sitFigs/sit1_1_2.fig');
-% close(gcf);
-% 
-% %% situation 1_4_1:
-% sit.vehNum          = 1;
-% sit.envNum          = 4;
-% sit.startState      = [0;0;0];
-% sit.startControls   = [0;0];
-% sit.goalState	    = [10;10;0];
-% sit.states          = {sit.startState};
-% sit.controls        = {sit.startControls};
-% sit.Init.T          = {5};
-% 
-% save data/sit1_4_1.mat sit
-% 
-% eval(['load ./data/env',num2str(sit.envNum),'.mat;']);
-% 
-% plotEnv(env,sit);
-% savefig(gcf,'figs/sitFigs/sit1_4_1.fig');
-% close(gcf);
-% 
-% %% situation 1_5_1:
-% sit.vehNum          = 1;
-% sit.envNum          = 5;
-% sit.startState      = [0;0;0];
-% sit.startControls   = [0;0];
-% sit.goalState	    = [10;10;0];
-% sit.states          = {sit.startState};
-% sit.controls        = {sit.startControls};
-% sit.Init.T          = {5};
-% 
-% save data/sit1_5_1.mat sit
-% 
-% eval(['load ./data/env',num2str(sit.envNum),'.mat;']);
-% 
-% plotEnv(env,sit);
-% savefig(gcf,'figs/sitFigs/sit1_5_1.fig');
-% close(gcf);
-% 
-% %% situation 1_8_1:
-% sit.vehNum          = 1;
-% sit.envNum          = 8;
-% sit.startState      = [0;0;0];
-% sit.startControls   = [0;0];
-% sit.goalState	    = [10;10;0];
-% sit.states          = {sit.startState};
-% sit.controls        = {sit.startControls};
-% sit.Init.T          = {5};
-% 
-% save data/sit1_8_1.mat sit
-% 
-% eval(['load ./data/env',num2str(sit.envNum),'.mat;']);
-% 
-% plotEnv(env,sit);
-% savefig(gcf,'figs/sitFigs/sit1_8_1.fig');
-% close(gcf);
+
+%% situation 1_4_1:
+MPC.nav.vehicle         = 1;
+MPC.nav.environment     = 4;
+MPC.nav.globalStart     = [0;0;0];
+MPC.nav.globalGoal	    = [10;10;0];
+MPC.nav.currentState    = MPC.nav.globalStart;
+
+save data/MPC1_4_1.mat MPC
+
+eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
+
+plotEnv(env,MPC);
+savefig(gcf,'figs/sitFigs/MPC1_4_1.fig');
+close(gcf);
+
+
+%% situation 1_5_1:
+MPC.nav.vehicle         = 1;
+MPC.nav.environment   	= 5;
+MPC.nav.globalStart  	= [0;0;0];
+MPC.nav.globalGoal	    = [10;10;0];
+MPC.nav.currentState    = MPC.nav.globalStart;
+
+save data/MPC1_5_1.mat MPC
+
+eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
+
+plotEnv(env,MPC);
+savefig(gcf,'figs/sitFigs/MPC1_5_1.fig');
+close(gcf);
+
+
+%% situation 1_8_1:
+MPC.nav.vehicle     	= 1;
+MPC.nav.environment  	= 8;
+MPC.nav.globalStart   	= [0;0;0];
+MPC.nav.globalGoal	    = [10;10;0];
+MPC.nav.currentState    = MPC.nav.globalStart;
+
+save data/MPC1_8_1.mat MPC
+
+eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
+
+plotEnv(env,MPC);
+savefig(gcf,'figs/sitFigs/MPC1_8_1.fig');
+close(gcf);
