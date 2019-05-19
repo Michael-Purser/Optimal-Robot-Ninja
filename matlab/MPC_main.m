@@ -23,24 +23,26 @@ eval(['load ./data/veh',num2str(MPC.nav.vehicle),'.mat;']);
 eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
 
 % parameter initialization:
-veh.sensor.noiseamp         = 0;
-veh.sensor.freq             = 100;
-veh.motors.fmax             = 3;
-MPC.nav.globalStart         = [3.9;8;0];
-MPC.nav.globalGoal          = [6;8;pi/2];
-MPC.nav.currentState        = MPC.nav.globalStart;  % Robot starts at global start
-MPC.nav.currentVelocity     = [0;0];                % Robot starts from standstill
-MPC.nav.goalTolerance       = 0.01;
-MPC.nav.opt.solver      	= 'ipopt';
-MPC.nav.opt.maxDist         = 0.1;
-MPC.nav.opt.globalPlanR     = 2;
-MPC.nav.kmax                = 1000;
-MPC.nav.rebuild             = true;
-MPC.nav.preload             = true;
-MPC.log.logBool             = true;
-MPC.log.exportBool          = false;
-MPC.log.states{end+1}       = MPC.nav.currentState;
-MPC.log.velocities{end+1}   = [0;0];
+veh.sensor.noiseamp                 = 0;
+veh.sensor.freq                     = 100;
+veh.motors.fmax                     = 3;
+MPC.nav.obstacleData.localGridDx    = 0.05;
+MPC.nav.globalStart                 = [0;0;0];
+MPC.nav.globalGoal                  = [6;8;pi/2];
+MPC.nav.currentState                = MPC.nav.globalStart;  % Robot starts at global start
+MPC.nav.currentVelocity             = [0;0];                % Robot starts from standstill
+MPC.nav.goalTolerance               = 0.01;
+MPC.nav.opt.solver                  = 'ipopt';
+MPC.nav.opt.maxDist                 = 0.1;
+MPC.nav.opt.globalPlanR             = 2;
+MPC.nav.kmax                        = 1000;
+MPC.nav.rebuild                     = false;
+MPC.nav.preload                     = true;
+MPC.log.logBool                     = true;
+MPC.log.exportBool                  = false;
+MPC.nav.withLocalGrid               = true;
+MPC.log.states{end+1}               = MPC.nav.currentState;
+MPC.log.velocities{end+1}           = [0;0];
 
 
 %% MPC LOOP

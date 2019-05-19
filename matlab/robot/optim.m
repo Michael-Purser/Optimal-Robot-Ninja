@@ -50,11 +50,12 @@ if strcmp(solver,'ipopt')==1
     % if first iteration, make initial guesses; else 'warm-start' the
     % solver with previous solution:
     if MPC.nav.k==1
-        phi         = atan2(x_final(3),n);
-        alpha       = 0.5;
-        n_vec       = linspace(0,n,n+1);
-        theta_star  = alpha*sin(2*pi*n_vec/n);
-        theta_init  = n_vec*sin(phi)+theta_star*cos(phi);
+%         phi         = atan2(x_final(3),n);
+%         alpha       = 0.5;
+%         n_vec       = linspace(0,n,n+1);
+%         theta_star  = alpha*sin(2*pi*n_vec/n);
+%         theta_init  = n_vec*sin(phi)+theta_star*cos(phi);
+        theta_init = linspace(0,x_final(3),n+1);
         x_init  = [linspace(0,x_final(1),n+1);linspace(0,x_final(2),n+1); ...
             theta_init];
         u_init  = zeros(2,n);

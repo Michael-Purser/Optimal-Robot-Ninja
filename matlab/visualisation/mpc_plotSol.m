@@ -78,7 +78,7 @@ contour(x_vec,y_vec,gmap',[Ghat Ghat],'LineWidth',2,'LineColor','r');
 contour(x_vec,y_vec,gmap',10);
 
 % plot global path:
-plot(globalPlan(:,1),globalPlan(:,2),'r','LineWidth',1.4);
+plot(globalPlan(:,1),globalPlan(:,2),'g','LineWidth',1.4);
 
 % plot vehicle global path view radius
 plot(p(1)+Rv*cos(arc), p(2)+Rv*sin(arc), 'g--','LineWidth',1.5);
@@ -98,7 +98,7 @@ if fail==false
 end
 
 for k=1:size(states,2)
-    plot(states{k}(1),states{k}(2),'ro-','MarkerSize',6,'LineWidth',1.4);
+    plot(states{k}(1),states{k}(2),'r.-','MarkerSize',6,'LineWidth',1.4);
 end
 
 % Plot local and global goal:

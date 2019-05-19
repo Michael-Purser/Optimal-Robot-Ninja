@@ -29,10 +29,12 @@ MPC.nav.map.values      = [];       % Map matrix
 MPC.nav.map.inflated    = [];       % Map inflated with G-values
 MPC.nav.map.center      = [];       % Map center in world frame
 
-MPC.nav.obstacleData.meas.orig    = [];      % Measurements from simulated sensor (polar)
-MPC.nav.obstacleData.meas.transLocal   = [];      % Measurements in cartesian coordinates
-MPC.nav.obstacleData.meas.transGlobal   = [];      % Measurements in cartesian coordinates
-MPC.nav.obstacleData.preloaded    = [];      % Preloaded sampled environment data
+MPC.nav.obstacleData.meas.orig              = [];      % Measurements from simulated sensor (polar)
+MPC.nav.obstacleData.meas.transLocal        = [];      % Measurements in cartesian coordinates
+MPC.nav.obstacleData.meas.transGlobal       = [];      % Measurements in cartesian coordinates
+MPC.nav.obstacleData.meas.transGlobalGrid   = [];      % Measurements to grid in cartesian coordinates
+MPC.nav.obstacleData.preloaded              = [];      % Preloaded sampled environment data
+MPC.nav.obstacleData.localGridDx            = 0.05;    % Local grid cell width
 
 MPC.nav.goalTolerance   = 1e-2;     % Tolerance on final goal
 MPC.nav.goalReached     = false;    % Indicate if final goal is reached
@@ -42,6 +44,7 @@ MPC.nav.kmax            = 1000;     % MPC loop counter maximum
 MPC.nav.m               = 0;        % Number of states advanced in current MPC step
 MPC.nav.rebuild         = true;     % Indicate wether to rebuild (true) or load (false) the problem
 MPC.nav.preload         = true;     % Indicate wether to sort the obstacles between mapped & measured
+MPC.nav.withLocalGrid   = true;     % Indicate wether to transform the meas to local grid or not
 MPC.nav.problemIpoptA   = 0;        % put here as compromise; limit memory when logging opt
 MPC.nav.problemIpoptB   = 0;
 MPC.nav.problemSqpA     = 0;

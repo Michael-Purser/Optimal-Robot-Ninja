@@ -6,6 +6,7 @@ function MPC = prepareObstacleData(MPC)
     state       = MPC.nav.currentState;
     orig        = MPC.nav.obstacleData.meas.orig;
     preloaded   = MPC.nav.obstacleData.preloaded;
+    localGridDx = MPC.nav.obstacleData.localGridDx;
 
     % Transform local polar measurements to local cartesian measurements
     transLocal = zeros(size(orig));
@@ -31,8 +32,16 @@ function MPC = prepareObstacleData(MPC)
        A = T\[preloaded(i,:)';1];
        preloadedLocal(i,:) = A(1:2);
     end
+
+    % Process measurements
+    transLocalGrid = processMeas(transLocal,localGridDx);
+    MPC.nav.obstacleData.meas.transLocalGrid = transLocalGrid;
     
     % Fill info in variable used by optimization routine
     % MPC.nav.opt.obst = [transLocal;preloadedLocal];
-    MPC.nav.opt.obst = [transLocal];
+    if MPC.nav.withLocalGrid
+        MPC.nav.opt.obst = transLocalGrid;
+    else
+        MPC.nav.opt.obst = transLocal;
+    end
 end
