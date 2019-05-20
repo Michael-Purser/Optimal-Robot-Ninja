@@ -1,4 +1,4 @@
-function mpc_plotSol(MPC,veh,env,it,fail,varargin)
+function mpc_plotSol(MPC,veh,env,it,N,fail,varargin)
 
 if fail
     %it      = MPC.nav.k - 1;
@@ -26,7 +26,6 @@ W           = MPC.nav.map.width;
 
 p           = [states{it}(1:2);1];
 phi         = states{it}(3);
-N           = 500;
 arc         = 0:0.01:2*pi;
 H           = W/2;
 
@@ -154,7 +153,7 @@ axis([-2 12 -1 12]);
 title('Vehicle path in global frame');
 
 
-if nargin == 6 && fail == 0
+if nargin == 7 && fail == 0
     
     % plot velocities and accelerations in wheels:
     t_vec   = linspace(0,T(1),horizon+1);

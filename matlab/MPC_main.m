@@ -15,7 +15,7 @@ addpath('./simulation/');
 addpath('./visualisation/');
 
 % situation:
-sitStr = '1_1_1';
+sitStr = '1_4_1';
 
 % load situation, environment and vehicle:
 eval(['load ./data/MPC',sitStr,'.mat;']);
@@ -32,10 +32,11 @@ MPC.nav.globalGoal                  = [9;9;pi/2];
 MPC.nav.currentState                = MPC.nav.globalStart;  % Robot starts at global start
 MPC.nav.currentVelocity             = [0;0];                % Robot starts from standstill
 MPC.nav.goalTolerance               = 0.001;
+MPC.nav.opt.horizon                 = 100;
 MPC.nav.opt.solver                  = 'ipopt';
 MPC.nav.opt.maxDistBeta             = 3;
-MPC.nav.opt.globalPlanR             = 2;
-MPC.nav.kmax                        = 10;
+MPC.nav.opt.globalPlanR             = 1;
+MPC.nav.kmax                        = 1000;
 MPC.nav.rebuild                     = true;
 MPC.nav.preload                     = true;
 MPC.log.logBool                     = true;
@@ -76,9 +77,8 @@ while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     % combination of measured and preloaded data
     fprintf('Measuring environment \n');
     MPC = sensor(MPC,veh,env);
-    % optional: process the sensor meas (left out for now)
-    % transform obstacle data to local frame and move to MPC data
-    % structure:
+    % process and transform obstacle data to local frame and move to MPC 
+    % data structure:
     MPC = prepareObstacleData(MPC);
     
     % check if recomputation of a global plan is necessary
@@ -122,14 +122,16 @@ end
 %     sit = checkSolution(sit,veh,k);
 % end
 
-% make videos:
-% mpc_makeMov(sit,veh,env,sitStr,count,1);
-% mpc_makeMov(sit,veh,env,sitStr,2);
+% make video:
+N = 200;
+mpc_makeAVI(MPC,veh,env,N);
 close all;
 
 % plots:
 k = MPC.nav.k-1;
+N = 500;
 fprintf('Plotting solution \n');
-mpc_plotSol(MPC,veh,env,k,false,1);
+mpc_plotSol(MPC,veh,env,k,N,false);
+
 
 
