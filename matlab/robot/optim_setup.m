@@ -89,36 +89,37 @@ opti.subject_to(costf(x(1:2,:))<=Ghatp);
 % objective:
 opti.minimize(sum(T)/np);
 
+
 % solver:
-opts = struct;
-opts.convexify_strategy = 'eigen-reflect';
-opts.verbose = true;
-opts.jit = true;
-opts.compiler = 'shell';
-opts.jit_options.compiler = 'ccache gcc';
-opts.jit_options.flags = {'-O1'};
-opts.jit_temp_suffix = false;
-opts.qpsol = 'nlpsol';
-% opts.max_iter = 1;
-opts.qpsol_options.nlpsol = 'ipopt';
-opts.qpsol_options.nlpsol_options.ipopt.tol = 1e-7;
-opts.qpsol_options.nlpsol_options.ipopt.tiny_step_tol = 1e-20;
-opts.qpsol_options.nlpsol_options.ipopt.fixed_variable_treatment = 'make_constraint';
-opts.qpsol_options.nlpsol_options.ipopt.hessian_constant = 'yes';
-opts.qpsol_options.nlpsol_options.ipopt.jac_c_constant = 'yes';
-opts.qpsol_options.nlpsol_options.ipopt.jac_d_constant = 'yes';
-opts.qpsol_options.nlpsol_options.ipopt.accept_every_trial_step = 'yes';
-opts.qpsol_options.nlpsol_options.ipopt.mu_init = 1e-3;
-
-opts.qpsol_options.nlpsol_options.ipopt.print_level = 0;
-%opts.qpsol_options.nlpsol_options.print_time = false;
-opts.qpsol_options.nlpsol_options.ipopt.linear_solver = 'ma27';
-opts.qpsol_options.print_time = true;
-
-% opti.solver('sqpmethod',opts);
 if strcmp(solver_str,'ipopt')==1
-    opti.solver('ipopt');
+    options.ipopt.print_level = 0;
+    opti.solver('ipopt',options);
 else
+    opts = struct;
+    opts.convexify_strategy = 'eigen-reflect';
+    opts.verbose = false;
+    opts.jit = true;
+    opts.compiler = 'shell';
+    opts.jit_options.compiler = 'ccache gcc';
+    opts.jit_options.flags = {'-O1'};
+    opts.jit_temp_suffix = false;
+    opts.qpsol = 'nlpsol';
+    % opts.max_iter = 1;
+    opts.qpsol_options.nlpsol = 'ipopt';
+    opts.qpsol_options.nlpsol_options.ipopt.tol = 1e-7;
+    opts.qpsol_options.nlpsol_options.ipopt.tiny_step_tol = 1e-20;
+    opts.qpsol_options.nlpsol_options.ipopt.fixed_variable_treatment = 'make_constraint';
+    opts.qpsol_options.nlpsol_options.ipopt.hessian_constant = 'yes';
+    opts.qpsol_options.nlpsol_options.ipopt.jac_c_constant = 'yes';
+    opts.qpsol_options.nlpsol_options.ipopt.jac_d_constant = 'yes';
+    opts.qpsol_options.nlpsol_options.ipopt.accept_every_trial_step = 'yes';
+    opts.qpsol_options.nlpsol_options.ipopt.mu_init = 1e-3;
+
+    opts.qpsol_options.nlpsol_options.ipopt.print_level = 0;
+    %opts.qpsol_options.nlpsol_options.print_time = false;
+    opts.qpsol_options.nlpsol_options.ipopt.linear_solver = 'ma27';
+    opts.qpsol_options.print_time = true;
+
     opti.solver('sqpmethod',opts);
 end
 

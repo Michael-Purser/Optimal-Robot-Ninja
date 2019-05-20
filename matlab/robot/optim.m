@@ -49,7 +49,7 @@ u_begin = MPC.nav.currentVelocity;
 maxDist = beta*norm(x_begin(1:2)-x_final(1:2))/n;
 
 if strcmp(solver,'ipopt')==1
-    fprintf('Using IPOPT solver \n');
+    fprintf('\t Using IPOPT solver \n');
     % if first iteration, make initial guesses; else 'warm-start' the
     % solver with previous solution:
     if MPC.nav.k==1
@@ -79,7 +79,7 @@ if strcmp(solver,'ipopt')==1
     end
     
 else
-    fprintf('Using SQP solver - first iterations are IPOPT \n');
+    fprintf('\t Using SQP solver \n');
     if MPC.nav.k<3
         % initial guesses for first iteration
         phi         = atan2(x_final(3),n);
