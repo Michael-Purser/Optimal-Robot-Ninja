@@ -11,12 +11,12 @@ end
 L           = veh.geometry.wheelBase;
 H           = veh.sensor.horizon;
 states      = {MPC.log.states{1:it}};
+localGoal   = MPC.log.opts{it}.goal;
 x_final     = [MPC.nav.globalGoal(1:2);1];
 globalPlan  = MPC.nav.globalPlan.worldCoordinates;
 Ghat        = MPC.nav.opt.Ghat;
 sigma       = MPC.nav.opt.sigma;
 horizon     = MPC.nav.opt.horizon;
-localGoal   = MPC.nav.opt.goal;
 Rv          = MPC.nav.opt.globalPlanR;
 velLimits   = MPC.nav.opt.dynLimits.vel;
 accLimits   = MPC.nav.opt.dynLimits.acc;
@@ -142,7 +142,7 @@ quiver(p(1)-0.5*L*cos(phi),p(2)-0.5*L*sin(phi),...
 goal = Tr*[localGoal(1:2);1];
 goal = [goal(1:2);localGoal(3)-phi];
 plot(goal(1),goal(2),'ok','LineWidth',1.4);
-% quiver(goal(1),goal(2),sin(goal(3)),cos(goal(3)),'k','LineWidth',1.4);
+quiver(goal(1),goal(2),sin(goal(3)),cos(goal(3)),'k','LineWidth',1.4);
 
 plot(x_final(1),x_final(2),'xr','LineWidth',1.4);
 
