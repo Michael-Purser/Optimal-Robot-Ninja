@@ -106,17 +106,17 @@ end
 plot(p(1)+0.5*L*cos(arc), p(2)+0.5*L*sin(arc),'k',...
 'LineWidth',1.5);
 plot([p(1)+0.5*L*cos(phi), p(1)-0.5*L*cos(phi)],...
-    [p(2)-0.5*L*sin(phi), p(2)+0.5*L*sin(phi)],'k-','LineWidth',1)
-quiver(p(1)+0.5*L*cos(phi),p(2)-0.5*L*sin(phi),...
-    U(1,1)*sin(phi),U(1,1)*cos(phi),'k-','LineWidth',1.4);
-quiver(p(1)-0.5*L*cos(phi),p(2)+0.5*L*sin(phi),...
-    U(2,1)*sin(phi),U(2,1)*cos(phi),'k-','LineWidth',1.4);
+    [p(2)+0.5*L*sin(phi), p(2)-0.5*L*sin(phi)],'k-','LineWidth',1)
+quiver(p(1)+0.5*L*cos(phi),p(2)+0.5*L*sin(phi),...
+    -U(1,1)*sin(phi),U(1,1)*cos(phi),'k-','LineWidth',1.4);
+quiver(p(1)-0.5*L*cos(phi),p(2)-0.5*L*sin(phi),...
+    -U(2,1)*sin(phi),U(2,1)*cos(phi),'k-','LineWidth',1.4);
 
 % Plot local and global goal:
 goal = Tr*[localGoal(1:2);1];
 goal = [goal(1:2);localGoal(3)-phi];
 plot(goal(1),goal(2),'ok','LineWidth',1.4);
-quiver(goal(1),goal(2),sin(goal(3)),cos(goal(3)),'k','LineWidth',1.4);
+% quiver(goal(1),goal(2),sin(goal(3)),cos(goal(3)),'k','LineWidth',1.4);
 
 plot(x_final(1),x_final(2),'xr','LineWidth',1.4);
 
