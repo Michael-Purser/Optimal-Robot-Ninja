@@ -28,12 +28,12 @@ for m=1:numberOfParts
     
     for i=1:n
         
-        k = (m-1)*n + i;
+        k = (m-1)*framesPerPart + i;
         
         % completion logger
         perc = floor(100*i/n);
         if rem(perc,10)==0 && perc>prev_perc
-            fprintf('\t %i%% \t \t %i/%i \n',perc,k,n);
+            fprintf('\t %i%% \t \t %i/%i \n',perc,k,totalFrames);
             prev_perc = perc;
         end
         
