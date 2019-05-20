@@ -20,6 +20,7 @@ localGoal   = MPC.nav.opt.goal;
 Rv          = MPC.nav.opt.globalPlanR;
 velLimits   = MPC.nav.opt.dynLimits.vel;
 accLimits   = MPC.nav.opt.dynLimits.acc;
+jerkLimits  = MPC.nav.opt.dynLimits.jerk;
 omLimits    = MPC.nav.opt.dynLimits.om;
 W           = MPC.nav.map.width;
 
@@ -107,6 +108,11 @@ if fail==false
     A       = zeros(2,size(U,2)-1);
     A(1,:)  = diff(U(1,:))/dT;
     A(2,:)  = diff(U(2,:))/dT;
+    
+    % reconstruct jerks
+    J       = zeros(2,size(U,2)-2);
+    J(1,:)  = diff(A(1,:))/dT;
+    J(2,:)  = diff(A(2,:))/dT;
 
     % transform solution to global frame
     x = zeros(3,size(X,2));
@@ -158,33 +164,52 @@ if nargin == 6 && fail == 0
     [vLeftUpper,vLeftLower]   = makeAxisLimits(max(max(U(2,:)),velLimits(2)),min(min(U(2,:)),velLimits(1)),slack);
     [aRightUpper,aRightLower] = makeAxisLimits(max(max(A(1,:)),accLimits(2)),min(min(A(1,:)),accLimits(1)),slack);
     [aLeftUpper,aLeftLower]   = makeAxisLimits(max(max(A(2,:)),accLimits(2)),min(min(A(2,:)),accLimits(1)),slack);
+    [jRightUpper,jRightLower] = makeAxisLimits(max(max(J(1,:)),jerkLimits(2)),min(min(J(1,:)),jerkLimits(1)),slack);
+    [jLeftUpper,jLeftLower]   = makeAxisLimits(max(max(J(2,:)),jerkLimits(2)),min(min(J(2,:)),jerkLimits(1)),slack);
 
     figure;
 
-    subplot(2,2,1);
+    subplot(3,2,1);
     hold all;
     plot(t_vec(1:end-1),U(1,:)); xlabel('time [s]'); ylabel('v_{right}(t) [m/s]'); title('v_{right}(t)');
     plot(t_vec(1:end-1),ones(1,size(U,2))*velLimits(1),'r--');
     plot(t_vec(1:end-1),ones(1,size(U,2))*velLimits(2),'r--');
     axis([0 t_vec(end) vRightLower vRightUpper]);
-    subplot(2,2,2);
+    
+    subplot(3,2,2);
     hold all;
     plot(t_vec(1:end-1),U(2,:)); xlabel('time [s]'); ylabel('v_{left}(t) [m/s]'); title('v_{left}(t)');
     plot(t_vec(1:end-1),ones(1,size(U,2))*velLimits(1),'r--');
     plot(t_vec(1:end-1),ones(1,size(U,2))*velLimits(2),'r--');
     axis([0 t_vec(end) vLeftLower vLeftUpper]);
-    subplot(2,2,3);
+    
+    subplot(3,2,3);
     hold all;
     plot(t_vec(1:end-2)+dT/2,A(1,:)); xlabel('time [s]'); ylabel('a_{right}(t) [m/s^2]'); title('a_{right}(t)');
     plot(t_vec(1:end-2),ones(1,size(A,2))*accLimits(1),'r--');
     plot(t_vec(1:end-2),ones(1,size(A,2))*accLimits(2),'r--');
     axis([0 t_vec(end) aRightLower aRightUpper]);
-    subplot(2,2,4);
+    
+    subplot(3,2,4);
     hold all;
     plot(t_vec(1:end-2)+dT/2,A(2,:)); xlabel('time [s]'); ylabel('a_{left}(t) [m/s^2]'); title('a_{left}(t)');
     plot(t_vec(1:end-2),ones(1,size(A,2))*accLimits(1),'r--');
     plot(t_vec(1:end-2),ones(1,size(A,2))*accLimits(2),'r--');
     axis([0 t_vec(end) aLeftLower aLeftUpper]);
+    
+    subplot(3,2,5);
+    hold all;
+    plot(t_vec(1:end-3)+dT,J(1,:)); xlabel('time [s]'); ylabel('j_{right}(t) [m/s^3]'); title('j_{right}(t)');
+    plot(t_vec(1:end-3),ones(1,size(J,2))*jerkLimits(1),'r--');
+    plot(t_vec(1:end-3),ones(1,size(J,2))*jerkLimits(2),'r--');
+    axis([0 t_vec(end) jRightLower jRightUpper]);
+    
+    subplot(3,2,6);
+    hold all;
+    plot(t_vec(1:end-3)+dT,J(2,:)); xlabel('time [s]'); ylabel('j_{left}(t) [m/s^3]'); title('j_{left}(t)');
+    plot(t_vec(1:end-3),ones(1,size(J,2))*jerkLimits(1),'r--');
+    plot(t_vec(1:end-3),ones(1,size(J,2))*jerkLimits(2),'r--');
+    axis([0 t_vec(end) jLeftLower jLeftUpper]);
 
     % plot max(G) in all iterations:
     figure;

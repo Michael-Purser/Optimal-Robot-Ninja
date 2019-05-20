@@ -78,8 +78,10 @@ opti.subject_to(aminp <= np./T(2:end).*u(2,2:end)-np./T(1:end-1).*u(2,1:end-1) <
 
 % jerk constraints; implemented using a three-point stencil second
 % derivative scheme
-opti.subject_to(jminp <= np./T(3:end).*u(1,3:end)-2*np./T(2:end-1).*u(1,2:end-1)+np./T(1:end-2).*u(1,1:end-2) <= jmaxp);
-opti.subject_to(jminp <= np./T(3:end).*u(2,3:end)-2*np./T(2:end-1).*u(2,2:end-1)+np./T(1:end-2).*u(2,1:end-2) <= jmaxp);
+opti.subject_to(jminp <= ((np./T(3:end)).^2).*u(1,3:end)-2*((np./T(2:end-1)).^2).*u(1,2:end-1)+...
+    ((np./T(1:end-2)).^2).*u(1,1:end-2) <= jmaxp);
+opti.subject_to(jminp <= ((np./T(3:end)).^2).*u(2,3:end)-2*((np./T(2:end-1)).^2).*u(2,2:end-1)+...
+    ((np./T(1:end-2)).^2).*u(2,1:end-2) <= jmaxp);
 
 % angular velocity constraint
 opti.subject_to(omminp <= (1/Lp)*(u(2,:)-u(1,:)) <= ommaxp);

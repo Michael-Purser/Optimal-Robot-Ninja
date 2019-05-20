@@ -14,7 +14,7 @@ veh.dynamics.COG         = [0;0;0.2]; % in vehicle xyz
 veh.dynamics.omLimits    = [-pi;pi];
 veh.dynamics.velLimits   = [-0.2;0.2];
 veh.dynamics.accLimits   = [-0.2;0.2];
-veh.dynamics.jerkLimits  = [-0.01;0.01];
+veh.dynamics.jerkLimits  = [-0.5;0.5];
 
 % Actuators
 veh.motors.fmax       	= 3;
