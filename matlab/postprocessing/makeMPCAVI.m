@@ -1,4 +1,4 @@
-function mpc_makeAVI(MPC,veh,env,N)
+function makeMPCAVI(MPC,veh,env,N)
 
 totalFrames         = size(MPC.log.states,2)-1;
 framesPerPart       = 100;
@@ -37,7 +37,7 @@ for m=1:numberOfParts
             prev_perc = perc;
         end
         
-        mpc_plotSol(MPC,veh,env,k,N,false); 
+        plotMPCState(MPC,veh,env,k,N); 
         
         drawnow;
         pause(0.5);

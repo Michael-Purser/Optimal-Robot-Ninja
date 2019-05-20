@@ -9,7 +9,6 @@ else
 end
 
 L           = veh.geometry.wheelBase;
-H           = veh.sensor.horizon;
 states      = {MPC.log.states{1:it}};
 localGoal   = MPC.log.opts{it}.goal;
 x_final     = [MPC.nav.globalGoal(1:2);1];
@@ -21,7 +20,6 @@ Rv          = MPC.nav.opt.globalPlanR;
 velLimits   = MPC.nav.opt.dynLimits.vel;
 accLimits   = MPC.nav.opt.dynLimits.acc;
 jerkLimits  = MPC.nav.opt.dynLimits.jerk;
-omLimits    = MPC.nav.opt.dynLimits.om;
 W           = MPC.nav.map.width;
 
 p           = [states{it}(1:2);1];
@@ -51,22 +49,28 @@ y_vec        = linspace(-(H-dx),H-dx,2*N+1);
 figure;
 hold all;
 
+obstacleInsideColor = [170 170 200]/255;
+
 % plot obstacles:
 for i=1:size(env.obst,2)
     type = env.obst{i}.type;
     mode = env.obst{i}.mode;
     if strcmp(mode,'known')==1
-        plotColor = 'b';
+        plotStyle = 'k';
     elseif strcmp(mode,'unknown')==1
-        plotColor = 'c';
+        plotStyle = 'k--';
     end
     
     % circular obstacle:
     if strcmp(type,'circle')==1
         pos = env.obst{i}.center;
         R = env.obst{i}.radius;
-        plot(pos(1)+R*cos(arc), pos(2)+R*sin(arc), plotColor,...
+        plot(pos(1)+R*cos(arc), pos(2)+R*sin(arc), plotStyle,...
             'LineWidth',1.5);
+        th = 0:pi/50:2*pi;
+        x_circle = pos(1)+R*cos(th);
+        y_circle = pos(2)+R*sin(th);
+        fill(x_circle, y_circle,obstacleInsideColor)
         
     % rectangular obstacle:
     elseif strcmp(type,'rectangle')==1
@@ -75,8 +79,9 @@ for i=1:size(env.obst,2)
         H = env.obst{i}.height;
         ori = env.obst{i}.orientation;
         C = rectangleCorners(pos,W/2,H/2,ori);
+        fill(C(1,:),C(2,:),obstacleInsideColor);
         C(:,end+1) = C(:,1);
-        plot(C(1,:),C(2,:),plotColor,'LineWidth',1.5);
+        plot(C(1,:),C(2,:),plotStyle,'LineWidth',1.5);
     end
 end
 
@@ -84,11 +89,11 @@ end
 contour(x_vec,y_vec,gmap',[Ghat Ghat],'LineWidth',2,'LineColor','r');
 contour(x_vec,y_vec,gmap',10);
 
-% plot global path:
-plot(globalPlan(:,1),globalPlan(:,2),'g','LineWidth',1.4);
+% plot global plan:
+plot(globalPlan(:,1),globalPlan(:,2),'b','LineWidth',1.5);
 
 % plot vehicle global path view radius
-plot(p(1)+Rv*cos(arc), p(2)+Rv*sin(arc), 'g--','LineWidth',1.5);
+% plot(p(1)+Rv*cos(arc), p(2)+Rv*sin(arc), 'b--','LineWidth',1.5);
 
 % plot vehicle and its path: transform from local to global coordinates
 % before plotting:

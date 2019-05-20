@@ -12,7 +12,7 @@ addpath('./data/');
 addpath('./rastar/');
 addpath('./robot/');
 addpath('./simulation/');
-addpath('./visualisation/');
+addpath('./postprocessing/');
 
 % situation:
 sitStr = '1_4_1';
@@ -27,15 +27,17 @@ veh.sensor.noiseamp                 = 0;
 veh.sensor.freq                     = 100;
 veh.motors.fmax                     = 3;
 MPC.nav.obstacleData.localGridDx    = 0.05;
-MPC.nav.globalStart                 = [0;0;0];
+MPC.nav.globalStart                 = [2;6;0];
 MPC.nav.globalGoal                  = [9;9;pi/2];
 MPC.nav.currentState                = MPC.nav.globalStart;  % Robot starts at global start
 MPC.nav.currentVelocity             = [0;0];                % Robot starts from standstill
-MPC.nav.goalTolerance               = 0.001;
+MPC.nav.goalTolerance               = 0.01;
 MPC.nav.opt.horizon                 = 100;
+MPC.nav.opt.Ghat                    = 0.15;
+MPC.nav.opt.sigma                   = 0.1;
 MPC.nav.opt.solver                  = 'ipopt';
 MPC.nav.opt.maxDistBeta             = 3;
-MPC.nav.opt.globalPlanR             = 1;
+MPC.nav.opt.globalPlanR             = 1.5;
 MPC.nav.kmax                        = 1000;
 MPC.nav.rebuild                     = true;
 MPC.nav.preload                     = true;
@@ -123,15 +125,19 @@ end
 % end
 
 % make video:
-N = 200;
-mpc_makeAVI(MPC,veh,env,N);
-close all;
+% N = 200;
+% makeMPCAVI(MPC,veh,env,N);
+% close all;
 
 % plots:
 k = MPC.nav.k-1;
-N = 500;
+N = 200;
 fprintf('Plotting solution \n');
-mpc_plotSol(MPC,veh,env,k,N,false);
+
+plotMPCState(MPC,veh,env,k,N);
+plotGaussians3D(MPC,k,N);
+plotDynamics(MPC,k);
+plotMPCStats(MPC);
 
 
 

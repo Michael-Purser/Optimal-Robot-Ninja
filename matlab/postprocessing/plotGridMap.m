@@ -1,4 +1,6 @@
 function plotGridMap(MPC)
+% Plots the discrete map with the preloaded obstacles used by the global
+% planner
 
 mapValues   = MPC.nav.map.values;
 mapInflated = MPC.nav.map.inflated;

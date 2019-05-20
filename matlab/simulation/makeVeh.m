@@ -6,7 +6,7 @@ function makeVeh()
 % All units are S.I. if not specified otherwise
 
 % Geometry and Dynamics
-veh.geometry.wheelBase  = 0.2;
+veh.geometry.wheelBase  = 0.4;
 veh.geometry.height     = 0.3;
 
 veh.dynamics.mass        = 15;
