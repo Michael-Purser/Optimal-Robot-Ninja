@@ -39,23 +39,21 @@ k4 = ode(x+h*k3,  u);
 xf = x+ h/6 * (k1 + 2*k2 + 2*k3 + k4);
 F  = casadi.Function('F',{x,u,h},{xf});
 
+% decision variables
 x    = opti.variable(3,n+1);
 u    = opti.variable(2,n);
 T    = opti.variable(1,n);
 
-% [dusqmax,samax] = getULimits(veh,0.8);
-
-% constraints:
-% TODO: add constraint for platform global acceleration
-% 	    make actuator acceleration limits dependent on current velocity
-% 	    add jerk contraints to avoid inf accelerations
+% multiple-shooting constraint
 opti.subject_to(F(x(:,1:end-1),u,T./np)==x(:,2:end));
 
+% state constraints
 opti.subject_to(x(:,1)==xbeginp);
 opti.subject_to(x(:,end)==xfinalp);
 opti.subject_to(-maxDistp<=diff(x(1,:))<=maxDistp);
 opti.subject_to(-maxDistp<=diff(x(2,:))<=maxDistp);
 
+% velocity constraints
 opti.subject_to(uminp <= u(1,:) <= umaxp);
 opti.subject_to(uminp <= u(2,:) <= umaxp);
 opti.subject_to(u(:,1) == ubeginp);
@@ -67,12 +65,11 @@ if with_end
 end
 opti.subject_to(u(1,:)+u(2,:) >= 0);
 
-% add platform dynamics constraint:
+% platform dynamics constraint (optional):
+% [dusqmax,samax] = getULimits(veh,0.8);
 % opti.subject_to(abs(u(1,:).^2-u(2,:).^2) <= dusqmax);
 
 % acceleration constraints
-% opti.subject_to(a_min <= (n./T(2:end)).*diff(u(1,:)) <= a_max);
-% opti.subject_to(a_min <= (n./T(2:end)).*diff(u(2,:)) <= a_max);
 opti.subject_to(aminp <= np./T(2:end).*u(1,2:end)-np./T(1:end-1).*u(1,1:end-1) <= amaxp);
 opti.subject_to(aminp <= np./T(2:end).*u(2,2:end)-np./T(1:end-1).*u(2,1:end-1) <= amaxp);
 
@@ -86,20 +83,18 @@ opti.subject_to(jminp <= ((np./T(3:end)).^2).*u(2,3:end)-2*((np./T(2:end-1)).^2)
 % angular velocity constraint
 opti.subject_to(omminp <= (1/Lp)*(u(2,:)-u(1,:)) <= ommaxp);
 
+% time constraints
 opti.subject_to(T >= 0);
 opti.subject_to(T(2:end)==T(1:end-1));
 
-pos = casadi.MX.sym('pos',2);
-
-% p   = [measp(:,1) measp(:,2)];
-g   = gaussianValue(measp,pos,sigmap,sigmap);
-costf = casadi.Function('costf',{pos},{sum(g)});
-
+% obstacle avoidance constraint
+pos     = casadi.MX.sym('pos',2);
+g       = gaussianValue(measp,pos,sigmap,sigmap);
+costf   = casadi.Function('costf',{pos},{sum(g)});
 opti.subject_to(costf(x(1:2,:))<=Ghatp);
 
 % objective:
 opti.minimize(sum(T)/np);
-
 
 % solver:
 if strcmp(solver_str,'ipopt')==1
