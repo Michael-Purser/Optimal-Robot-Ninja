@@ -12,6 +12,7 @@ states      = {MPC.log.states{1:it}};
 p           = [states{it}(1:2);1];
 phi         = states{it}(3);
 x_final     = [MPC.nav.globalGoal(1:2);1];
+L           = veh.geometry.wheelBase;
 H           = veh.sensor.horizon;
 Ghat        = MPC.nav.opt.Ghat;
 sigma       = MPC.nav.opt.sigma;
@@ -98,8 +99,18 @@ if fail==false
 end
 
 for k=1:size(states,2)
-    plot(states{k}(1),states{k}(2),'r.-','MarkerSize',6,'LineWidth',1.4);
+    plot(states{k}(1),states{k}(2),'r.','MarkerSize',6,'LineWidth',1.4);
 end
+
+% plot vehicle shape and arrows representing wheel velocities
+plot(p(1)+0.5*L*cos(arc), p(2)+0.5*L*sin(arc),'k',...
+'LineWidth',1.5);
+plot([p(1)+0.5*L*cos(phi), p(1)-0.5*L*cos(phi)],...
+    [p(2)-0.5*L*sin(phi), p(2)+0.5*L*sin(phi)],'k-','LineWidth',1)
+quiver(p(1)+0.5*L*cos(phi),p(2)-0.5*L*sin(phi),...
+    U(1,1)*sin(phi),U(1,1)*cos(phi),'k-','LineWidth',1.4);
+quiver(p(1)-0.5*L*cos(phi),p(2)+0.5*L*sin(phi),...
+    U(2,1)*sin(phi),U(2,1)*cos(phi),'k-','LineWidth',1.4);
 
 % Plot local and global goal:
 goal = Tr*[localGoal(1:2);1];

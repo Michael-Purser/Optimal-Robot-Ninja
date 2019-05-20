@@ -15,7 +15,7 @@ addpath('./simulation/');
 addpath('./visualisation/');
 
 % situation:
-sitStr = '1_1_1';
+sitStr = '1_4_1';
 
 % load situation, environment and vehicle:
 eval(['load ./data/MPC',sitStr,'.mat;']);
