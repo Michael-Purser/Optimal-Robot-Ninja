@@ -59,7 +59,8 @@ MPC.nav.opt.dynLimits.acc = [];
 MPC.nav.opt.dynLimits.om  = [];
 MPC.nav.opt.sigma         = 0.1;
 MPC.nav.opt.Ghat          = 2.0;
-MPC.nav.opt.maxDist       = 0.1;
+MPC.nav.opt.maxDist       = 0;
+MPC.nav.opt.maxDistBeta   = 3;
 MPC.nav.opt.globalPlanR   = 2;
 
 MPC.nav.opt.init.x      = [];

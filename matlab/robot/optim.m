@@ -13,7 +13,7 @@ om_min      = MPC.nav.opt.dynamicLimits.om(1);
 om_max      = MPC.nav.opt.dynamicLimits.om(2);
 sigma       = MPC.nav.opt.sigma;
 Ghat        = MPC.nav.opt.Ghat;
-maxDist     = MPC.nav.opt.maxDist;
+beta        = MPC.nav.opt.maxDistBeta;
 solver      = MPC.nav.opt.solver;
 max_meas    = 1000;
 
@@ -44,6 +44,9 @@ opti = casadi.Opti();
 x_begin = MPC.nav.opt.start;
 x_final = MPC.nav.opt.goal;
 u_begin = MPC.nav.currentVelocity;
+
+% make the max dist value:
+maxDist = beta*norm(x_begin(1:2)-x_final(1:2))/n;
 
 if strcmp(solver,'ipopt')==1
     fprintf('Using IPOPT solver \n');
@@ -104,6 +107,9 @@ else
         end
     end
 end
+
+% log the maxDist value
+MPC.nav.opt.maxDist = maxDist;
 
 % log the initial guesses
 MPC.nav.opt.init.x = x_init;

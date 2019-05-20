@@ -27,13 +27,13 @@ veh.sensor.noiseamp                 = 0;
 veh.sensor.freq                     = 100;
 veh.motors.fmax                     = 3;
 MPC.nav.obstacleData.localGridDx    = 0.05;
-MPC.nav.globalStart                 = [0;0;0];
+MPC.nav.globalStart                 = [8;8;0];
 MPC.nav.globalGoal                  = [9;9;pi/2];
 MPC.nav.currentState                = MPC.nav.globalStart;  % Robot starts at global start
 MPC.nav.currentVelocity             = [0;0];                % Robot starts from standstill
-MPC.nav.goalTolerance               = 0.01;
+MPC.nav.goalTolerance               = 0.001;
 MPC.nav.opt.solver                  = 'ipopt';
-MPC.nav.opt.maxDist                 = 0.1;
+MPC.nav.opt.maxDistBeta             = 3;
 MPC.nav.opt.globalPlanR             = 2;
 MPC.nav.kmax                        = 1000;
 MPC.nav.rebuild                     = false;
@@ -130,6 +130,6 @@ close all;
 % plots:
 k = MPC.nav.k-1;
 fprintf('Plotting solution \n');
-mpc_plotSol(MPC,veh,env,k,false);
+mpc_plotSol(MPC,veh,env,k,false,1);
 
 
