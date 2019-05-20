@@ -9,9 +9,9 @@ xinit = opti.parameter(1);
 opti.minimize(sin(x));
 opti.solver('ipopt');
 
-opti.subject_to(x<xinit);
+% opti.subject_to(x<xinit);
 
-opti.set_value(xinit,3);
+% opti.set_value(xinit,3);
 
 opti.set_initial(x,-9);
 

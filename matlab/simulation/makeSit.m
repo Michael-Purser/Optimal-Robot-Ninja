@@ -69,6 +69,7 @@ MPC.nav.opt.init.T      = 0;
 MPC.nav.opt.sol.x       = [];
 MPC.nav.opt.sol.u       = [];
 MPC.nav.opt.sol.T       = 0;
+MPC.nav.opt.sol.stats   = 0;
 
 MPC.nav.opt.solPrev.x   = [];
 MPC.nav.opt.solPrev.u   = [];

@@ -117,6 +117,7 @@ MPC.nav.opt.init.T = T_init;
 MPC.nav.opt.sol.x = opti.value(X);
 MPC.nav.opt.sol.u = opti.value(U);
 MPC.nav.opt.sol.T = opti.value(T);
+MPC.nav.opt.sol.stats = getSolverStats(problem);
 
 % lamg = sol.value(opti.lam_g);
 
