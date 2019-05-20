@@ -5,6 +5,7 @@ npm-debug.log
 *.mat
 *.casadi
 *.fig
+*.avi
 *.zip
 *.mtx
 *.h
