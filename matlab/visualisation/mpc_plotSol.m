@@ -174,6 +174,16 @@ if nargin == 6 && fail == 0
     mesh(x_vec,y_vec,gmap'); axis off;
     contour3(x_vec,y_vec,gmap',[Ghat,Ghat],'r','Linewidth',4);
 
+    % Plot wall times
+    figure;
+    hold all;
+    for k = 1:size(MPC.log.opts,2)
+        plot(k,MPC.log.opts{k}.sol.stats.t_wall_solver,'b.-'); 
+        xlabel('iteration [-]'); ylabel('Solver CPU time [s]');
+        titlestr = {'Solver CPU time (wall time) over','successive MPC iterations'};
+        title(titlestr);
+    end
+
 end
 
 
