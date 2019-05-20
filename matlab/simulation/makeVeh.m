@@ -9,18 +9,18 @@ function makeVeh()
 veh.geometry.wheelBase  = 0.2;
 veh.geometry.height     = 0.3;
 
-veh.dynamics.mass       = 15;
-veh.dynamics.COG        = [0;0;0.2]; % in vehicle xyz
-veh.dynamics.omLimits   = [-pi;pi];
-veh.dynamics.velLimits  = [-0.2;0.2];
-veh.dynamics.accLimits  = [-0.2;0.2];
+veh.dynamics.mass        = 15;
+veh.dynamics.COG         = [0;0;0.2]; % in vehicle xyz
+veh.dynamics.omLimits    = [-pi;pi];
+veh.dynamics.velLimits   = [-0.2;0.2];
+veh.dynamics.accLimits   = [-0.2;0.2];
+veh.dynamics.jerkLimits  = [-0.01;0.01];
 
 % Actuators
 veh.motors.fmax       	= 3;
 veh.motors.noiseamp    	= 0.03;
 veh.motors.velLimits    = [-0.2,0.2];
 veh.motors.accLimits    = [-0.2,0.2];
-
 % Sensor:
 veh.sensor.thetamax     = pi;
 veh.sensor.horizon      = 5;

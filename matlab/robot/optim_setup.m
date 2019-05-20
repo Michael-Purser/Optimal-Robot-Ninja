@@ -13,6 +13,8 @@ uminp       = opti.parameter(1,1);
 umaxp       = opti.parameter(1,1);
 aminp       = opti.parameter(1,1);
 amaxp       = opti.parameter(1,1);
+jminp       = opti.parameter(1,1);
+jmaxp       = opti.parameter(1,1);
 omminp      = opti.parameter(1,1);
 ommaxp      = opti.parameter(1,1);
 sigmap      = opti.parameter(1,1);
@@ -74,6 +76,12 @@ opti.subject_to(u(1,:)+u(2,:) >= 0);
 opti.subject_to(aminp <= np./T(2:end).*u(1,2:end)-np./T(1:end-1).*u(1,1:end-1) <= amaxp);
 opti.subject_to(aminp <= np./T(2:end).*u(2,2:end)-np./T(1:end-1).*u(2,1:end-1) <= amaxp);
 
+% jerk constraints; implemented using a three-point stencil second
+% derivative scheme
+opti.subject_to(jminp <= np./T(3:end).*u(1,3:end)-2*np./T(2:end-1).*u(1,2:end-1)+np./T(1:end-2).*u(1,1:end-2) <= jmaxp);
+opti.subject_to(jminp <= np./T(3:end).*u(2,3:end)-2*np./T(2:end-1).*u(2,2:end-1)+np./T(1:end-2).*u(2,1:end-2) <= jmaxp);
+
+% angular velocity constraint
 opti.subject_to(omminp <= (1/Lp)*(u(2,:)-u(1,:)) <= ommaxp);
 
 opti.subject_to(T >= 0);
@@ -125,7 +133,7 @@ else
 end
 
 problem = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,...
-    omminp,ommaxp,Ghatp,maxDistp,xbeginp,xfinalp,ubeginp,measp,...
+    jminp,jmaxp,omminp,ommaxp,Ghatp,maxDistp,xbeginp,xfinalp,ubeginp,measp,...
     sigmap},{x,u,T});
 problem.save('problem.casadi');
 

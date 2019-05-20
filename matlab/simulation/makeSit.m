@@ -56,6 +56,7 @@ MPC.nav.opt.horizon       = 200;
 MPC.nav.opt.obst          = [];
 MPC.nav.opt.dynLimits.vel = [];
 MPC.nav.opt.dynLimits.acc = [];
+MPC.nav.opt.dynLimits.jerk = [];
 MPC.nav.opt.dynLimits.om  = [];
 MPC.nav.opt.sigma         = 0.1;
 MPC.nav.opt.Ghat          = 2.0;

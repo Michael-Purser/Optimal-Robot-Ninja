@@ -9,6 +9,8 @@ u_min       = MPC.nav.opt.dynLimits.vel(1);
 u_max       = MPC.nav.opt.dynLimits.vel(2);
 a_min       = MPC.nav.opt.dynLimits.acc(1);
 a_max       = MPC.nav.opt.dynLimits.acc(2);
+j_min       = MPC.nav.opt.dynLimits.jerk(1);
+j_max       = MPC.nav.opt.dynLimits.jerk(2);
 om_min      = MPC.nav.opt.dynLimits.om(1);
 om_max      = MPC.nav.opt.dynLimits.om(2);
 sigma       = MPC.nav.opt.sigma;
@@ -116,8 +118,8 @@ MPC.nav.opt.init.x = x_init;
 MPC.nav.opt.init.u = u_init;
 MPC.nav.opt.init.T = T_init;
 
-[X,U,T] = problem(x_init,u_init,T_init,L,n,u_min,u_max,a_min,a_max,om_min,...
-        om_max,Ghat,maxDist,x_begin,x_final,u_begin,meas,sigma);
+[X,U,T] = problem(x_init,u_init,T_init,L,n,u_min,u_max,a_min,a_max,j_min,...
+    j_max,om_min,om_max,Ghat,maxDist,x_begin,x_final,u_begin,meas,sigma);
 
 % append to struct:
 MPC.nav.opt.sol.x = opti.value(X);
