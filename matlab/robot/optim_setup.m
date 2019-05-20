@@ -68,6 +68,7 @@ opti.subject_to(u(1,:)+u(2,:) >= 0);
 % add platform dynamics constraint:
 % opti.subject_to(abs(u(1,:).^2-u(2,:).^2) <= dusqmax);
 
+% acceleration constraints
 % opti.subject_to(a_min <= (n./T(2:end)).*diff(u(1,:)) <= a_max);
 % opti.subject_to(a_min <= (n./T(2:end)).*diff(u(2,:)) <= a_max);
 opti.subject_to(aminp <= np./T(2:end).*u(1,2:end)-np./T(1:end-1).*u(1,1:end-1) <= amaxp);
