@@ -127,7 +127,7 @@ env.obst      = {};
               
 R1 = makeRectangle('R1','known',[-3;5;1],1,5,0);
 R2 = makeRectangle('R2','known',[3;5;1],1,5,0);
-C1 = makeCircle('C1','known',[1;6;1],0.7);
+C1 = makeCircle('C1','unknown',[1;6;1],0.7);
 
 env.obst{end+1} = R1;
 env.obst{end+1} = R2;
@@ -147,7 +147,7 @@ env.obst      = {};
               
 R1 = makeRectangle('R1','known',[-3;5;1],1,5,0);
 R2 = makeRectangle('R2','known',[3;5;1],1,5,0);
-C1 = makeCircle('C1','known',[0;6;1],0.7);
+C1 = makeCircle('C1','unknown',[0;6;1],0.7);
 
 env.obst{end+1} = R1;
 env.obst{end+1} = R2;

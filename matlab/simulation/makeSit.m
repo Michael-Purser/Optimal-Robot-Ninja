@@ -94,14 +94,14 @@ MPC.log.CPUtimes        = {};
 MPC.nav.vehicle         = 1;
 MPC.nav.environment     = 1;
 MPC.nav.globalStart     = [0;0;0];
-MPC.nav.globalGoal	    = [0;10;0];
+MPC.nav.globalGoal	    = [0;9;0];
 MPC.nav.currentState    = MPC.nav.globalStart;
 
 save data/MPC1_1_1.mat MPC
 
 eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
 
-plotEnv(env,MPC);
+plotSit(MPC,env);
 savefig(gcf,'figs/sitFigs/MPC1_1_1.fig');
 close(gcf);
 
@@ -110,14 +110,14 @@ close(gcf);
 MPC.nav.vehicle         = 1;
 MPC.nav.environment     = 4;
 MPC.nav.globalStart     = [0;0;0];
-MPC.nav.globalGoal	    = [10;10;0];
+MPC.nav.globalGoal	    = [9;9;0];
 MPC.nav.currentState    = MPC.nav.globalStart;
 
 save data/MPC1_4_1.mat MPC
 
 eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
 
-plotEnv(env,MPC);
+plotSit(MPC,env);
 savefig(gcf,'figs/sitFigs/MPC1_4_1.fig');
 close(gcf);
 
@@ -126,14 +126,14 @@ close(gcf);
 MPC.nav.vehicle         = 1;
 MPC.nav.environment   	= 5;
 MPC.nav.globalStart  	= [0;0;0];
-MPC.nav.globalGoal	    = [10;10;0];
+MPC.nav.globalGoal	    = [9;9;0];
 MPC.nav.currentState    = MPC.nav.globalStart;
 
 save data/MPC1_5_1.mat MPC
 
 eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
 
-plotEnv(env,MPC);
+plotSit(MPC,env);
 savefig(gcf,'figs/sitFigs/MPC1_5_1.fig');
 close(gcf);
 
@@ -142,13 +142,13 @@ close(gcf);
 MPC.nav.vehicle     	= 1;
 MPC.nav.environment  	= 8;
 MPC.nav.globalStart   	= [0;0;0];
-MPC.nav.globalGoal	    = [10;10;0];
+MPC.nav.globalGoal	    = [9;9;0];
 MPC.nav.currentState    = MPC.nav.globalStart;
 
 save data/MPC1_8_1.mat MPC
 
 eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
 
-plotEnv(env,MPC);
+plotSit(MPC,env);
 savefig(gcf,'figs/sitFigs/MPC1_8_1.fig');
 close(gcf);

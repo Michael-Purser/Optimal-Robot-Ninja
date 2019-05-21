@@ -27,8 +27,8 @@ veh.sensor.noiseamp                 = 0;
 veh.sensor.freq                     = 100;
 veh.motors.fmax                     = 3;
 MPC.nav.obstacleData.localGridDx    = 0.05;
-MPC.nav.globalStart                 = [2;6;0];
-MPC.nav.globalGoal                  = [9;9;pi/2];
+MPC.nav.globalStart                 = [0;4;0];
+MPC.nav.globalGoal                  = [0;8;0];
 MPC.nav.currentState                = MPC.nav.globalStart;  % Robot starts at global start
 MPC.nav.currentVelocity             = [0;0];                % Robot starts from standstill
 MPC.nav.goalTolerance               = 0.01;
@@ -131,6 +131,7 @@ end
 
 % plots:
 k = MPC.nav.k-1;
+k = 8;
 N = 200;
 fprintf('Plotting solution \n');
 
