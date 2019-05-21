@@ -19,6 +19,6 @@ for i = 1:size(inVector,2)
     temp             = Tr*[inVector(1:2,i);1];
     outVector(1:2,i) = temp(1:2);
     if adaptAngles
-        outVector(3,i) = outVector(3) - phi;
+        outVector(3,i) = inVector(3) - phi;
     end
 end
