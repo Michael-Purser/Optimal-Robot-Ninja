@@ -2,11 +2,19 @@ function plotMPCStats(MPC)
 
 % plot max(G) in all iterations:
 figure;
-hold all;
+subplot(1,2,1); hold all;
 for k = 1:size(MPC.log.opts,2)
-    plot(k,max(MPC.log.opts{k}.sol.Gvalues),'b.-'); 
+    plot(k,max(MPC.log.opts{k}.sol.GValuesOrig),'b.-'); 
     xlabel('iteration [-]'); ylabel('max(G) [-]');
     titlestr = {'max(G) over successive MPC iterations','(original measurements)'};
+    title(titlestr);
+end
+
+subplot(1,2,2); hold all;
+for k = 1:size(MPC.log.opts,2)
+    plot(k,max(MPC.log.opts{k}.sol.GValuesGrid),'b.-'); 
+    xlabel('iteration [-]'); ylabel('max(G) [-]');
+    titlestr = {'max(G) over successive MPC iterations','(grid-fitted measurements)'};
     title(titlestr);
 end
     

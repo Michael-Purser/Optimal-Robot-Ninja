@@ -18,7 +18,9 @@ if MPC.nav.k == 1
 end
 
 % calculate and log G-values of solution:
-MPC.log.opts{end}.sol.Gvalues    = ...
+MPC.log.opts{end}.sol.GValuesOrig    = ...
     checkSolution(MPC.nav.obstacleData.meas.transLocal,MPC.nav.opt.sol.x,MPC.nav.opt.sigma);
+MPC.log.opts{end}.sol.GValuesGrid    = ...
+    checkSolution(MPC.nav.obstacleData.meas.transLocalGrid,MPC.nav.opt.sol.x,MPC.nav.opt.sigma);
 
 end
