@@ -171,4 +171,28 @@ plotEnv(env);
 savefig(gcf,'figs/envFigs/env8.fig');
 close(gcf);
 
+
+%% Environment 9: Slalom of medium-sized circles
+
+% reset env.obst cell array:
+env.obst      = {};
+
+C1  = makeCircle('C1','known',[-1.2;0;1],1);
+C2  = makeCircle('C2','known',[1.2;2;1],1);
+C3  = makeCircle('C3','known',[-1.2;4;1],1);
+C4  = makeCircle('C4','known',[1.2;6;1],1);
+C5  = makeCircle('C5','known',[-1.2;8;1],1);
+
+env.obst{end+1} = C1;
+env.obst{end+1} = C2;
+env.obst{end+1} = C3;
+env.obst{end+1} = C4;
+env.obst{end+1} = C5;
+
+save data/env9.mat env
+
+plotEnv(env);
+savefig(gcf,'figs/envFigs/env9.fig');
+close(gcf);
+
 end
