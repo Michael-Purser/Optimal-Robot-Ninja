@@ -6,5 +6,5 @@ map     = zeros(2*N+1,2*N+1);
 dx      = 2*H/(2*N+1);
 map     = addMeasurementsToMap(map,dx,meas,phi,N,addingStrategy);
 gmap    = addGaussianToMap(map,sigma,H,N);
-xVec    = linspace(-(H-dx),H-dx,2*N+1);
-yVec    = linspace(-(H-dx),H-dx,2*N+1);
+xVec    = linspace(-(H-dx/2),H-dx/2,2*N+1);
+yVec    = linspace(-(H-dx/2),H-dx/2,2*N+1);
