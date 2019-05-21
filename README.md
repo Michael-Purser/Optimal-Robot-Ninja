@@ -10,6 +10,7 @@ This repository is not being updated for the moment, as C++ implementation work 
 [Contents](#contents)  
 [Robot platform](#robot-platform)  
 [Logging](#logging)  
+[Matlab Implementation log](#matlab-implementation-log)  
 [C++ Implementation log](#implementation-log)  
 
 ## About
@@ -56,12 +57,26 @@ Current working points, in order of importance:
  - Examination of pointers and memory preallocation to make the C++ code run faster.
 -->
 
-## Implementation log
+## Matlab Implementation log
+#### In progress
+ * Examining deviations in solution in successive MPC iterations due to abrupt changes in local goal orientation
+ * Implementing sqp solver in new code/data structure and test on scenarios
+ * Testing new 'slalom' scenario with circular obstacles
 
-**(NOTE: C++ implementation work is currently being done in a branch of the GIP 2018 repository containing the code template. The current repo is mostly for testing purposes, although at some point in the future the code will be added here too. A link to the GIP repo can be found [here](https://github.com/intermodalics-gip/omg_ros))**
+#### To do
+ * Add support for unknown obstacles and loosing sight of global plan
+ * Add lambda to initial guess and check performance compared to without
+ * Add checks on parameters and initialization
+ * Fix gaussian landscape slight offset visualisation bug
+ * Investigate good values of Ghat and sigma for robot
+ * Optional: add support for waypoints on global plan
+
+## C++ Implementation log
+
+**(NOTE: While matlab implementation is still updated here regularly, C++ implementation work is currently being done in a branch of the GIP 2018 repository containing the code template. At some point in the future the C++ planner class will be added here too. This class can then be added to ROS move_base as a plugin. A link to the GIP 2018 repo can be found [here](https://github.com/intermodalics-gip/omg_ros))**
 
 
-#### Completed
+#### Completed C++ work
 ROS/gazebo/rviz workflow:
  * Run turtlebot simulation on ROS kinetic (see [turtlebot tutorials](http://wiki.ros.org/turtlebot/Tutorials/indigo/Turtlebot%20Installation))
  * Visualise turtlebot info using rviz (see [turtlebot rviz tutorial](http://wiki.ros.org/turtlebot/Tutorials/indigo/3D%20Visualisation)).
@@ -88,14 +103,14 @@ ROS/gazebo/rviz workflow:
     * Function 'exportSolution' that writes previous solution for next iteration
     * Function 'getLocalGoal' that gets the next local goal from the global path
     * Function 'getInitialGuesses' that gets the initial values for the optimization solver
-
+    * Function 'getConstraintValues'(see [code architecture ](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png))
+    * Import casadi solver and run in class code
 
 #### In progress
- * Implement matlab-code in C++
-    * 'getConstraintValues'(see [code architecture ](https://github.com/Michael-Purser/Optimal-Robot-Ninja/blob/master/architecture.png))
+ * Cleanup code and test casadi solver behaviour (stopped for now).
 
 #### To do
- * Thesis text
-    * Chapter 1: review
-    * Chapter 3: write
+ * Cleanup code and test casadi solver behaviour (stopped for now).
+ * Implement solving time logger
+ * Add support for threading
 
