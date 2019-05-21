@@ -1,9 +1,16 @@
 function [MPC,env] = initialize(MPC,env,veh)
 % initialization function for the MPC loop
+
+    % initialize first state
+    MPC.nav.currentState    = MPC.nav.globalStart;  % Robot starts at global start
+    MPC.nav.currentVelocity = [0;0];                % Robot starts from standstill
     
-    % Initialize logging variables with first state
-    MPC.log.states{end+1}     = MPC.nav.currentState;
-    MPC.log.velocities{end+1} = [0;0];
+    % initialize logging variables with first state
+    % (only if logging activated)
+    if MPC.log.logBool
+        MPC.log.states{end+1}     = MPC.nav.currentState;
+        MPC.log.velocities{end+1} = [0;0];
+    end
     
     % process the knowledge in the environment structure:
     % sort obstacles into mapped and measured and sample the mapped
