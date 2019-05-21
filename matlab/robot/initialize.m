@@ -1,6 +1,10 @@
 function [MPC,env] = initialize(MPC,env,veh)
 % initialization function for the MPC loop
     
+    % Initialize logging variables with first state
+    MPC.log.states{end+1}     = MPC.nav.currentState;
+    MPC.log.velocities{end+1} = [0;0];
+    
     % process the knowledge in the environment structure:
     % sort obstacles into mapped and measured and sample the mapped
     % obstacles:

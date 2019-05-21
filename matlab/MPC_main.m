@@ -44,8 +44,6 @@ MPC.nav.preload                     = true;
 MPC.log.logBool                     = true;
 MPC.log.exportBool                  = false;
 MPC.nav.withLocalGrid               = true;
-MPC.log.states{end+1}               = MPC.nav.currentState;
-MPC.log.velocities{end+1}           = [0;0];
 
 
 %% MPC LOOP
