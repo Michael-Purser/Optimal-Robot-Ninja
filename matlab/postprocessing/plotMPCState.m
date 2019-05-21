@@ -44,4 +44,4 @@ drawLocalPlan(localPlanWorld);
 drawLocalGoal(localGoalWorld);
 
 axis equal;
-axis([0 10 0 10]);
+axis([-5 5 0 12]);

@@ -9,9 +9,12 @@ clc;
 % add relevant folders to path:
 addpath('~/Downloads/casadi/install/matlab/');
 addpath('./data/');
-addpath('./rastar/');
+addpath('./globalPlanner/');
+addpath('./localPlanner/');
 addpath('./robot/');
-addpath('./simulation/');
+addpath('./MPC/');
+addpath('./other/');
+addpath('./environment/');
 addpath('./postprocessing/');
 
 % situation:
@@ -134,7 +137,7 @@ fprintf('Plotting solution \n');
 plotMPCState(MPC,veh,env,k,N);
 % plotGaussians3D(MPC,k,N);
 % plotDynamics(MPC,k);
-% plotMPCStats(MPC);
+plotMPCStats(MPC);
 
 
 
