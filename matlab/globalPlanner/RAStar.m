@@ -38,12 +38,12 @@ while (isempty(open)==0 && isempty(goals_reached))
     % increase iteration counter:
     n = n+1;
 end
-fprintf('   number of iterations/cells examined: %i \n',n);
-fprintf('   number of cells in map: %i \n',(2*(N+1)+1)^2);
+fprintf('\t \t number of iterations/cells examined: %i \n',n);
+fprintf('\t \t number of cells in map: %i \n',(2*(N+1)+1)^2);
 if isempty(goals_reached)==1
-    error('   failed to find a path to goal');
+    error('\t \t failed to find a path to goal');
 else
-    fprintf('   found a path! \n');
+    fprintf('\t \t found a path! \n');
     path = reconstructPath(goals(goal_index(1),:),map,G_hat);
 end
 

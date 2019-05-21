@@ -1,11 +1,11 @@
-function MPC = getLocalStartAndGoal(MPC)
+function [globalPlanner,localPlanner] = getLocalStartAndGoal(MPC,globalPlanner,localPlanner)
 
-x           = MPC.nav.currentState;
-plan        = MPC.nav.globalPlan.worldCoordinates;
-R           = MPC.nav.opt.globalPlanR;
-globalStart = MPC.nav.globalStart;
-globalGoal  = MPC.nav.globalGoal;
-last_index  = MPC.nav.globalPlan.lastIndex;
+x           = MPC.currentState;
+globalStart = MPC.globalStart;
+globalGoal  = MPC.globalGoal;
+plan        = globalPlanner.worldCoordinates;
+last_index  = globalPlanner.lastIndex;
+R           = localPlanner.params.globalPlanR;
 
 % Iterate over global plan and get last point on plan
 % if no point of plan is further than global plan horizon, get last one in
@@ -63,9 +63,9 @@ ori = ori + x(3); % transform to local coordinate system
 T = homTrans(x(3),[x(1:2);1]);
 G = T\[g';1];
 
-MPC.nav.globalPlan.lastIndex = current_index;
-MPC.nav.opt.goal = [G(1:2);ori];
-MPC.nav.opt.start = [0;0;0]; % For now, robot always at center of local frame so start is always zero:
-MPC.nav.goalInView = goalInView;
+globalPlanner.lastIndex     = current_index;
+localPlanner.params.start   = [0;0;0]; % For now, robot always at center of local frame so start is always zero:
+localPlanner.params.goal    = [G(1:2);ori];
+localPlanner.goalInView     = goalInView;
 
 end

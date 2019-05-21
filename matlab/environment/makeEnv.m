@@ -4,9 +4,9 @@ function makeEnv()
 % The environments are made out of geometric shapes.
 % They are stored in .dat files for later access.
 
-env.obst      = {};
-env.measured  = {};
-env.mapped    = {};
+env.obst            = {};
+env.measured        = {};
+env.mapped          = {};
 
 %% Environment 1: Two circles
 

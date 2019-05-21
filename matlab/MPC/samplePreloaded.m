@@ -59,6 +59,6 @@ for i=1:size(env.mapped,2)
 
 end
 
-MPC.nav.obstacleData.preloaded = preloaded;
+MPC.obstacleData.preloaded = preloaded;
 
 end

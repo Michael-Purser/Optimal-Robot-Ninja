@@ -1,19 +1,17 @@
-function MPC = globalPlanner(MPC)
+function globalPlanner = getGlobalPlan(MPC,globalPlanner)
 
 % PARAMETERS:
-values    = MPC.nav.map.inflated;
-dx        = MPC.nav.map.dx;
-N         = (MPC.nav.map.Nw-1)/2;
-H         = (MPC.nav.map.width)/2;
-goalAbs   = MPC.nav.globalGoal(1:2)';   % in global coordinates
-startAbs  = MPC.nav.globalStart(1:2)';  % in global coordinates
-% n         = veh.Optim.n + 1;
-% G_hat     = veh.Optim.G_hat;
-Ghat     = 0.01*MPC.nav.opt.Ghat;
+values    = MPC.map.inflated;
+dx        = MPC.map.dx;
+N         = (MPC.map.Nw-1)/2;
+H         = (MPC.map.width)/2;
+startAbs  = MPC.globalStart(1:2)';  % in global coordinates
+goalAbs   = MPC.globalGoal(1:2)';   % in global coordinates
+Ghat      = 0.01*globalPlanner.Ghat;
 
 % IF GOAL INSIDE MAP:
 if abs(goalAbs(1))<H && abs(goalAbs(2))<H
-    fprintf('   goal is inside map \n');
+    fprintf('\t \t goal is inside map \n');
     
     goalsAbs = goalAbs;
     
@@ -36,7 +34,7 @@ if abs(goalAbs(1))<H && abs(goalAbs(2))<H
 
 % IF GOAL OUTSIDE MAP:
 else
-    fprintf('   goal is outside map \n');
+    fprintf('\t \t goal is outside map \n');
     
     % MAKE MAP:
     % this time add two borders: an 'escape tunnel' and the obstacle border:
@@ -83,7 +81,7 @@ planAbs = [startAbs(1:2);planAbs];
 % path_abs = [B,C];
 
 % ADD PATH TO SITUATION STRUCT:
-MPC.nav.globalPlan.gridCoordinates = plan;
-MPC.nav.globalPlan.worldCoordinates = planAbs;
+globalPlanner.gridCoordinates = plan;
+globalPlanner.worldCoordinates = planAbs;
 
 end

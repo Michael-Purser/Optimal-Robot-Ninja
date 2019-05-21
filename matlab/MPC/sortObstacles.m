@@ -2,7 +2,7 @@ function env = sortObstacles(MPC,env)
     % Function that sorts the obstacles into 'measured' and 'mapped' based
     % on the selected mode:
     
-    if MPC.nav.preload
+    if MPC.preload
         for i=1:size(env.obst,2)
             mode = env.obst{i}.mode;
             if strcmp(mode,'known')

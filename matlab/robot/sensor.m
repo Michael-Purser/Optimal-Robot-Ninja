@@ -5,8 +5,8 @@ function MPC = sensor(MPC,veh,env)
 % measurement is considered to be 'no obstacle detected'.
 
 % get vehicle info:
-pos         = [MPC.nav.currentState(1:2);1];
-phi         = MPC.nav.currentState(3);
+pos         = [MPC.currentState(1:2);1];
+phi         = MPC.currentState(3);
 
 % get sensor info:
 thetamax    = veh.sensor.thetamax;
@@ -67,6 +67,6 @@ end
 meas = meas(all(meas,2),:);
 
 % append result to vehicle struct:
-MPC.nav.obstacleData.meas.orig = meas;
+MPC.obstacleData.meas.orig = meas;
 
 end

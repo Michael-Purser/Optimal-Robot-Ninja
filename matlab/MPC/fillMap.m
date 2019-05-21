@@ -4,11 +4,11 @@ function MPC = fillMap(MPC,selector)
 %   case 1: a flooring strategy --> gives errors with limit measurements
 %   case 2: a 4-quadrant strategy --> more robust
 
-Nw      = MPC.nav.map.Nw;
-Nh      = MPC.nav.map.Nh;
-dx      = MPC.nav.map.dx;
-map     = MPC.nav.map.values;
-meas    = [MPC.nav.obstacleData.preloaded;MPC.nav.obstacleData.meas.transGlobal];
+Nw      = MPC.map.Nw;
+Nh      = MPC.map.Nh;
+dx      = MPC.map.dx;
+map     = MPC.map.values;
+meas    = [MPC.obstacleData.preloaded;MPC.obstacleData.meas.transGlobal];
 % NOTE: if called before MPC loop, no measurements yet --> it will only
 % fill map with preloaded data. This behaviour is used to generate the map
 % for the global planner.
@@ -53,6 +53,6 @@ switch selector
 
 end
 
-MPC.nav.map.values = map;
+MPC.map.values = map;
 
 end

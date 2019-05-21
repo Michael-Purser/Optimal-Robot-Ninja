@@ -1,10 +1,10 @@
-function problem = optim_setup(MPC,veh,solver_str,with_end)
+function problem = optim_setup(localPlanner,veh,log,solver_str,with_end)
 
 % initialize variables:
 opti = casadi.Opti();
 
 max_meas    = 1000;
-n           = MPC.nav.opt.horizon;
+n           = localPlanner.params.horizon;
 L           = veh.geometry.wheelBase;
 
 Lp          = opti.parameter(1,1);
@@ -152,7 +152,7 @@ else
     end
 end
 
-if MPC.log.exportBool == true
+if log.exportBool == true
     if strcmp(solver_str,'ipopt')==1
         problem.save('problemIpopt.casadi');
     else

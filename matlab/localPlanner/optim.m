@@ -1,26 +1,26 @@
-function MPC = optim(MPC,veh)
+function localPlanner = optim(MPC,localPlanner,veh,MPC_iteration)
 % Formulate and solve the minimum time optimization problem.
 % Vehicle model: diff-drive.
 
 % parameters:
 L           = veh.geometry.wheelBase;
-n           = MPC.nav.opt.horizon;
-u_min       = MPC.nav.opt.dynLimits.vel(1);
-u_max       = MPC.nav.opt.dynLimits.vel(2);
-a_min       = MPC.nav.opt.dynLimits.acc(1);
-a_max       = MPC.nav.opt.dynLimits.acc(2);
-j_min       = MPC.nav.opt.dynLimits.jerk(1);
-j_max       = MPC.nav.opt.dynLimits.jerk(2);
-om_min      = MPC.nav.opt.dynLimits.om(1);
-om_max      = MPC.nav.opt.dynLimits.om(2);
-sigma       = MPC.nav.opt.sigma;
-Ghat        = MPC.nav.opt.Ghat;
-beta        = MPC.nav.opt.maxDistBeta;
-solver      = MPC.nav.opt.solver;
+n           = localPlanner.params.horizon;
+u_min       = localPlanner.params.dynLimits.vel(1);
+u_max       = localPlanner.params.dynLimits.vel(2);
+a_min       = localPlanner.params.dynLimits.acc(1);
+a_max       = localPlanner.params.dynLimits.acc(2);
+j_min       = localPlanner.params.dynLimits.jerk(1);
+j_max       = localPlanner.params.dynLimits.jerk(2);
+om_min      = localPlanner.params.dynLimits.om(1);
+om_max      = localPlanner.params.dynLimits.om(2);
+sigma       = localPlanner.params.sigma;
+Ghat        = localPlanner.params.Ghat;
+beta        = localPlanner.params.maxDistBeta;
+solver      = localPlanner.solver.type;
 max_meas    = 1000;
 
 % get measurements (in cartesian coordinates):
-meas        = MPC.nav.opt.obst;
+meas        = localPlanner.obstacleData;
 meas        = [meas;20*ones(max_meas-size(meas,1),2)];
 
 % check position; adapt G_hat if needed:
@@ -43,18 +43,18 @@ end
 opti = casadi.Opti();
 
 % initial and final positions + initial guess for time and states:
-x_begin = MPC.nav.opt.start;
-x_final = MPC.nav.opt.goal;
-u_begin = MPC.nav.currentVelocity;
+x_begin = localPlanner.params.start;
+x_final = localPlanner.params.goal;
+u_begin = localPlanner.params.startVelocity;
 
 % make the max dist value:
 maxDist = beta*norm(x_begin(1:2)-x_final(1:2))/n;
 
 if strcmp(solver,'ipopt')==1
-    fprintf('\t Using IPOPT solver \n');
+    fprintf('\t \t Using IPOPT solver \n');
     % if first iteration, make initial guesses; else 'warm-start' the
     % solver with previous solution:
-    if MPC.nav.k==1
+    if MPC_iteration==1
 %         phi         = atan2(x_final(3),n);
 %         alpha       = 0.5;
 %         n_vec       = linspace(0,n,n+1);
@@ -66,23 +66,23 @@ if strcmp(solver,'ipopt')==1
         u_init  = zeros(2,n);
         T_init = norm(x_begin(1:2)-x_final(1:2))/u_max;
     else
-        x_init = MPC.nav.opt.sol.x;
-        u_init = MPC.nav.opt.sol.u;
-        T_init = MPC.nav.opt.sol.T;
+        x_init = localPlanner.sol.x;
+        u_init = localPlanner.sol.u;
+        T_init = localPlanner.sol.T;
     end
     % select problem to solve depending on wether endgoal is in view or
     % not:
-    if MPC.nav.goalInView
-        fprintf('\t Goal in view \n');
-        problem    = MPC.nav.problemIpoptB;
+    if localPlanner.goalInView
+        fprintf('\t \t Goal in view \n');
+        problem    = localPlanner.solver.problemIpoptB;
     else
-        fprintf('\t Goal not in view \n');
-        problem    = MPC.nav.problemIpoptA;
+        fprintf('\t \t Goal not in view \n');
+        problem    = localPlanner.solver.problemIpoptA;
     end
     
 else
-    fprintf('\t Using SQP solver \n');
-    if MPC.nav.k<3
+    fprintf('\t \t Using SQP solver \n');
+    if MPC.k<3
         % initial guesses for first iteration
         phi         = atan2(x_final(3),n);
         alpha       = 0.5;
@@ -93,39 +93,39 @@ else
             theta_init];
         u_init  = zeros(2,n);
         T_init  = norm(x_begin(1:2)-x_final(1:2))/u_max;
-        problem = MPC.nav.problemIpoptA;
+        problem = localPlanner.solver.problemIpoptA;
     else
-        x_init  = MPC.nav.opt.sol.x;
-        u_init  = MPC.nav.opt.sol.u;
-        T_init  = MPC.nav.opt.sol.T;
+        x_init  = localPlanner.sol.x;
+        u_init  = localPlanner.sol.u;
+        T_init  = localPlanner.sol.T;
         % select problem to solve depending on wether endgoal is in view or
         % not:
-        if MPC.nav.goalInView
+        if localPlanner.goalInView
             fprintf('\t Goal in view \n');
-            problem    = MPC.nav.problemSqpB;
+            problem    = localPlanner.solver.problemSqpB;
         else
             fprintf('\t Goal not in view \n');
-            problem    = MPC.nav.problemSqpA;
+            problem    = localPlanner.solver.problemSqpA;
         end
     end
 end
 
 % log the maxDist value
-MPC.nav.opt.maxDist = maxDist;
+localPlanner.params.maxDist = maxDist;
 
 % log the initial guesses
-MPC.nav.opt.init.x = x_init;
-MPC.nav.opt.init.u = u_init;
-MPC.nav.opt.init.T = T_init;
+localPlanner.init.x = x_init;
+localPlanner.init.u = u_init;
+localPlanner.init.T = T_init;
 
 [X,U,T] = problem(x_init,u_init,T_init,L,n,u_min,u_max,a_min,a_max,j_min,...
     j_max,om_min,om_max,Ghat,maxDist,x_begin,x_final,u_begin,meas,sigma);
 
 % append to struct:
-MPC.nav.opt.sol.x = opti.value(X);
-MPC.nav.opt.sol.u = opti.value(U);
-MPC.nav.opt.sol.T = opti.value(T);
-MPC.nav.opt.sol.stats = getSolverStats(problem);
+localPlanner.sol.x = opti.value(X);
+localPlanner.sol.u = opti.value(U);
+localPlanner.sol.T = opti.value(T);
+localPlanner.sol.stats = getSolverStats(problem);
 
 % lamg = sol.value(opti.lam_g);
 

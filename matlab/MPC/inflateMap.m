@@ -1,9 +1,9 @@
 function MPC = inflateMap(MPC)
 
-values = MPC.nav.map.values;
-N         = (MPC.nav.map.Nw-1)/2;
-h = (MPC.nav.map.width)/2;
-sig = MPC.nav.opt.sigma;
+values  = MPC.map.values;
+N       = (MPC.map.Nw-1)/2;
+h       = (MPC.map.width)/2;
+sig     = MPC.map.sigma;
 
 % make the gaussian
 % on a grid extending 3 standard deviations in each direction
@@ -25,7 +25,7 @@ for i=1:size(values,1)
 end
 
 % remove border added above
-MPC.nav.map.inflated = gmap(nx+1:(end-nx),ny+1:(end-ny));
+MPC.map.inflated = gmap(nx+1:(end-nx),ny+1:(end-ny));
 
 
 end
