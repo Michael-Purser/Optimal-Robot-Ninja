@@ -15,20 +15,20 @@ addpath('./simulation/');
 addpath('./postprocessing/');
 
 % situation:
-sitStr = '1_4_1';
+sitStr = '1_9_1';
 
 % load situation, environment and vehicle:
 eval(['load ./data/MPC',sitStr,'.mat;']);
 eval(['load ./data/veh',num2str(MPC.nav.vehicle),'.mat;']);
 eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
 
-% parameter initialization:
+% manual parameter initialization:
 veh.sensor.noiseamp                 = 0;
 veh.sensor.freq                     = 100;
 veh.motors.fmax                     = 3;
 MPC.nav.obstacleData.localGridDx    = 0.05;
-MPC.nav.globalStart                 = [0;4;0];
-MPC.nav.globalGoal                  = [0;8;0];
+% MPC.nav.globalStart                 = [0;4;0];
+% MPC.nav.globalGoal                  = [0;8;0];
 MPC.nav.goalTolerance               = 0.01;
 MPC.nav.opt.horizon                 = 100;
 MPC.nav.opt.Ghat                    = 0.15;
@@ -47,6 +47,7 @@ MPC.nav.withLocalGrid               = true;
 %% MPC LOOP
 
 % Initialize the MPC loop
+fprintf('Initializing \n');
 [MPC,env] = initialize(MPC,env,veh);
 
 % Actual loop:
@@ -63,11 +64,10 @@ while (MPC.nav.goalReached == false && MPC.nav.k<=MPC.nav.kmax)
     % final navigation goal
     % if this is the case, the loop breaks and the robot is considered
     % in the right final state, ie navigation is finished
-    if norm([MPC.nav.currentState(1:2);1]-[MPC.nav.globalGoal(1:2);1])<MPC.nav.goalTolerance
-        fprintf(2,'Vehicle localized to be within tolerance of final goal! \n');
-        fprintf(2,'STOPPED \n');
-        MPC.nav.goalReached = true;
-        break;
+    fprintf('Getting distance to goal \n');
+    MPC = checkGoalReached(MPC);
+    if MPC.nav.goalReached
+        break
     end
     
     % this part simulates the environment info gathering of the robot
@@ -127,14 +127,14 @@ end
 
 % plots:
 k = MPC.nav.k-1;
-k = 8;
+%k = 8;
 N = 200;
 fprintf('Plotting solution \n');
 
 plotMPCState(MPC,veh,env,k,N);
-plotGaussians3D(MPC,k,N);
-plotDynamics(MPC,k);
-plotMPCStats(MPC);
+% plotGaussians3D(MPC,k,N);
+% plotDynamics(MPC,k);
+% plotMPCStats(MPC);
 
 
 
