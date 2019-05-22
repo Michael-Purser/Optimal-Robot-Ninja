@@ -1,7 +1,7 @@
 function makeMPCAVI(log,veh,env)
 
 totalFrames         = size(log.states,2)-1;
-framesPerPart       = 100;
+framesPerPart       = 10;
 numberOfParts       = ceil(totalFrames/framesPerPart);
 remainder           = rem(totalFrames,framesPerPart);
 
@@ -20,6 +20,9 @@ end
 fprintf('\n');
 
 for m=1:numberOfParts
+    
+    % clear F struct
+    clear F;
     
     % iteration log
     fprintf('Making file %i/%i \n',m,numberOfParts);
