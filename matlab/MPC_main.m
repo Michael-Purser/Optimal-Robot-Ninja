@@ -6,45 +6,38 @@ clear;
 close all;
 clc;
 
+% select situation:
+sitStr = '1_1_1';
+
+% select global end local planner:
+global_planner  = 'relaxedAStar';
+local_planner   = 'gaussianLandscapePlanner';
+
 % add relevant folders to path:
 addpath('~/Downloads/casadi/install/matlab/');
 addpath('./data/');
-addpath('./globalPlanner/');
-addpath('./localPlanner/');
+addpath(['./globalPlanners/',global_planner]);
+addpath(['./localPlanners/',local_planner]);
+addpath(['./localPlanners/',local_planner,'/postprocessing']);
 addpath('./robot/');
 addpath('./MPC/');
 addpath('./other/');
 addpath('./environment/');
 addpath('./postprocessing/');
 
-% situation:
-sitStr = '1_1_1';
-
 % load situation, environment and vehicle:
 eval(['load ./data/MPC',sitStr,'.mat;']);
 eval(['load ./data/veh',num2str(MPC.vehicle),'.mat;']);
 eval(['load ./data/env',num2str(MPC.environment),'.mat;']);
 
-% manual parameter overrides:
+% manual parameter overrides (add if you want):
 veh.sensor.noiseamp                 = 0;
 veh.sensor.freq                     = 100;
 veh.motors.fmax                     = 3;
-% MPC.nav.obstacleData.localGridDx    = 0.05;
 MPC.globalStart                     = [0;0;0];
 MPC.globalGoal                      = [9;9;0];
-% MPC.nav.goalTolerance               = 0.01;
-% MPC.nav.opt.horizon                 = 100;
-% MPC.nav.opt.Ghat                    = 0.15;
-% MPC.nav.opt.sigma                   = 0.1;
-% MPC.nav.opt.solver                  = 'ipopt';
-% MPC.nav.opt.maxDistBeta             = 3;
-% MPC.nav.opt.globalPlanR             = 1.5;
 MPC.kmax                            = 14;
-% MPC.nav.rebuild                     = true;
 MPC.nav.preload                     = true;
-% MPC.log.logBool                     = true;
-% MPC.log.exportBool                  = false;
-% MPC.nav.withLocalGrid               = true;
 
 
 %% MPC LOOP
