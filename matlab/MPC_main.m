@@ -82,6 +82,9 @@ while (MPC.goalReached == false && MPC.k<=MPC.kmax)
     
     % check if recomputation of a global plan is necessary
     % if so, a new global plan is computed
+    if localPlanner.sol.success == false
+        error('Error while computing optimal solution');
+    end
     
     % update vehicle position using the actuator frequency and
     % back-simulation with added noise to simulate real-world effects

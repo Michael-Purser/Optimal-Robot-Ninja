@@ -118,14 +118,24 @@ localPlanner.init.x = x_init;
 localPlanner.init.u = u_init;
 localPlanner.init.T = T_init;
 
-[X,U,T] = problem(x_init,u_init,T_init,L,n,u_min,u_max,a_min,a_max,j_min,...
-    j_max,om_min,om_max,Ghat,maxDist,x_begin,x_final,u_begin,meas,sigma);
+% try solving problem; if no success, log in localPlanner:
 
-% append to struct:
-localPlanner.sol.x = opti.value(X);
-localPlanner.sol.u = opti.value(U);
-localPlanner.sol.T = opti.value(T);
-localPlanner.sol.stats = getSolverStats(problem);
+try
+    [X,U,T] = problem(x_init,u_init,T_init,L,n,u_min,u_max,a_min,a_max,j_min,...
+        j_max,om_min,om_max,Ghat,maxDist,x_begin,x_final,u_begin,meas,sigma);
+
+    % append to struct:
+    localPlanner.sol.x = opti.value(X);
+    localPlanner.sol.u = opti.value(U);
+    localPlanner.sol.T = opti.value(T);
+    localPlanner.sol.stats = getSolverStats(problem);
+    localPlanner.sol.success = true;
+    
+catch ME
+    localPlanner.sol.stats = getSolverStats(problem);
+    localPlanner.sol.success = false;
+    
+end
 
 % lamg = sol.value(opti.lam_g);
 
