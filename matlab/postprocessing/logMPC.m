@@ -35,7 +35,7 @@ if MPC.k == 1
     log.solvers{end+1}  = localPlanner.solver;
 end
 localPlannerLog             = localPlanner;
-localPlannerLog.solvers     = 0;
+localPlannerLog.solver      = 0;
 log.localPlanners{end+1}    = localPlannerLog;
 
 end
