@@ -14,15 +14,7 @@ function [MPC,env,globalPlanner,localPlanner,log] = initialize(MPC,env)
     % initialize first state
     fprintf('\t Setting first state \n');
     MPC.currentState    = MPC.globalStart;  % Robot starts at global start
-    MPC.currentVelocity = [0;0];                % Robot starts from standstill
-    
-    % initialize logging variables with first state
-    % (only if logging activated)
-    if log.logBool
-        fprintf('\t Logging is ON: logging first state \n');
-        log.states{end+1}     = MPC.currentState;
-        log.velocities{end+1} = [0;0];
-    end
+    MPC.currentVelocity = [0;0];            % Robot starts from standstill
     
     % process the knowledge in the environment structure:
     % sort obstacles into mapped and measured and sample the mapped

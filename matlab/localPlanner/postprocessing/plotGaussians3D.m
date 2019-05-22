@@ -1,12 +1,12 @@
-function plotGaussians3D(MPC,it,N)
+function plotGaussians3D(log,it,N)
 % function that plots the 3D gaussian landscape
 
 % get data
-vehicleState    = MPC.log.states{it};
-localMeas       = MPC.log.opts{it}.obst;
-Ghat            = MPC.nav.opt.Ghat;
-sigma           = MPC.nav.opt.sigma;
-W               = MPC.nav.map.width;
+vehicleState    = log.states{it};
+localMeas       = log.localPlanners{it}.obstacleData;
+Ghat            = log.localPlanners{it}.params.Ghat;
+sigma           = log.localPlanners{it}.params.sigma;
+W               = log.maps{it}.width;
 
 H               = W/2; % exact half-width of gridmap
 

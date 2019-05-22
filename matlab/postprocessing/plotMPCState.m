@@ -1,28 +1,20 @@
-function plotMPCState(MPC,veh,env,it,N)
+function plotMPCState(log,veh,env,it,varargin)
+
+if nargin==4
+    fprintf('Plotting MPC state %i \n',it);
+end
 
 % get data
 wheelBase       = veh.geometry.wheelBase;
-vehicleState    = MPC.log.states{it};
-vehicleVelocity = MPC.log.velocities{it};
-localPlan       = MPC.log.opts{it}.sol.x;
-localMeas       = MPC.log.opts{it}.obst;
-states          = {MPC.log.states{1:it}};
-localGoal       = MPC.log.opts{it}.goal;
-globalStart     = MPC.nav.globalStart;
-globalGoal      = MPC.nav.globalGoal;
-globalPlan      = MPC.nav.globalPlan.worldCoordinates;
-Ghat            = MPC.nav.opt.Ghat;
-sigma           = MPC.nav.opt.sigma;
-W               = MPC.nav.map.width;
-
-H               = W/2; % exact half-width of gridmap
+states          = {log.states{1:it}};
+vehicleState    = log.states{it};
+vehicleVelocity = log.velocities{it};
+localPlan       = log.localPlanners{it}.sol.x;
+localGoal       = log.localPlanners{it}.params.goal;
+globalStart     = log.globalStart;
+globalGoal      = log.globalGoal;
+globalPlan      = log.globalPlanners{end}.worldCoordinates;
 arc             = 0:0.01:2*pi;
-
-% transform obstacle data to global frame:
-globalMeas = toWorldFrame(vehicleState(1:2),vehicleState(3),localMeas');
-
-% reconstruct gaussian local map from MPC data:
-[gmap,xVec,yVec] = getGMap(N,H,globalMeas',vehicleState(3),sigma,2);
 
 % transform solution to global frame
 localPlanWorld = toWorldFrame(vehicleState(1:2),vehicleState(3),localPlan);
@@ -39,9 +31,12 @@ drawGlobalPlan(globalPlan);
 drawStartAndGoal(globalStart,globalGoal);
 drawStates(states);
 drawVeh(vehicleState,vehicleState(3),wheelBase,arc,vehicleVelocity);
-drawGaussians2D(gmap,xVec,yVec,Ghat,10);
 drawLocalPlan(localPlanWorld);
 drawLocalGoal(localGoalWorld);
 
+% call postprocessing plotting method from localPlanner
+plotObstacleConstraints(log,it);
+titlestr = ['MPC state at iteration ',num2str(it)];
+title(titlestr);
 axis equal;
-axis([-5 5 0 12]);
+axis([-1 10 -1 10]);

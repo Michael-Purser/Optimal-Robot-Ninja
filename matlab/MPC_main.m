@@ -25,13 +25,13 @@ eval(['load ./data/MPC',sitStr,'.mat;']);
 eval(['load ./data/veh',num2str(MPC.vehicle),'.mat;']);
 eval(['load ./data/env',num2str(MPC.environment),'.mat;']);
 
-% manual parameter initialization:
-% veh.sensor.noiseamp                 = 0;
-% veh.sensor.freq                     = 100;
-% veh.motors.fmax                     = 3;
+% manual parameter overrides:
+veh.sensor.noiseamp                 = 0;
+veh.sensor.freq                     = 100;
+veh.motors.fmax                     = 3;
 % MPC.nav.obstacleData.localGridDx    = 0.05;
-% MPC.globalStart                 = [0;4;0];
-% MPC.globalGoal                  = [0;8;0];
+MPC.globalStart                     = [0;0;0];
+MPC.globalGoal                      = [9;9;0];
 % MPC.nav.goalTolerance               = 0.01;
 % MPC.nav.opt.horizon                 = 100;
 % MPC.nav.opt.Ghat                    = 0.15;
@@ -41,7 +41,7 @@ eval(['load ./data/env',num2str(MPC.environment),'.mat;']);
 % MPC.nav.opt.globalPlanR             = 1.5;
 % MPC.nav.kmax                        = 1000;
 % MPC.nav.rebuild                     = true;
-% MPC.nav.preload                     = true;
+MPC.nav.preload                     = true;
 % MPC.log.logBool                     = true;
 % MPC.log.exportBool                  = false;
 % MPC.nav.withLocalGrid               = true;
@@ -105,29 +105,17 @@ end
 
 
 %% POST-PROCESSING:
-    
-% check the obstacle constraint on solution
-% sit.Sol.G = {};
-% fprintf('Checking solution \n');
-% for k=1:count
-%     sit = checkSolution(sit,veh,k);
-% end
 
 % make video:
-% N = 200;
-% makeMPCAVI(MPC,veh,env,N);
-% close all;
+makeMPCAVI(log,veh,env);
+close all;
 
 % plots:
-k = MPC.nav.k-1;
-%k = 8;
-N = 200;
-fprintf('Plotting solution \n');
+k = MPC.k-1;
 
-plotMPCState(MPC,veh,env,k,N);
-% plotGaussians3D(MPC,k,N);
-% plotDynamics(MPC,k);
-plotMPCStats(MPC);
+plotMPCState(log,veh,env,k);
+plotDynamics(log,k);
+plotMPCStats(log);
 
 
 

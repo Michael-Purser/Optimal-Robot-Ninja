@@ -1,13 +1,15 @@
-function plotDynamics(MPC,it)
+function plotDynamics(log,it)
 % Plot planned platform dynamics along MPC iteration 'it'.
 
+fprintf('Plotting vehicle dynamics along solution %i \n',it);
+
 % get data
-U           = MPC.log.opts{it}.sol.u;
-T           = MPC.log.opts{it}.sol.T;
-horizon     = MPC.log.opts{it}.horizon;
-velLimits   = MPC.nav.opt.dynLimits.vel;
-accLimits   = MPC.nav.opt.dynLimits.acc;
-jerkLimits  = MPC.nav.opt.dynLimits.jerk;
+U           = log.localPlanners{it}.sol.u;
+T           = log.localPlanners{it}.sol.T;
+horizon     = log.localPlanners{it}.params.horizon;
+velLimits   = log.localPlanners{it}.params.dynLimits.vel;
+accLimits   = log.localPlanners{it}.params.dynLimits.acc;
+jerkLimits  = log.localPlanners{it}.params.dynLimits.jerk;
 
 % reconstruct dynamic properties
 [A,J,dT] = getAccelerationAndJerk(U,T,horizon);

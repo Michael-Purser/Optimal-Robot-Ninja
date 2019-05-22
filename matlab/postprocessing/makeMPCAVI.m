@@ -1,9 +1,23 @@
-function makeMPCAVI(MPC,veh,env,N)
+function makeMPCAVI(log,veh,env)
 
-totalFrames         = size(MPC.log.states,2)-1;
+totalFrames         = size(log.states,2)-1;
 framesPerPart       = 100;
 numberOfParts       = ceil(totalFrames/framesPerPart);
 remainder           = rem(totalFrames,framesPerPart);
+
+% info displays:
+fprintf('\n');
+fprintf('Starting video creation...\n');
+fprintf('Number of part files: \t %i \n', numberOfParts);
+fprintf('Frames per part file: \n');
+for m=1:numberOfParts
+    mframes = framesPerPart;
+    if m==numberOfParts && remainder>0
+        mframes = remainder;
+    end
+    fprintf('\t Part %i: \t %i \n', m, mframes);
+end
+fprintf('\n');
 
 for m=1:numberOfParts
     
@@ -30,26 +44,26 @@ for m=1:numberOfParts
         
         k = (m-1)*framesPerPart + i;
         
-        % completion logger
-        perc = floor(100*i/n);
-        if rem(perc,10)==0 && perc>prev_perc
-            fprintf('\t %i%% \t \t %i/%i \n',perc,k,totalFrames);
-            prev_perc = perc;
-        end
-        
-        plotMPCState(MPC,veh,env,k,N); 
+        plotMPCState(log,veh,env,k,1); % '1' is extra input to turn off command line displays
         
         drawnow;
         pause(0.5);
         set(gcf,'Position',[1000 1 800 800]);
         F(i) = getframe(gcf);
         close(gcf);
+        
+        % completion logger
+        perc = floor(100*i/n);
+        if rem(perc,10)==0 && perc>prev_perc
+            fprintf('\t %i%% \t \t %i/%i \n',perc,k,totalFrames);
+            prev_perc = perc;
+        end
     end
     
-    fprintf('\t Saving... \n');
+    fprintf('Saving... \n');
     save(matfile,'F');
     
-    fprintf('\t Writing avi... \n');
+    fprintf('Writing avi... \n');
     name = movfile;
     v = VideoWriter(name);
     v.Quality = 90;
@@ -57,6 +71,7 @@ for m=1:numberOfParts
     open(v);
     writeVideo(v,F);
     close(v);
-    fprintf('\t Finished writing avi \n');
+    fprintf('Finished writing avi \n');
+    fprintf('\n');
 
 end

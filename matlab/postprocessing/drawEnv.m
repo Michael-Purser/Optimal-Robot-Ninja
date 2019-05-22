@@ -40,22 +40,4 @@ for i=1:size(obst,2)
     end
 end
 
-% % plot MPC info on fig (optional)
-% if nargin == 2
-%     % plot robot with its orientation:
-%     p   = MPC.nav.currentState;
-%     plot(p(1),p(2),'ro');
-%     quiver(p(1),p(2),-sin(p(3)),cos(p(3)),'r-');
-% 
-%     % plot desired final robot position:
-%     g   = MPC.nav.globalGoal;
-%     plot(g(1),g(2),'rx');
-% end
-
-% axis constraints:
-% axis equal;
-
-% title:
-% title('Obstacles in world frame');
-
 end

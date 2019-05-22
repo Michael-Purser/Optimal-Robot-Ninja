@@ -1,12 +1,12 @@
-function plotGridMap(MPC)
+function plotGridMap(MPC,globalPlanner)
 % Plots the discrete map with the preloaded obstacles used by the global
 % planner
 
-mapValues   = MPC.nav.map.values;
-mapInflated = MPC.nav.map.inflated;
-Nw          = MPC.nav.map.Nw;
-Nh          = MPC.nav.map.Nh;
-plan        = MPC.nav.globalPlan.gridCoordinates;
+mapValues   = MPC.map.values;
+mapInflated = MPC.map.inflated;
+Nw          = MPC.map.Nw;
+Nh          = MPC.map.Nh;
+plan        = globalPlanner.gridCoordinates;
 figure
 hold all;
 
@@ -41,7 +41,7 @@ for k=1:size(plan,1)
     j = plan(k,2);
     x = [i-0.5 i-0.5 i+0.5 i+0.5];
     y = [j-0.5 j+0.5 j+0.5 j-0.5];
-    fill(x,y,'g','LineStyle','none');
+    fill(x,y,'b','LineStyle','none');
 end
 
 % plot(plan(:,1),plan(:,2),'r','Linewidth');

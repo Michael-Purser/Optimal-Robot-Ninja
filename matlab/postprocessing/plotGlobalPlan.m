@@ -1,7 +1,7 @@
-function plotGlobalPlan(MPC,env)
+function plotGlobalPlan(env,globalPlanner)
 % Function that plots the global plan in the environment
 
-plan = MPC.nav.globalPlan.worldCoordinates;
+plan = globalPlanner.worldCoordinates;
 
 arc = 0:0.1:2*pi;
 
