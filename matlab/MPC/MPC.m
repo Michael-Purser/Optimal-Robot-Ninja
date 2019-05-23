@@ -1,29 +1,6 @@
-% BEFORE RUNNING:
-% execute 'makeEnv()', 'makeVeh()' and 'makeSit()' in command line (in that
-% order); they can be found in the 'simulation' folder.
-
-clear;
-close all;
-clc;
-
-% select situation:
-sitStr = '1_1_1';
-
-% select global end local planner:
-global_planner  = 'relaxedAStar';
-local_planner   = 'gaussianLandscapePlanner';
-
-% add relevant folders to path:
-addpath('~/Downloads/casadi/install/matlab/');
-addpath('./data/');
-addpath(['./globalPlanners/',global_planner]);
-addpath(['./localPlanners/',local_planner]);
-addpath(['./localPlanners/',local_planner,'/postprocessing']);
-addpath('./robot/');
-addpath('./MPC/');
-addpath('./other/');
-addpath('./environment/');
-addpath('./postprocessing/');
+function [MPC,veh,env,globalPlanner,localPlanner,log] = MPC(sitStr,makeMov)
+% Function that executes the main MPC loop, using situation, global planner
+% and local planner specified by the user.
 
 % load situation, environment and vehicle:
 eval(['load ./data/MPC',sitStr,'.mat;']);
@@ -103,8 +80,10 @@ end
 %% POST-PROCESSING:
 
 % make video:
-makeMPCAVI(log,veh,env);
-close all;
+if makeMov
+    makeMPCAVI(log,veh,env);
+    close all;
+end
 
 % plots:
 k = MPC.k-1;
