@@ -67,6 +67,6 @@ end
 meas = meas(all(meas,2),:);
 
 % append result to vehicle struct:
-MPC.obstacleData.meas.orig = meas;
+MPC.obstacleData.meas.localPolar = meas;
 
 end

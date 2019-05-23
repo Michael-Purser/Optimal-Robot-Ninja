@@ -1,16 +1,16 @@
 function localPlanner = prepareObstacleData(MPC,localPlanner)
     
-    transLocal  = MPC.obstacleData.meas.transLocal;
+    localCartesian  = MPC.obstacleData.meas.localCartesian;
     localGridDx = localPlanner.localGridDx;
 
     % Process measurements
-    transLocalGrid = processMeas(transLocal,localGridDx);
-    MPC.nav.obstacleData.meas.transLocalGrid = transLocalGrid;
+    localCartesianGrid = processMeas(localCartesian,localGridDx);
+    MPC.nav.obstacleData.meas.localCartesianGrid = localCartesianGrid;
     
     % Fill info in variable used by optimization routine
     if localPlanner.withLocalGrid
-        localPlanner.obstacleData = transLocalGrid;
+        localPlanner.obstacleData = localCartesianGrid;
     else
-        localPlanner.obstacleData = transLocal;
+        localPlanner.obstacleData = localCartesian;
     end
 end

@@ -6,7 +6,7 @@ function MPC = transformMeasurements(MPC)
     fprintf('Transforming measurements \n');
     
     state       = MPC.currentState;
-    orig        = MPC.obstacleData.meas.orig;
+    orig        = MPC.obstacleData.meas.localPolar;
     preloaded   = MPC.obstacleData.preloaded;
 
     % Transform local polar measurements to local cartesian measurements
@@ -16,7 +16,7 @@ function MPC = transformMeasurements(MPC)
         R       = orig(i,2);
         transLocal(i,:) = [-R*sin(theta) R*cos(theta)];
     end
-    MPC.obstacleData.meas.transLocal = transLocal;
+    MPC.obstacleData.meas.localCartesian = transLocal;
     
     % Transform measurements to global cartesian measurements
     T = homTrans(state(3),[state(1);state(2)]);
@@ -25,7 +25,7 @@ function MPC = transformMeasurements(MPC)
        A = T*[transLocal(i,:)';1];
        transGlobal(i,:) = A(1:2);
     end
-    MPC.obstacleData.meas.transGlobal = transGlobal;
+    MPC.obstacleData.meas.globalCartesian = transGlobal;
     
     % Transform preloaded data to local cartesian measurements
     preloadedLocal = zeros(size(preloaded));

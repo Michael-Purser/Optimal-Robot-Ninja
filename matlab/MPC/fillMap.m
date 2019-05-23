@@ -8,7 +8,7 @@ Nw      = MPC.map.Nw;
 Nh      = MPC.map.Nh;
 dx      = MPC.map.dx;
 map     = MPC.map.values;
-meas    = [MPC.obstacleData.preloaded;MPC.obstacleData.meas.transGlobal];
+meas    = [MPC.obstacleData.preloaded;MPC.obstacleData.meas.globalCartesian];
 % NOTE: if called before MPC loop, no measurements yet --> it will only
 % fill map with preloaded data. This behaviour is used to generate the map
 % for the global planner.

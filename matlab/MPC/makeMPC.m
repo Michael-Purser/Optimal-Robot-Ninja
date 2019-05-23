@@ -15,9 +15,9 @@ MPC.globalGoal      = [];
 MPC.currentState    = [];       % Current robot state
 MPC.currentVelocity = [];       % Current velocity signal
 
-MPC.obstacleData.meas.orig              = [];      % Measurements from simulated sensor (polar)
-MPC.obstacleData.meas.transLocal        = [];      % Measurements in cartesian coordinates
-MPC.obstacleData.meas.transGlobal       = [];      % Measurements in cartesian coordinates
+MPC.obstacleData.meas.localPolar        = [];      % Measurements from simulated sensor (polar)
+MPC.obstacleData.meas.localCartesian    = [];      % Measurements in cartesian coordinates
+MPC.obstacleData.meas.globalCartesian   = [];      % Measurements in cartesian coordinates
 MPC.obstacleData.preloaded              = [];      % Preloaded sampled environment data
 MPC.obstacleData.preloadedLocal         = [];      % Preloaded sampled environment data in local frame
 

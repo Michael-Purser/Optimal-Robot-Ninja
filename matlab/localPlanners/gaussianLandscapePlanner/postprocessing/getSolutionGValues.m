@@ -5,7 +5,7 @@ function log = getSolutionGValues(log)
 for it=1:size(log.localPlanners,2)
 
     % get data
-    measTransLocal      = log.meas{it}.transLocal;
+    measTransLocal      = log.meas{it}.localCartesian;
     measTransLocalGrid  = log.localPlanners{it}.obstacleData;
     X                   = log.localPlanners{it}.sol.x;
     sigma               = log.localPlanners{it}.params.sigma;
