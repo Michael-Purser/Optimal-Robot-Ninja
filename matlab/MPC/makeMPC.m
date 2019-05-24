@@ -47,68 +47,68 @@ MPC.globalGoal	    = [0;9;0];
 
 save data/MPC1_1_1.mat MPC
 
-% eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
-% 
-% plotSit(MPC,env);
-% savefig(gcf,'figs/sitFigs/MPC1_1_1.fig');
-% close(gcf);
+eval(['load ./data/env',num2str(MPC.environment),'.mat;']);
+
+plotSit(MPC,env);
+savefig(gcf,'figs/sitFigs/MPC1_1_1.fig');
+close(gcf);
 
 
-% %% situation 1_4_1:
-% MPC.nav.vehicle         = 1;
-% MPC.nav.environment     = 4;
-% MPC.nav.globalStart     = [0;0;0];
-% MPC.nav.globalGoal	    = [9;9;0];
-% 
-% save data/MPC1_4_1.mat MPC
-% 
-% eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
-% 
-% plotSit(MPC,env);
-% savefig(gcf,'figs/sitFigs/MPC1_4_1.fig');
-% close(gcf);
-% 
-% 
-% %% situation 1_5_1:
-% MPC.nav.vehicle         = 1;
-% MPC.nav.environment   	= 5;
-% MPC.nav.globalStart  	= [0;0;0];
-% MPC.nav.globalGoal	    = [9;9;0];
-% 
-% save data/MPC1_5_1.mat MPC
-% 
-% eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
-% 
-% plotSit(MPC,env);
-% savefig(gcf,'figs/sitFigs/MPC1_5_1.fig');
-% close(gcf);
-% 
-% 
-% %% situation 1_8_1:
-% MPC.nav.vehicle     	= 1;
-% MPC.nav.environment  	= 8;
-% MPC.nav.globalStart   	= [0;0;0];
-% MPC.nav.globalGoal	    = [9;9;0];
-% 
-% save data/MPC1_8_1.mat MPC
-% 
-% eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
-% 
-% plotSit(MPC,env);
-% savefig(gcf,'figs/sitFigs/MPC1_8_1.fig');
-% close(gcf);
-% 
-% 
-% %% situation 1_9_1:
-% MPC.nav.vehicle     	= 1;
-% MPC.nav.environment  	= 9;
-% MPC.nav.globalStart   	= [-1;2;0];
-% MPC.nav.globalGoal	    = [1;8;pi/4];
-% 
-% save data/MPC1_9_1.mat MPC
-% 
-% eval(['load ./data/env',num2str(MPC.nav.environment),'.mat;']);
-% 
-% plotSit(MPC,env);
-% savefig(gcf,'figs/sitFigs/MPC1_9_1.fig');
-% close(gcf);
+%% situation 1_4_1:
+MPC.vehicle         = 1;
+MPC.environment     = 4;
+MPC.globalStart     = [0;0;0];
+MPC.globalGoal	    = [9;9;0];
+
+save data/MPC1_4_1.mat MPC
+
+eval(['load ./data/env',num2str(MPC.environment),'.mat;']);
+
+plotSit(MPC,env);
+savefig(gcf,'figs/sitFigs/MPC1_4_1.fig');
+close(gcf);
+
+
+%% situation 1_5_1:
+MPC.vehicle         = 1;
+MPC.environment   	= 5;
+MPC.globalStart  	= [0;0;0];
+MPC.globalGoal	    = [9;9;0];
+
+save data/MPC1_5_1.mat MPC
+
+eval(['load ./data/env',num2str(MPC.environment),'.mat;']);
+
+plotSit(MPC,env);
+savefig(gcf,'figs/sitFigs/MPC1_5_1.fig');
+close(gcf);
+
+
+%% situation 1_8_1:
+MPC.vehicle     	= 1;
+MPC.environment  	= 8;
+MPC.globalStart   	= [0;0;0];
+MPC.globalGoal	    = [9;9;0];
+
+save data/MPC1_8_1.mat MPC
+
+eval(['load ./data/env',num2str(MPC.environment),'.mat;']);
+
+plotSit(MPC,env);
+savefig(gcf,'figs/sitFigs/MPC1_8_1.fig');
+close(gcf);
+
+
+%% situation 1_9_1:
+MPC.vehicle     	= 1;
+MPC.environment  	= 9;
+MPC.globalStart   	= [-1;2;0];
+MPC.globalGoal	    = [1;8;pi/4];
+
+save data/MPC1_9_1.mat MPC
+
+eval(['load ./data/env',num2str(MPC.environment),'.mat;']);
+
+plotSit(MPC,env);
+savefig(gcf,'figs/sitFigs/MPC1_9_1.fig');
+close(gcf);
