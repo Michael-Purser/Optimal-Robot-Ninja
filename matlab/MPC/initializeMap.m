@@ -3,8 +3,8 @@ function MPC = initializeMap(MPC)
     
     MPC.map.width   = 20;
     MPC.map.height  = 20;
-    MPC.map.dx      = 0.05;
-    MPC.map.dy      = 0.05;
+    MPC.map.dx      = 0.1;
+    MPC.map.dy      = 0.1;
     MPC.map.Nw      = ceil(MPC.map.width/MPC.map.dx);
     MPC.map.Nh      = ceil(MPC.map.height/MPC.map.dx);
     % make sure the map always has a center cell by making the cell numbers

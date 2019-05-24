@@ -8,6 +8,7 @@ H         = (MPC.map.width)/2;
 startAbs  = MPC.globalStart(1:2)';  % in global coordinates
 goalAbs   = MPC.globalGoal(1:2)';   % in global coordinates
 Ghat      = 0.01*globalPlanner.Ghat;
+smooth    = globalPlanner.smooth;   % indicates if the plan has to be smoothed
 
 % IF GOAL INSIDE MAP:
 if abs(goalAbs(1))<H && abs(goalAbs(2))<H
@@ -79,6 +80,18 @@ planAbs = [startAbs(1:2);planAbs];
 % B = interpolateUntil(path_abs(:,1),n);
 % C = interpolateUntil(path_abs(:,2),n);
 % path_abs = [B,C];
+
+% IF DESIRED, SMOOTH THE PLAN USING A SAVITZKY-GOLAY FILTER:
+% Values are hardcoded -- may be good to make them variable in the future
+if smooth
+    fprintf('\t \t smoothing is ON: smoothing the path using Savitzky-Golay filter \n');
+    plan2Abs = planAbs;
+    plan2Abs(:,1) = sgolayfilt(planAbs(:,1),3,9); % smooth x-component
+    plan2Abs(:,2) = sgolayfilt(planAbs(:,2),3,9); % smooth y-component
+    planAbs = plan2Abs;
+else
+    fprintf('\t \t smoothing is OFF \n');
+end
 
 % ADD PATH TO SITUATION STRUCT:
 globalPlanner.gridCoordinates = plan;
