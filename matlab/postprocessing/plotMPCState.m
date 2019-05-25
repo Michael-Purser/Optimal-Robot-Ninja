@@ -39,4 +39,4 @@ plotObstacleConstraints(log,it);
 titlestr = ['MPC state at iteration ',num2str(it)];
 title(titlestr);
 axis equal;
-axis([-1 10 -1 10]);
+axis([-3 3 1 9]);

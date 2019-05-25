@@ -1,7 +1,7 @@
 function makeMPCAVI(log,veh,env)
 
 totalFrames         = size(log.states,2)-1;
-framesPerPart       = 10;
+framesPerPart       = 100;
 numberOfParts       = ceil(totalFrames/framesPerPart);
 remainder           = rem(totalFrames,framesPerPart);
 
