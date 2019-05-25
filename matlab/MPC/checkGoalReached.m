@@ -9,6 +9,7 @@ currentState    = MPC.currentState;
 globalGoal      = MPC.globalGoal;
 
 distanceToGoal  = norm(currentState(1:2)-globalGoal(1:2));
+angleToGoal     = currentState(3)-globalGoal(3);
 
 if distanceToGoal<MPC.goalTolerance
     fprintf(2,'\t Vehicle localized to be within tolerance of final goal! \n');
@@ -16,5 +17,6 @@ if distanceToGoal<MPC.goalTolerance
     fprintf(2,'\n');
     MPC.goalReached = true;
 else
-    fprintf('\t Distance to goal: %f [m] \n',distanceToGoal);
+    fprintf('\t cartesian distance: %f [m] \n',distanceToGoal);
+    fprintf('\t angular deviation: %f [°] \n',angleToGoal*180/pi);
 end
