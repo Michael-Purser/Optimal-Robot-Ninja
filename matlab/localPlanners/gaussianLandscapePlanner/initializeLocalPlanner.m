@@ -3,6 +3,7 @@ function localPlanner = initializeLocalPlanner(localPlanner,veh,log)
     % prints  
     LogicalStr = {'OFF', 'ON'};
     fprintf('\t \t Local grid: \t %s \n', LogicalStr{localPlanner.withLocalGrid+1});
+    fprintf('\t \t Linear End: \t %s \n', LogicalStr{localPlanner.withLinearEndInitial+1});
     fprintf('\t \t Rebuild: \t %s \n', LogicalStr{localPlanner.rebuildSolver+1});
     if localPlanner.rebuildSolver
         fprintf('\t \t Constraints: \n');

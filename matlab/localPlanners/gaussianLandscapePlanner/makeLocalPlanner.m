@@ -1,7 +1,8 @@
 function localPlanner = makeLocalPlanner()
 
-localPlanner.obstacleData  = [];            % Measurement data in cartesian coordinates
-localPlanner.localGridDx   = 0.05;          % Local grid cell width
+localPlanner.obstacleData            = [];            % Measurement data in cartesian coordinates
+localPlanner.localGridDx             = 0.05;          % Local grid cell width
+localPlanner.linearEndSwitchDistance = 0.06;          % Distance to goal from which to switch initial guess type (if this functionality is active)
 
 localPlanner.params.start         = [];     % Starting state
 localPlanner.params.goal          = [];     % Goal state
@@ -18,6 +19,7 @@ localPlanner.params.maxDistBeta   = 3;      % Used in calculation of above max d
 localPlanner.params.globalPlanR   = 2;      % Following radius for global plan
 
 localPlanner.withLocalGrid                   = true;
+localPlanner.withLinearEndInitial            = true;
 localPlanner.rebuildSolver                   = true;     % Indicate wether to rebuild (true) or load (false) the problem
 localPlanner.withMaxDistConstraints          = true;
 localPlanner.withVelocityConstraints         = true;
