@@ -9,7 +9,7 @@ close all;
 clc;
 
 % select situation:
-sitStr = '1_1_1';
+sitStr = '1_9_1';
 
 % select global end local planner:
 globalPlannerStr  = 'relaxedAStar';
@@ -38,10 +38,11 @@ eval(['load ./data/env',num2str(MPC.environment),'.mat;']);
 % manual parameter overrides (add if you want):
 veh.sensor.noiseamp                 = 0;
 veh.sensor.freq                     = 100;
-veh.motors.fmax                     = 3;
-MPC.globalStart                     = [0;0;0];
-MPC.globalGoal                      = [9;9;0];
-MPC.kmax                            = 14;
+veh.motors.fmax                     = 10;
+veh.motors.noiseamp                 = 0.0;
+MPC.globalStart                     = [0.8;8;0];
+% MPC.globalGoal                      = [9;9;0];
+MPC.kmax                            = 1000;
 MPC.nav.preload                     = true;
 
 

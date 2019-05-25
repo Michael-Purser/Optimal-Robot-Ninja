@@ -5,6 +5,12 @@ opti = casadi.Opti();
 
 max_meas    = 1000;
 n           = localPlanner.params.horizon;
+withMaxDist = localPlanner.withMaxDistConstraints;
+withV       = localPlanner.withVelocityConstraints;
+withVPos    = localPlanner.withPositiveVelocityConstraints;
+withA       = localPlanner.withAccelerationConstraints;
+withJ       = localPlanner.withJerkConstraints;
+withOm      = localPlanner.withOmegaConstraints;
 L           = veh.geometry.wheelBase;
 
 Lp          = opti.parameter(1,1);
@@ -44,44 +50,58 @@ x    = opti.variable(3,n+1);
 u    = opti.variable(2,n);
 T    = opti.variable(1,n);
 
+%% *** CONSTRAINTS ***
+
 % multiple-shooting constraint
 opti.subject_to(F(x(:,1:end-1),u,T./np)==x(:,2:end));
 
 % state constraints
 opti.subject_to(x(:,1)==xbeginp);
 opti.subject_to(x(:,end)==xfinalp);
-opti.subject_to(-maxDistp<=diff(x(1,:))<=maxDistp);
-opti.subject_to(-maxDistp<=diff(x(2,:))<=maxDistp);
+if withMaxDist
+    opti.subject_to(-maxDistp<=diff(x(1,:))<=maxDistp);
+    opti.subject_to(-maxDistp<=diff(x(2,:))<=maxDistp);
+end
 
 % velocity constraints
-opti.subject_to(uminp <= u(1,:) <= umaxp);
-opti.subject_to(uminp <= u(2,:) <= umaxp);
-opti.subject_to(u(:,1) == ubeginp);
+if withV
+    opti.subject_to(uminp <= u(1,:) <= umaxp);
+    opti.subject_to(uminp <= u(2,:) <= umaxp);
+    opti.subject_to(u(:,1) == ubeginp);
+end
+if withVPos
+    opti.subject_to(u(1,:)+u(2,:) >= 0);
+end
 
 % end velocity constraint; depends on wether the end goal is in view or
 % not:
 if with_end
 	opti.subject_to(u(:,end) == [0;0]);
 end
-opti.subject_to(u(1,:)+u(2,:) >= 0);
 
 % platform dynamics constraint (optional):
 % [dusqmax,samax] = getULimits(veh,0.8);
 % opti.subject_to(abs(u(1,:).^2-u(2,:).^2) <= dusqmax);
 
 % acceleration constraints
-opti.subject_to(aminp <= np./T(2:end).*u(1,2:end)-np./T(1:end-1).*u(1,1:end-1) <= amaxp);
-opti.subject_to(aminp <= np./T(2:end).*u(2,2:end)-np./T(1:end-1).*u(2,1:end-1) <= amaxp);
+if withA
+    opti.subject_to(aminp <= np./T(2:end).*u(1,2:end)-np./T(1:end-1).*u(1,1:end-1) <= amaxp);
+    opti.subject_to(aminp <= np./T(2:end).*u(2,2:end)-np./T(1:end-1).*u(2,1:end-1) <= amaxp);
+end
 
 % jerk constraints; implemented using a three-point stencil second
 % derivative scheme
-opti.subject_to(jminp <= ((np./T(3:end)).^2).*u(1,3:end)-2*((np./T(2:end-1)).^2).*u(1,2:end-1)+...
-    ((np./T(1:end-2)).^2).*u(1,1:end-2) <= jmaxp);
-opti.subject_to(jminp <= ((np./T(3:end)).^2).*u(2,3:end)-2*((np./T(2:end-1)).^2).*u(2,2:end-1)+...
-    ((np./T(1:end-2)).^2).*u(2,1:end-2) <= jmaxp);
+if withJ
+    opti.subject_to(jminp <= ((np./T(3:end)).^2).*u(1,3:end)-2*((np./T(2:end-1)).^2).*u(1,2:end-1)+...
+        ((np./T(1:end-2)).^2).*u(1,1:end-2) <= jmaxp);
+    opti.subject_to(jminp <= ((np./T(3:end)).^2).*u(2,3:end)-2*((np./T(2:end-1)).^2).*u(2,2:end-1)+...
+        ((np./T(1:end-2)).^2).*u(2,1:end-2) <= jmaxp);
+end
 
 % angular velocity constraint
-opti.subject_to(omminp <= (1/Lp)*(u(2,:)-u(1,:)) <= ommaxp);
+if withOm
+    opti.subject_to(omminp <= (1/Lp)*(u(2,:)-u(1,:)) <= ommaxp);
+end
 
 % time constraints
 opti.subject_to(T >= 0);
@@ -92,6 +112,9 @@ pos     = casadi.MX.sym('pos',2);
 g       = gaussianValue(measp,pos,sigmap,sigmap);
 costf   = casadi.Function('costf',{pos},{sum(g)});
 opti.subject_to(costf(x(1:2,:))<=Ghatp);
+
+
+%% *** OBJECTIVE AND SOLVER ***
 
 % objective:
 opti.minimize(sum(T)/np);
@@ -129,9 +152,31 @@ else
     opti.solver('sqpmethod',opts);
 end
 
-problem = opti.to_function('MPC',{x,u,T,Lp,np,uminp,umaxp,aminp,amaxp,...
-    jminp,jmaxp,omminp,ommaxp,Ghatp,maxDistp,xbeginp,xfinalp,ubeginp,measp,...
-    sigmap},{x,u,T});
+%% BUILD PARAMETRIC PROBLEM
+problemName = 'MPC';
+% Build up input cell array:
+inputCellArray = {x,u,T,Lp,np,xbeginp,xfinalp,ubeginp,measp,Ghatp,sigmap};
+if withV
+    inputCellArray{end+1} = uminp;
+    inputCellArray{end+1} = umaxp;
+end
+if withA
+    inputCellArray{end+1} = aminp;
+    inputCellArray{end+1} = amaxp;
+end
+if withJ
+    inputCellArray{end+1} = jminp;
+    inputCellArray{end+1} = jmaxp;
+end
+if withOm
+    inputCellArray{end+1} = omminp;
+    inputCellArray{end+1} = ommaxp;
+end
+if withMaxDist
+    inputCellArray{end+1} = maxDistp;
+end
+
+eval('problem = opti.to_function(problemName,inputCellArray,{x,u,T});');
 problem.save('problem.casadi');
 
 if strcmp(solver_str,'ipopt')==1

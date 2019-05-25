@@ -5,6 +5,13 @@ function localPlanner = optim(MPC,localPlanner,veh,MPC_iteration)
 % parameters:
 L           = veh.geometry.wheelBase;
 n           = localPlanner.params.horizon;
+
+withMaxDist = localPlanner.withMaxDistConstraints;
+withV       = localPlanner.withVelocityConstraints;
+withA       = localPlanner.withAccelerationConstraints;
+withJ       = localPlanner.withJerkConstraints;
+withOm      = localPlanner.withOmegaConstraints;
+
 u_min       = localPlanner.params.dynLimits.vel(1);
 u_max       = localPlanner.params.dynLimits.vel(2);
 a_min       = localPlanner.params.dynLimits.acc(1);
@@ -54,18 +61,21 @@ if strcmp(solver,'ipopt')==1
     fprintf('\t \t Using IPOPT solver \n');
     % if first iteration, make initial guesses; else 'warm-start' the
     % solver with previous solution:
-    if MPC_iteration==1
+    if MPC_iteration==1 
+        %|| norm(x_final(1:2))<0.06
 %         phi         = atan2(x_final(3),n);
 %         alpha       = 0.5;
 %         n_vec       = linspace(0,n,n+1);
 %         theta_star  = alpha*sin(2*pi*n_vec/n);
 %         theta_init  = n_vec*sin(phi)+theta_star*cos(phi);
+        fprintf('\t \t NOT warm-started \n');
         theta_init = linspace(0,x_final(3),n+1);
         x_init  = [linspace(0,x_final(1),n+1);linspace(0,x_final(2),n+1); ...
             theta_init];
         u_init  = zeros(2,n);
         T_init = norm(x_begin(1:2)-x_final(1:2))/u_max;
     else
+        fprintf('\t \t Warm-started \n');
         x_init = localPlanner.sol.x;
         u_init = localPlanner.sol.u;
         T_init = localPlanner.sol.T;
@@ -83,7 +93,7 @@ if strcmp(solver,'ipopt')==1
 else
     fprintf('\t \t Using SQP solver \n');
     if MPC.k<3
-        % initial guesses for first iteration
+        % initial guesses for first iterations OR when close to goal
         phi         = atan2(x_final(3),n);
         alpha       = 0.5;
         n_vec       = linspace(0,n,n+1);
@@ -121,8 +131,29 @@ localPlanner.init.T = T_init;
 % try solving problem; if no success, log in localPlanner:
 
 try
-    [X,U,T] = problem(x_init,u_init,T_init,L,n,u_min,u_max,a_min,a_max,j_min,...
-        j_max,om_min,om_max,Ghat,maxDist,x_begin,x_final,u_begin,meas,sigma);
+    % buildup input list:
+    inputCellArray = {x_init,u_init,T_init,L,n,x_begin,x_final,u_begin,meas,Ghat,sigma};
+    if withV
+        inputCellArray{end+1} = u_min;
+        inputCellArray{end+1} = u_max;
+    end
+    if withA
+        inputCellArray{end+1} = a_min;
+        inputCellArray{end+1} = a_max;
+    end
+    if withJ
+        inputCellArray{end+1} = j_min;
+        inputCellArray{end+1} = j_max;
+    end
+    if withOm
+        inputCellArray{end+1} = om_min;
+        inputCellArray{end+1} = om_max;
+    end
+    if withMaxDist
+        inputCellArray{end+1} = maxDist;
+    end
+    
+    eval('[X,U,T] = problem(inputCellArray{:});');
 
     % append to struct:
     localPlanner.sol.x = opti.value(X);
