@@ -20,6 +20,7 @@ localPlanner.params.globalPlanR   = 2;      % Following radius for global plan
 
 localPlanner.withLocalGrid                   = true;
 localPlanner.withLinearEndInitial            = true;
+localPlanner.warmStart                       = true;     % Indicate wether to warm-start iteration or not
 localPlanner.rebuildSolver                   = true;     % Indicate wether to rebuild (true) or load (false) the problem
 localPlanner.withMaxDistConstraints          = true;
 localPlanner.withVelocityConstraints         = true;

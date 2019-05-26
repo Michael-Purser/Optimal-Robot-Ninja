@@ -6,6 +6,7 @@ function localPlanner = optim(MPC,localPlanner,veh,MPC_iteration)
 L           = veh.geometry.wheelBase;
 n           = localPlanner.params.horizon;
 
+warmStart               = localPlanner.warmStart;
 withLinearEnd           = localPlanner.withLinearEndInitial;
 linearEndSwitchDistance = localPlanner.linearEndSwitchDistance;
 
@@ -61,10 +62,14 @@ u_begin = localPlanner.params.startVelocity;
 maxDist = beta*norm(x_begin(1:2)-x_final(1:2))/n;
 
 % distinction with or without linear end inital guess
-if withLinearEnd
-    linearSelectorBool = (MPC_iteration==1 || norm(x_final(1:2))<linearEndSwitchDistance);
+if warmStart
+    if withLinearEnd
+        linearSelectorBool = (MPC_iteration==1 || norm(x_final(1:2))<linearEndSwitchDistance);
+    else
+        linearSelectorBool = (MPC_iteration==1);
+    end
 else
-    linearSelectorBool = (MPC_iteration==1);
+    linearSelectorBool = true; 
 end
 
 if strcmp(solver,'ipopt')==1
