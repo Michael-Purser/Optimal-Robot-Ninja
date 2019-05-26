@@ -6,4 +6,4 @@ globalPlanner.lastIndex        = 1;   % Last local goal index along the global p
 
 globalPlanner.method           = 'RAstar';
 globalPlanner.Ghat             = 2;
-globalPlanner.smooth           = false;
+globalPlanner.smooth           = true;

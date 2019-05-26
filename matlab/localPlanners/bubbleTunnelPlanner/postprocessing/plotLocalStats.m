@@ -1,0 +1,5 @@
+function plotLocalStats(log)
+
+
+
+end
